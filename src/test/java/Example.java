@@ -1,5 +1,6 @@
 import geoMeta.*;
 import org.untitled.phoenix.component.Component;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 import org.untitled.phoenix.component.Description;
 import org.gems.WebComponent;
@@ -35,10 +36,10 @@ public class Example {
     public void test() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
-        Component.find(Item::new, Item.byName("Приморский край")).expand();
-        Component.find(Item::new, Item.byName("Владивостокский ГО")).expand();
-        Component.find(Item::new, Item.byName("Шкотовский МР")).expand();
+        Component.find(Item::new, Item.Requirements.Equals.byName("Приморский край")).expand();
+        Component.find(Item::new, Item.Requirements.Equals.byName("Владивостокский ГО")).expand();
+        Component.find(Item::new, Item.Requirements.Equals.byName("Шкотовский МР")).expand();
 
-        Component.find(Item::new, Item.byName("Результаты запросов (Sapphire)")).expand();
+        Component.find(Item::new, Item.Requirements.Equals.byName("Результаты запросов (Sapphire)")).expand();
     }
 }

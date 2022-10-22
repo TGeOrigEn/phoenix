@@ -3,14 +3,32 @@ package geoMeta;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 import org.gems.WebComponent;
+import org.untitled.phoenix.component.requirement.BaseRequirement;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 
 public class Item extends Component {
 
-    public static @NotNull Requirement<Item, String> byName(@NotNull String name) {
-        return new Requirement<>(Item::getName, name, "Имеет имя");
+    public static class Requirements {
+
+        public static class Equals {
+
+            public static @NotNull BaseRequirement<Item> byName(@NotNull String name) {
+                return new Requirement<>(Item::getName, name, "Имеет имя");
+            }
+        }
+
+        public static class Contains {
+
+            public static @NotNull BaseRequirement<Item> byName(@NotNull String name) {
+                return new Requirement<>(Item::getName, name, "Содержит имя", String::contains);
+            }
+        }
+
+        public static @NotNull BaseRequirement<Item> byExpand(boolean isExpand) {
+            return new Requirement<>(Item::isExpand, isExpand, "Открыт");
+        }
     }
 
     private static final Description EXPAND_BUTTON_DESCRIPTION = new Description(By.cssSelector("img[class*='plus']"), "Кнопка 'Развернуть'");
@@ -43,5 +61,9 @@ public class Item extends Component {
     public void expand() {
         expandButton.toAction().click();
         find(QuickTip::new).toAction().hover();
+    }
+
+    public boolean isExpand(){
+       return toAction().getCssClass().contains("x-grid-tree-node-expanded");
     }
 }

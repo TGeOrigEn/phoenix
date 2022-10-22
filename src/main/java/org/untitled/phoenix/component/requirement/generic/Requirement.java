@@ -16,46 +16,46 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
 
     public static class Contains {
 
-        public static @NotNull Requirement<Component, String> byAttribute(@NotNull String name, @Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byAttribute(@NotNull String name, @Nullable String value) {
             return new Requirement<>(component -> component.toAction().getAttribute(name), value, String.format("Содержит значение атрибута '%s'", name), String::contains);
         }
 
-        public static @NotNull Requirement<Component, String> byCssClass(@Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssClass(@Nullable String value) {
             return new Requirement<>(component -> component.toAction().getCssClass(), value, "Содержит значение класса", String::contains);
         }
 
-        public static @NotNull Requirement<Component, String> byValue(@Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byValue(@Nullable String value) {
             return new Requirement<>(component -> component.toAction().getValue(), value, "Содержит значение", String::contains);
         }
 
-        public static @NotNull Requirement<Component, String> byCssId(@Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssId(@Nullable String value) {
             return new Requirement<>(component -> component.toAction().getCssId(), value, "Содержит идентификатор", String::contains);
         }
 
-        public static @NotNull Requirement<Component, String> byText(@Nullable String text) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byText(@Nullable String text) {
             return new Requirement<>(component -> component.toAction().getText(), text, "Содержит текст", String::contains);
         }
     }
 
     public static class Equals {
 
-        public static @NotNull Requirement<Component, String> byAttribute(@NotNull String name, @Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byAttribute(@NotNull String name, @Nullable String value) {
             return new Requirement<>(component -> component.toAction().getAttribute(name), value, String.format("Имеет значение атрибута '%s'", name));
         }
 
-        public static @NotNull Requirement<Component, String> byCssClass(@Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssClass(@Nullable String value) {
             return new Requirement<>(component -> component.toAction().getCssClass(), value, "Имеет значение класса");
         }
 
-        public static @NotNull Requirement<Component, String> byValue(@Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byValue(@Nullable String value) {
             return new Requirement<>(component -> component.toAction().getValue(), value, "Имеет значение");
         }
 
-        public static @NotNull Requirement<Component, String> byCssId(@Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssId(@Nullable String value) {
             return new Requirement<>(component -> component.toAction().getCssId(), value, "Имеет идентификатор");
         }
 
-        public static @NotNull Requirement<Component, String> byText(@Nullable String value) {
+        public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byText(@Nullable String value) {
             return new Requirement<>(component -> component.toAction().getText(), value, "Имеет текст");
         }
     }
@@ -87,23 +87,23 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         this.value = value;
     }
 
-    public static @NotNull Requirement<Component, Boolean> byAvailable(boolean isAvailable) {
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byAvailable(boolean isAvailable) {
         return new Requirement<>(Component::isAvailable, isAvailable, "Доступен");
     }
 
-    public static @NotNull Requirement<Component, Boolean> byDisplayed(boolean isDisplayed) {
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byDisplayed(boolean isDisplayed) {
         return new Requirement<>(component -> component.toAction().isDisplayed(), isDisplayed, "Отображается");
     }
 
-    public static @NotNull Requirement<Component, Boolean> byReadonly(boolean isReadonly) {
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byReadonly(boolean isReadonly) {
         return new Requirement<>(component -> component.toAction().isReadonly(), isReadonly, "Только для чтения");
     }
 
-    public static @NotNull Requirement<Component, Boolean> bySelected(boolean isSelected) {
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> bySelected(boolean isSelected) {
         return new Requirement<>(component -> component.toAction().isSelected(), isSelected, "Выделен");
     }
 
-    public static @NotNull Requirement<Component, Boolean> byEnabled(boolean isEnabled) {
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byEnabled(boolean isEnabled) {
         return new Requirement<>(component -> component.toAction().isEnabled(), isEnabled, "Включён");
     }
 
