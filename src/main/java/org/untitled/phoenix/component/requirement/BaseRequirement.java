@@ -19,6 +19,14 @@ public abstract class BaseRequirement<TComponent extends Component> {
         this.value = value;
     }
 
+    public abstract BaseRequirement<TComponent> and(BaseRequirement<TComponent> requirement);
+
+    public abstract BaseRequirement<TComponent> or(BaseRequirement<TComponent> requirement);
+
+    public abstract BaseRequirement<TComponent> toNegative();
+
+    public abstract boolean isTrue(TComponent component);
+
     public @NotNull String getDescription() {
         return description;
     }
@@ -30,14 +38,6 @@ public abstract class BaseRequirement<TComponent extends Component> {
     public boolean isNegative() {
         return negative;
     }
-
-    public abstract BaseRequirement<TComponent> and(BaseRequirement<TComponent> requirement);
-
-    public abstract BaseRequirement<TComponent> or(BaseRequirement<TComponent> requirement);
-
-    public abstract BaseRequirement<TComponent> toNegative();
-
-    public abstract boolean isTrue(TComponent component);
 
     @Override
     public String toString() {
