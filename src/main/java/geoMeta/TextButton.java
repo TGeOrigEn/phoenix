@@ -3,13 +3,13 @@ package geoMeta;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 import org.gems.WebComponent;
-import org.untitled.phoenix.component.Requirement;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 
 public class TextButton extends Component {
 
-    public static @NotNull Requirement<TextButton> byText(String buttonText) {
+    public static @NotNull Requirement<TextButton, String> byText(String buttonText) {
         return new Requirement<>(TextButton::getText, buttonText, "Имеет текст");
     }
 

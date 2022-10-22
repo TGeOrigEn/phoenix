@@ -1,10 +1,11 @@
 package org.untitled.phoenix.component.condition;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.untitled.phoenix.component.Component;
 
-public abstract class Condition {
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public abstract class BaseCondition {
 
     private final @NotNull Component component;
 
@@ -14,7 +15,7 @@ public abstract class Condition {
 
     private boolean enabled = true;
 
-    public Condition(@NotNull Component component, @Nullable Object value, @NotNull String description) {
+    public BaseCondition(@NotNull Component component, @Nullable Object value, @NotNull String description) {
         this.description = description;
         this.component = component;
         this.value = value;

@@ -1,30 +1,32 @@
 package org.untitled.phoenix.component;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebElement;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
+import org.untitled.phoenix.component.requirement.BaseRequirement;
 import org.untitled.phoenix.component.condition.generic.Condition;
+import org.untitled.phoenix.component.condition.BaseCondition;
 import org.untitled.phoenix.configuration.Configuration;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.Callable;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
+
 import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.time.Duration;
+import java.util.List;
 
 public abstract class Component {
 
-    private @NotNull Description description;
+    private @Nullable BaseCondition condition;
 
-    private @NotNull Property property;
+    private @NotNull Description description;
 
     private final @NotNull Action action;
 
-    private @Nullable org.untitled.phoenix.component.condition.Condition condition;
+    private @NotNull Property property;
 
     private @NotNull Duration timeout = Duration.ofSeconds(30);
 
@@ -42,7 +44,7 @@ public abstract class Component {
         this.property = new Property(this, null);
     }
 
-    public static <TComponent extends Component> boolean has(@NotNull TComponent component, @NotNull Requirement<TComponent> requirement, @NotNull Duration timeout) {
+    public static <TComponent extends Component> boolean has(@NotNull TComponent component, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
         final var condition = new Condition<>(component, requirement);
         final var startTime = System.currentTimeMillis();
 
@@ -52,7 +54,7 @@ public abstract class Component {
         }
     }
 
-    public static <TComponent extends Component> TComponent should(@NotNull TComponent component, @NotNull Requirement<TComponent> requirement, @NotNull Duration timeout) {
+    public static <TComponent extends Component> TComponent should(@NotNull TComponent component, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
         final var condition = new Condition<>(component, requirement);
         final var startTime = System.currentTimeMillis();
 
@@ -66,7 +68,7 @@ public abstract class Component {
         return findComponent(constructor, null, null, null);
     }
 
-    public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Requirement<TComponent> requirement) {
+    public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement) {
         return findComponent(constructor, null, requirement, null);
     }
 
@@ -74,7 +76,7 @@ public abstract class Component {
         return findComponent(constructor, null, null, this);
     }
 
-    public <TComponent extends Component> @NotNull TComponent findInside(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Requirement<TComponent> requirement) {
+    public <TComponent extends Component> @NotNull TComponent findInside(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement) {
         return findComponent(constructor, null, requirement, this);
     }
 
@@ -88,7 +90,7 @@ public abstract class Component {
         return property;
     }
 
-    public @Nullable org.untitled.phoenix.component.condition.Condition getCondition() {
+    public @Nullable BaseCondition getCondition() {
         return condition;
     }
 
@@ -139,7 +141,7 @@ public abstract class Component {
                 : String.format("%s ?? '%s -> %s'", property.getPath(), condition.getDescription(), condition.getValue());
     }
 
-    private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable Requirement<TComponent> requirement, @Nullable Component parent) {
+    private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent) {
         final var component = constructor.get();
         final var condition = requirement != null
                 ? new Condition<>(component, requirement)
@@ -152,7 +154,7 @@ public abstract class Component {
         return component;
     }
 
-    private static <TComponent extends Component> @NotNull Supplier<List<TComponent>> findComponents(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable Requirement<TComponent> requirement, @Nullable Component parent, @NotNull Duration timeout) {
+    private static <TComponent extends Component> @NotNull Supplier<List<TComponent>> findComponents(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent, @NotNull Duration timeout) {
         return () -> {
             final var components = new ArrayList<TComponent>();
             for (int index1 = 0; index1 < Integer.MAX_VALUE; index1++) {

@@ -1,6 +1,7 @@
 package org.untitled.phoenix.component;
 
 import org.jetbrains.annotations.NotNull;
+
 import org.openqa.selenium.By;
 
 public final class Description {

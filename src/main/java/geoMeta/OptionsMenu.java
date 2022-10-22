@@ -3,7 +3,7 @@ package geoMeta;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 import org.gems.WebComponent;
-import org.untitled.phoenix.component.Requirement;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 
@@ -17,6 +17,6 @@ public class OptionsMenu extends Component {
     }
 
     public void clickOnOption(String optionName) {
-        findInside(() -> new WebComponent(OPTION_DESCRIPTION), Requirement.byText(optionName)).toAction().click();
+        findInside(() -> new WebComponent(OPTION_DESCRIPTION), Requirement.Equals.byText(optionName)).toAction().click();
     }
 }

@@ -1,8 +1,7 @@
 package org.untitled.phoenix.component;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.untitled.phoenix.component.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 

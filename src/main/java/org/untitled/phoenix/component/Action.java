@@ -1,16 +1,18 @@
 package org.untitled.phoenix.component;
 
-import org.openqa.selenium.WebElement;
 import org.untitled.phoenix.configuration.Configuration;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import org.openqa.selenium.interactions.Actions;
-
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.time.Duration;
+import java.util.Objects;
+import java.util.Arrays;
 
 public final class Action {
 
@@ -21,7 +23,15 @@ public final class Action {
     }
 
     public @Nullable String getAttribute(@NotNull String attributeName) {
-        return invoke((Function<WebElement, String>) webElement -> webElement.getAttribute(attributeName), String.format("Не удалось значение атрибута '%s' компонента", attributeName), component.getTimeout());
+        return invoke((Function<WebElement, String>) webElement -> webElement.getAttribute(attributeName), String.format("Не удалось получить значение атрибута '%s' компонента", attributeName), component.getTimeout());
+    }
+
+    public @Nullable String getCssId() {
+        return invoke((Function<WebElement, String>) webElement -> webElement.getAttribute("id"), "Не удалось получить значение идентификатора", component.getTimeout());
+    }
+
+    public @Nullable String getCssClass() {
+        return invoke((Function<WebElement, String>) webElement -> webElement.getAttribute("class"), "Не удалось получить значение класса", component.getTimeout());
     }
 
     public @Nullable String getValue() {
@@ -87,6 +97,10 @@ public final class Action {
         return invoke(WebElement::isEnabled, "Не удалось установить включен ли компонент", component.getTimeout());
     }
 
+    public boolean isReadonly() {
+        return invoke(webElement -> !Objects.equals(webElement.getAttribute("readonly"), null), "Не удалось установить является ли компонент только для чтения", component.getTimeout());
+    }
+
     private void invoke(@NotNull Consumer<@NotNull WebElement> action, @NotNull String message, @NotNull Duration timeout) {
         final var startTime = System.currentTimeMillis();
 
@@ -106,7 +120,7 @@ public final class Action {
 
         while (true) {
             try {
-               return action.apply(component.toWebElement());
+                return action.apply(component.toWebElement());
             } catch (Exception ignore) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw new RuntimeException(String.format("%s :: %s на протяжении %d миллисекунд.", component, message, timeout.toMillis()));
