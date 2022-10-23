@@ -12,8 +12,6 @@ import java.util.Objects;
 
 public final class Requirement<TComponent extends Component, TValue> extends BaseRequirement<TComponent> {
 
-    private enum Operation {OR, AND}
-
     public static class Contains {
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byAttribute(@NotNull String name, @Nullable String value) {
@@ -64,22 +62,15 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
 
     private final @NotNull Function<@NotNull TComponent, @Nullable TValue> function;
 
-    private final @NotNull Operation operation;
-
     private final @Nullable TValue value;
 
     public Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description) {
-        this(function, value, description, Objects::equals, null, Operation.OR, false);
+        this(function, value, description, Objects::equals);
     }
 
-    public Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition) {
-        this(function, value, description, condition, null, Operation.OR, false);
-    }
-
-    private Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition, @Nullable BaseRequirement<TComponent> requirement, @NotNull Operation operation, boolean negative) {
-        super(value, description, requirement, negative);
+    private Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition) {
+        super(value, description);
         this.condition = condition;
-        this.operation = operation;
         this.function = function;
         this.value = value;
     }
@@ -107,25 +98,9 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
     @Override
     public boolean isTrue(TComponent component) {
         return getRequirement() == null
-                ? condition.test(function.apply(component), value) != isNegative() : operation == Operation.AND
+                ? condition.test(function.apply(component), value) != isNegative()
+                : getOperation() == Operation.AND
                 ? condition.test(function.apply(component), value) != isNegative() && getRequirement().isTrue(component)
                 : condition.test(function.apply(component), value) != isNegative() || getRequirement().isTrue(component);
-    }
-
-    @Override
-    public @NotNull BaseRequirement<TComponent> and(BaseRequirement<TComponent> requirement) {
-        final var test = new Requirement<>(function, value, getDescription(), condition, requirement, Operation.AND, isNegative());
-        return new Requirement<>(function, value, String.format("%s и %s", getDescription(), requirement.getDescription()), condition, test, Operation.AND, false);
-    }
-
-    @Override
-    public @NotNull BaseRequirement<TComponent> or(BaseRequirement<TComponent> requirement) {
-        final var test = new Requirement<>(function, value, getDescription(), condition, requirement, Operation.OR, isNegative());
-        return new Requirement<>(function, value, String.format("%s или %s", getDescription(), requirement.getDescription()), condition, test, Operation.OR, false);
-    }
-
-    @Override
-    public @NotNull BaseRequirement<TComponent> toNegative() {
-        return new Requirement<>(function, value, getDescription(), condition, getRequirement(), operation, !isNegative());
     }
 }

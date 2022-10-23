@@ -7,43 +7,62 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseRequirement<TComponent extends Component> {
 
-    private final @Nullable BaseRequirement<TComponent> requirement;
+    public enum Operation {OR, AND}
 
-    private final @NotNull String description;
+    private @NotNull String description;
 
     private final @Nullable Object value;
 
-    private final boolean negative;
+    private @Nullable BaseRequirement<TComponent> requirement = null;
 
-    public BaseRequirement(@Nullable Object value, @NotNull String description, @Nullable BaseRequirement<TComponent> requirement, boolean negative) {
-        this.requirement = requirement;
+    private @NotNull Operation operation = Operation.AND;
+
+    private boolean negative = false;
+
+    public BaseRequirement(@Nullable Object value, @NotNull String description) {
         this.description = description;
-        this.negative = negative;
         this.value = value;
     }
 
-    public abstract BaseRequirement<TComponent> and(BaseRequirement<TComponent> requirement);
-
-    public abstract BaseRequirement<TComponent> or(BaseRequirement<TComponent> requirement);
-
-    public abstract BaseRequirement<TComponent> toNegative();
-
-    public abstract boolean isTrue(TComponent component);
-
-    public @Nullable BaseRequirement<TComponent> getRequirement() {
+    public final @NotNull BaseRequirement<TComponent> and(@NotNull BaseRequirement<TComponent> requirement) {
+        requirement.description = String.format("%s И %s", requirement.description, description);
+        requirement.operation = Operation.AND;
+        requirement.requirement = this;
         return requirement;
     }
 
-    public @NotNull String getDescription() {
+    public final @NotNull BaseRequirement<TComponent> or(@NotNull BaseRequirement<TComponent> requirement) {
+        requirement.description = String.format("%s ИЛИ %s", requirement.description, description);
+        requirement.operation = Operation.OR;
+        requirement.requirement = this;
+        return requirement;
+    }
+
+    public final BaseRequirement<TComponent> toNegative() {
+        negative = !negative;
+        return this;
+    }
+
+    public abstract boolean isTrue(TComponent component);
+
+    public final @Nullable BaseRequirement<TComponent> getRequirement() {
+        return requirement;
+    }
+
+    public final @NotNull String getDescription() {
         return description;
     }
 
-    public @Nullable Object getValue() {
+    public final @Nullable Object getValue() {
         return value;
     }
 
-    public boolean isNegative() {
+    public final boolean isNegative() {
         return negative;
+    }
+
+    public final @NotNull Operation getOperation() {
+        return operation;
     }
 
     @Override
