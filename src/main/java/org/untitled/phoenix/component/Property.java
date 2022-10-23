@@ -11,6 +11,8 @@ public final class Property {
 
     private final @Nullable Component parent;
 
+    private final @NotNull String path;
+
     public Property(@NotNull Component component, @Nullable Component parent) {
         this.parent = parent;
 
@@ -24,6 +26,8 @@ public final class Property {
             trace[length] = component;
             this.trace = trace;
         }
+
+        path = String.join("->", Arrays.stream(trace).map(element -> String.format("'%s[%d]'", element.getDescription().getName(), element.getDescription().getIndex())).toArray(String[]::new));
     }
 
     public @Nullable Component getParent() {
@@ -32,5 +36,9 @@ public final class Property {
 
     public @NotNull Component[] getTrace() {
         return trace;
+    }
+
+    public @NotNull String getPath() {
+        return path;
     }
 }
