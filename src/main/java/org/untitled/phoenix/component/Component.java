@@ -15,6 +15,7 @@ import org.openqa.selenium.By;
 import org.untitled.phoenix.exception.ComponentConditionException;
 import org.untitled.phoenix.exception.UnavailableComponentException;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.ArrayList;
 import java.time.Duration;
@@ -137,9 +138,15 @@ public abstract class Component {
 
     @Override
     public String toString() {
-        return condition == null
-                ? property.getPath()
-                : String.format("%s ?? %s", property.getPath(), condition);
+        final var s = Arrays.stream(property.getTrace()).map(component -> {
+            final var description = component.getDescription();
+            final var condition = component.condition;
+
+            return condition == null
+                    ? String.format("'%s[%d](%d)'", description.getName(), description.getIndex(), component.getIndex())
+                    : String.format("'%s[%d](%d)' ?? %s", description.getName(), description.getIndex(), component.getIndex(), condition);
+        });
+        return String.join("->", s.toArray(String[]::new));
     }
 
     private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent) {
