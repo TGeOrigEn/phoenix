@@ -7,6 +7,8 @@ import org.openqa.selenium.interactions.Actions;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.untitled.phoenix.exception.ComponentActionException;
+import org.untitled.phoenix.exception.UnavailableComponentException;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -108,9 +110,12 @@ public final class Action {
             try {
                 action.accept(component.toWebElement());
                 return;
-            } catch (Exception exception) {
+            } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
-                    throw new RuntimeException(String.format("%s :: %s на протяжении %d миллисекунд.", component, message, timeout.toMillis()));
+                    throw exception;
+            } catch (Exception ignore) {
+                if (System.currentTimeMillis() - startTime >= timeout.toMillis())
+                    throw new ComponentActionException(component, message, timeout);
             }
         }
     }
@@ -121,9 +126,12 @@ public final class Action {
         while (true) {
             try {
                 return action.apply(component.toWebElement());
+            } catch (UnavailableComponentException exception) {
+                if (System.currentTimeMillis() - startTime >= timeout.toMillis())
+                    throw exception;
             } catch (Exception ignore) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
-                    throw new RuntimeException(String.format("%s :: %s на протяжении %d миллисекунд.", component, message, timeout.toMillis()));
+                    throw new ComponentActionException(component, message, timeout);
             }
         }
     }

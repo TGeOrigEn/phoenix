@@ -22,4 +22,9 @@ public final class Condition<TComponent extends Component> extends BaseCondition
     public boolean isTrue() {
         return requirement.isTrue(component);
     }
+
+    @Override
+    public String toString() {
+        return requirement.toString();
+    }
 }

@@ -25,14 +25,14 @@ public abstract class BaseRequirement<TComponent extends Component> {
     }
 
     public final @NotNull BaseRequirement<TComponent> and(@NotNull BaseRequirement<TComponent> requirement) {
-        requirement.description = String.format("%s И %s", this, requirement.description);
+        requirement.description = String.format("%s И '%s", this.toString().substring(1), requirement.description);
         requirement.operation = Operation.AND;
         requirement.requirement = this;
         return requirement;
     }
 
     public final @NotNull BaseRequirement<TComponent> or(@NotNull BaseRequirement<TComponent> requirement) {
-        requirement.description = String.format("%s ИЛИ %s", this, requirement.description);
+        requirement.description = String.format("%s ИЛИ '%s", this.toString().substring(1), requirement.description);
         requirement.operation = Operation.OR;
         requirement.requirement = this;
         return requirement;
@@ -67,6 +67,6 @@ public abstract class BaseRequirement<TComponent extends Component> {
 
     @Override
     public String toString() {
-        return String.format("'%s -> %s'", getDescription(), value);
+        return String.format("'%s => %s'", getDescription(), value);
     }
 }

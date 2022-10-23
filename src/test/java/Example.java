@@ -37,9 +37,9 @@ public class Example {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
         for (var index = 0; index < 20; index++) {
-            final var requirement = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable((true)));
-            Component.find(Item::new, requirement)
-                    .expand();
+            final var requirement = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable((true))).and(Requirement.byAvailable(false));
+            final var component = Component.find(Item::new, requirement);
+            component.expand();
         }
 
         //Component.find(Item::new, Item.Requirements.Equals.byName("Результаты запросов (Sapphire)").toNegative().and(Item.Requirements.byExpand(false)).toNegative().and(Requirement.byReadonly(false)).and(Requirement.byDisplayed(true))).expand();

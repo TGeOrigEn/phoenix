@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
+import org.untitled.phoenix.exception.ComponentConditionException;
+import org.untitled.phoenix.exception.UnavailableComponentException;
 
 import java.util.function.Supplier;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public abstract class Component {
 
     private @NotNull Property property;
 
-    private @NotNull Duration timeout = Duration.ofSeconds(30);
+    private @NotNull Duration timeout = Duration.ofSeconds(10);
 
     private int index = 0;
 
@@ -60,7 +62,7 @@ public abstract class Component {
 
         while (true) {
             if (condition.isTrue()) return component;
-            if (System.currentTimeMillis() - startTime >= timeout.toMillis()) throw new RuntimeException(String.format("%s :: Не выполнял условие '%s -> %s' на протяжении %d миллисекунд.", component, requirement.getDescription(), requirement.getValue(), timeout.toMillis()));
+            if (System.currentTimeMillis() - startTime >= timeout.toMillis()) throw new ComponentConditionException(component, condition, timeout);
         }
     }
 
@@ -119,7 +121,7 @@ public abstract class Component {
         final var trace = getProperties().getTrace();
 
         while (true) {
-            Component unavailable;
+            Component unavailable = this;
             for (int index = trace.length - 1; index >= 0; index--) {
                 var element = toWebElement(trace[index]);
                 if (element != null) {
@@ -127,10 +129,9 @@ public abstract class Component {
                         return element;
                     break;
                 } else unavailable = trace[index];
-
-                if (System.currentTimeMillis() - startTime >= getTimeout().toMillis())
-                    throw new RuntimeException(String.format("%s :: Был недоступен на протяжении %d миллисекунд.", unavailable, timeout.toMillis()));
             }
+            if (System.currentTimeMillis() - startTime >= getTimeout().toMillis())
+                throw new UnavailableComponentException(unavailable);
         }
     }
 
@@ -138,7 +139,7 @@ public abstract class Component {
     public String toString() {
         return condition == null
                 ? property.getPath()
-                : String.format("%s ?? '%s -> %s'", property.getPath(), condition.getDescription(), condition.getValue());
+                : String.format("%s ?? %s", property.getPath(), condition);
     }
 
     private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent) {
@@ -148,8 +149,8 @@ public abstract class Component {
                 : null;
 
         if (description != null) ((Component) component).description = description;
-        ((Component) component).property = new Property(component, parent);
         ((Component) component).condition = condition;
+        ((Component) component).property = new Property(component, parent);
 
         return component;
     }
