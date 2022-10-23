@@ -1,7 +1,8 @@
 package org.untitled.phoenix.exception;
 
-import org.jetbrains.annotations.NotNull;
 import org.untitled.phoenix.component.Component;
+
+import org.jetbrains.annotations.NotNull;
 
 public final class UnavailableComponentException extends RuntimeException {
 

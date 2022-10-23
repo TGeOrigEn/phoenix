@@ -48,9 +48,12 @@ public final class Action {
             try {
                 action.moveToElement(component.toWebElement()).build().perform();
                 return;
-            } catch (Exception exception) {
+            } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
-                    throw new RuntimeException(String.format("%s :: Не удалось навести курсор мыши на компонент на протяжении %d миллисекунд.", component, component.getTimeout().toMillis()));
+                    throw exception;
+            } catch (Exception ignore) {
+                if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
+                    throw new ComponentActionException(component, "Не удалось навести курсор мыши на компонент", component.getTimeout());
             }
         }
     }
@@ -72,9 +75,12 @@ public final class Action {
                 element.clear();
                 element.sendKeys(value);
                 return;
-            } catch (Exception exception) {
+            } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
-                    throw new RuntimeException(String.format("%s :: Не удалось задать значение '%s' компоненту на протяжении %d миллисекунд.", component, value, component.getTimeout().toMillis()));
+                    throw exception;
+            } catch (Exception ignore) {
+                if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
+                    throw new ComponentActionException(component, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout());
             }
         }
     }
