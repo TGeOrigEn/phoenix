@@ -37,10 +37,8 @@ public class Example {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
         for (var index = 0; index < 20; index++) {
-            Component.find(Item::new,
-                            Item.Requirements.Equals.byName("").toNegative()
-                                    .and(Item.Requirements.byExpand(false))
-                                    .and(Item.Requirements.byExpendable((true))))
+            final var requirement = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable((true)));
+            Component.find(Item::new, requirement)
                     .expand();
         }
 
