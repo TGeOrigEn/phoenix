@@ -8,6 +8,8 @@ import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 
+import java.time.Duration;
+
 public class Item extends Component {
 
     public static class Requirements {
@@ -64,7 +66,9 @@ public class Item extends Component {
 
     public void expand() {
         expandButton.toAction().click();
-        find(QuickTip::new).toAction().hover();
+        final var quickTip = find(QuickTip::new);
+        if (Component.has(quickTip, Requirement.byAvailable(true), Duration.ofSeconds(2)))
+            quickTip.toAction().hover();
     }
 
     public boolean isExpendable() {

@@ -137,14 +137,14 @@ public abstract class Component {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         final var s = Arrays.stream(property.getTrace()).map(component -> {
             final var description = component.getDescription();
             final var condition = component.condition;
 
             return condition == null
-                    ? String.format("'%s[%d](%d)'", description.getName(), description.getIndex(), component.getIndex())
-                    : String.format("'%s[%d](%d)' ?? %s", description.getName(), description.getIndex(), component.getIndex(), condition);
+                    ? String.format("{'%s[%d](%d)'}", description.getName(), description.getIndex(), component.getIndex())
+                    : String.format("{'%s[%d](%d)' ?? %s}", description.getName(), description.getIndex(), component.getIndex(), condition);
         });
         return String.join("->", s.toArray(String[]::new));
     }
