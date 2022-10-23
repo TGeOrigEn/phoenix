@@ -36,10 +36,14 @@ public class Example {
     public void test() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
-        Component.find(Item::new, Item.Requirements.Equals.byName("Приморский край")).expand();
-        Component.find(Item::new, Item.Requirements.Equals.byName("Владивостокский ГО")).expand();
-        Component.find(Item::new, Item.Requirements.Equals.byName("Шкотовский МР")).expand();
+        for (var index = 0; index < 20; index++) {
+            Component.find(Item::new,
+                            Item.Requirements.Equals.byName("").toNegative()
+                                    .and(Item.Requirements.byExpand(false))
+                                    .and(Item.Requirements.byExpendable((true))))
+                    .expand();
+        }
 
-        Component.find(Item::new, Item.Requirements.Equals.byName("Результаты запросов (Sapphire)")).expand();
+        //Component.find(Item::new, Item.Requirements.Equals.byName("Результаты запросов (Sapphire)").toNegative().and(Item.Requirements.byExpand(false)).toNegative().and(Requirement.byReadonly(false)).and(Requirement.byDisplayed(true))).expand();
     }
 }

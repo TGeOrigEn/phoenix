@@ -29,6 +29,10 @@ public class Item extends Component {
         public static @NotNull BaseRequirement<Item> byExpand(boolean isExpand) {
             return new Requirement<>(Item::isExpand, isExpand, "Открыт");
         }
+
+        public static @NotNull BaseRequirement<Item> byExpendable(boolean isExpendable){
+            return new Requirement<>(Item::isExpendable, isExpendable, "Может разворачиваться");
+        }
     }
 
     private static final Description EXPAND_BUTTON_DESCRIPTION = new Description(By.cssSelector("img[class*='plus']"), "Кнопка 'Развернуть'");
@@ -61,6 +65,10 @@ public class Item extends Component {
     public void expand() {
         expandButton.toAction().click();
         find(QuickTip::new).toAction().hover();
+    }
+
+    public boolean isExpendable() {
+        return expandButton.isAvailable();
     }
 
     public boolean isExpand(){
