@@ -68,7 +68,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         this(function, value, description, Objects::equals);
     }
 
-    private Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition) {
+    public Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition) {
         super(value, description);
         this.condition = condition;
         this.function = function;
