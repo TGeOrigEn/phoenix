@@ -7,13 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseRequirement<TComponent extends Component> {
 
+    private final @Nullable BaseRequirement<TComponent> requirement;
+
     private final @NotNull String description;
 
     private final @Nullable Object value;
 
     private final boolean negative;
 
-    public BaseRequirement(@Nullable Object value, @NotNull String description, boolean negative) {
+    public BaseRequirement(@Nullable Object value, @NotNull String description, @Nullable BaseRequirement<TComponent> requirement, boolean negative) {
+        this.requirement = requirement;
         this.description = description;
         this.negative = negative;
         this.value = value;
@@ -26,6 +29,10 @@ public abstract class BaseRequirement<TComponent extends Component> {
     public abstract BaseRequirement<TComponent> toNegative();
 
     public abstract boolean isTrue(TComponent component);
+
+    public @Nullable BaseRequirement<TComponent> getRequirement() {
+        return requirement;
+    }
 
     public @NotNull String getDescription() {
         return description;
