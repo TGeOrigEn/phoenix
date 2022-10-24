@@ -11,14 +11,11 @@ public abstract class BaseCondition {
 
     private final @NotNull String description;
 
-    private final @Nullable Object value;
-
     private boolean enabled = true;
 
-    public BaseCondition(@NotNull Component component, @Nullable Object value, @NotNull String description) {
+    public BaseCondition(@NotNull Component component, @NotNull String description) {
         this.description = description;
         this.component = component;
-        this.value = value;
     }
 
     public final @NotNull String getDescription() {
@@ -32,10 +29,6 @@ public abstract class BaseCondition {
 
     public final void setEnabled(boolean value) {
         enabled = value;
-    }
-
-    public final @Nullable Object getValue() {
-        return value;
     }
 
     public final boolean isEnabled() {

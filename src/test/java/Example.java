@@ -39,14 +39,12 @@ public class Example {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
         for (var index = 0; index < 70; index++) {
-            final var requirementA = Item.Requirements.Equals.byName("Шкотовский МР").add(Operation.OR, Item.Requirements.Equals.byName("Результаты запросов (Sapphire)"));
-            final var requirementB = Item.Requirements.Equals.byName("Владивостокский ГО").add(Operation.OR, Item.Requirements.Equals.byName("Приморский край"));
-            final var requirementC = Item.Requirements.byExpand(false).toNegative().add(Operation.AND, Item.Requirements.byExpendable(true));
-            final var requirementD = BaseRequirement.add(requirementA, Operation.AND, requirementB);
-
-            final var requirementE = requirementA.add(Operation.AND, requirementB).add(Operation.AND, requirementC);
-
-            final var component = Component.find(Item::new, new Description(By.cssSelector("tr[class*='x-grid-row']"), "Элемент списка", 0), requirementD);
+            final var requirementA = Item.Requirements.Equals.byName("Шкотовский МР").or(Item.Requirements.Equals.byName("Результаты запросов (Sapphire)"));
+            final var requirementB = Item.Requirements.Equals.byName("Владивостокский ГО").or(Item.Requirements.Equals.byName("Приморский край"));
+            final var requirementC = Item.Requirements.byExpand(true).and(Item.Requirements.byExpendable(true));
+            final var requirement = requirementA.or(requirementB).and(requirementC);
+            final var component = Component.find(Item::new, new Description(By.cssSelector("tr[class*='x-grid-row']"), "Элемент списка", 0), requirement);
+            //requirement.toString();
             component.expand();
         }
 
