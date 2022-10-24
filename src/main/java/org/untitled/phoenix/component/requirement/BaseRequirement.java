@@ -10,15 +10,15 @@ import java.util.List;
 
 public abstract class BaseRequirement<TComponent extends Component> {
 
-    public enum Operation {OR, AND}
-
-    private @NotNull String description;
-
-    private final @Nullable Object value;
-
-    private @Nullable BaseRequirement<TComponent> requirement = null;
+    private @Nullable BaseRequirement<TComponent> requirement;
 
     private @NotNull Operation operation = Operation.AND;
+
+    private final @NotNull List<LinearRequirement<TComponent>> requirements = new ArrayList<>();
+
+    private final @NotNull String description;
+
+    private final @Nullable Object value;
 
     private boolean negative = false;
 
@@ -27,16 +27,15 @@ public abstract class BaseRequirement<TComponent extends Component> {
         this.value = value;
     }
 
-    public final @NotNull BaseRequirement<TComponent> and(@NotNull BaseRequirement<TComponent> requirement) {
-        requirement.operation = Operation.AND;
-        requirement.requirement = this;
-        return requirement;
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> add(@NotNull BaseRequirement<TComponent> requirementA, @NotNull Operation operation, @NotNull BaseRequirement<TComponent> requirementB) {
+        requirementA.requirement = requirementB;
+        requirementA.operation = operation;
+        return requirementA;
     }
 
-    public final @NotNull BaseRequirement<TComponent> or(@NotNull BaseRequirement<TComponent> requirement) {
-        requirement.operation = Operation.OR;
-        requirement.requirement = this;
-        return requirement;
+    public final @NotNull BaseRequirement<TComponent> add(@NotNull Operation operation, @NotNull BaseRequirement<TComponent> requirement) {
+        requirements.add(new LinearRequirement<>(operation, requirement));
+        return this;
     }
 
     public final BaseRequirement<TComponent> toNegative() {
@@ -50,6 +49,10 @@ public abstract class BaseRequirement<TComponent extends Component> {
         return requirement;
     }
 
+    public final @NotNull List<LinearRequirement<TComponent>> getRequirements() {
+        return requirements;
+    }
+
     public final @NotNull String getDescription() {
         return description;
     }
@@ -58,12 +61,12 @@ public abstract class BaseRequirement<TComponent extends Component> {
         return value;
     }
 
-    public final boolean isNegative() {
-        return negative;
-    }
-
     public final @NotNull Operation getOperation() {
         return operation;
+    }
+
+    public final boolean isNegative() {
+        return negative;
     }
 
     public final @NotNull String getCompletedDescription() {
@@ -74,9 +77,7 @@ public abstract class BaseRequirement<TComponent extends Component> {
         if (buffer == null)
             buffer = new ArrayList<>();
 
-        if (requirement.requirement != null)
-            buffer.add(String.format("%s %s", requirement, requirement.operation == Operation.OR ? "ИЛИ" : "И"));
-        else buffer.add(requirement.toString());
+        buffer.add(requirement.toString());
 
         if (requirement.requirement != null)
             getCompletedDescription(requirement.requirement, buffer);
@@ -86,6 +87,8 @@ public abstract class BaseRequirement<TComponent extends Component> {
 
     @Override
     public String toString() {
-        return negative ? String.format("НЕ '%s => %s'", getDescription(), value) : String.format("'%s => %s'", getDescription(), value);
+        return negative
+                ? String.format("(НЕ '%s => %s')", getDescription(), value)
+                : String.format("('%s => %s')", getDescription(), value);
     }
 }

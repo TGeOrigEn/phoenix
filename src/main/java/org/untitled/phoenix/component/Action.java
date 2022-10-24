@@ -2,6 +2,7 @@ package org.untitled.phoenix.component;
 
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.InvalidElementStateException;
+import org.untitled.phoenix.component.requirement.Operation;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 
@@ -50,7 +51,7 @@ public final class Action {
 
         while (true) {
             try {
-                Component.should(component, Requirement.byDisplayed(true).and(Requirement.byEnabled(true)), Duration.ZERO);
+                Component.should(component, Requirement.byDisplayed(true).add(Operation.AND, Requirement.byEnabled(true)), Duration.ZERO);
                 action.moveToElement(component.toWebElement()).build().perform();
                 return;
             } catch (UnavailableComponentException | ComponentConditionException exception) {

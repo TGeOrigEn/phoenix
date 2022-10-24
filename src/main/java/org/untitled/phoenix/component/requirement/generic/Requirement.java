@@ -97,10 +97,33 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
 
     @Override
     public boolean isTrue(TComponent component) {
+
+        if (getRequirements().size() > 0) {
+
+            var result = switch (getRequirements().get(0).getOperation()) {
+                case AND -> condition.test(function.apply(component), value) != isNegative() && getRequirements().get(0).getRequirement().isTrue(component);
+                case OR -> condition.test(function.apply(component), value)  != isNegative()|| getRequirements().get(0).getRequirement().isTrue(component);
+            };
+
+            for (var index = 1; index < getRequirements().size(); index++)
+                result = switch (getRequirements().get(index).getOperation()) {
+                    case AND -> result && getRequirements().get(index).getRequirement().isTrue(component);
+                    case OR -> result || getRequirements().get(index).getRequirement().isTrue(component);
+                };
+
+            return getRequirement() == null
+                    ? result :
+                    switch (getOperation()) {
+                        case AND -> result && getRequirement().isTrue(component);
+                        case OR -> result || getRequirement().isTrue(component);
+                    };
+        }
+
         return getRequirement() == null
-                ? condition.test(function.apply(component), value) != isNegative()
-                : getOperation() == Operation.AND
-                ? condition.test(function.apply(component), value) != isNegative() && getRequirement().isTrue(component)
-                : condition.test(function.apply(component), value) != isNegative() || getRequirement().isTrue(component);
+                ? condition.test(function.apply(component), value) != isNegative() :
+                switch (getOperation()) {
+                    case AND -> condition.test(function.apply(component), value) != isNegative() && getRequirement().isTrue(component);
+                    case OR -> condition.test(function.apply(component), value) != isNegative() || getRequirement().isTrue(component);
+                };
     }
 }
