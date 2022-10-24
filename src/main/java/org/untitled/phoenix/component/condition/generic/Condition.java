@@ -1,5 +1,6 @@
 package org.untitled.phoenix.component.condition.generic;
 
+import org.jetbrains.annotations.Contract;
 import org.untitled.phoenix.component.requirement.BaseRequirement;
 import org.untitled.phoenix.component.condition.BaseCondition;
 import org.untitled.phoenix.component.Component;
@@ -24,7 +25,7 @@ public final class Condition<TComponent extends Component> extends BaseCondition
     }
 
     @Override
-    public String toString() {
-        return requirement.toString();
+    public @NotNull String toString() {
+        return requirement.getCompletedDescription();
     }
 }

@@ -5,6 +5,9 @@ import org.untitled.phoenix.component.Component;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class BaseRequirement<TComponent extends Component> {
 
     public enum Operation {OR, AND}
@@ -25,14 +28,12 @@ public abstract class BaseRequirement<TComponent extends Component> {
     }
 
     public final @NotNull BaseRequirement<TComponent> and(@NotNull BaseRequirement<TComponent> requirement) {
-        requirement.description = String.format("%s И '%s", this.toString().substring(1), requirement.description);
         requirement.operation = Operation.AND;
         requirement.requirement = this;
         return requirement;
     }
 
     public final @NotNull BaseRequirement<TComponent> or(@NotNull BaseRequirement<TComponent> requirement) {
-        requirement.description = String.format("%s ИЛИ '%s", this.toString().substring(1), requirement.description);
         requirement.operation = Operation.OR;
         requirement.requirement = this;
         return requirement;
@@ -65,8 +66,26 @@ public abstract class BaseRequirement<TComponent extends Component> {
         return operation;
     }
 
+    public final @NotNull String getCompletedDescription() {
+       return String.join(" ", getCompletedDescription(this, new ArrayList<>()));
+    }
+
+    private static <TComponent extends Component> @NotNull List<String> getCompletedDescription(BaseRequirement<TComponent> requirement, List<String> buffer) {
+        if (buffer == null)
+            buffer = new ArrayList<>();
+
+        if (requirement.requirement != null)
+            buffer.add(String.format("%s %s", requirement, requirement.operation == Operation.OR ? "ИЛИ" : "И"));
+        else buffer.add(requirement.toString());
+
+        if (requirement.requirement != null)
+            getCompletedDescription(requirement.requirement, buffer);
+
+        return buffer;
+    }
+
     @Override
     public String toString() {
-        return String.format("'%s => %s'", getDescription(), value);
+        return negative ? String.format("НЕ '%s => %s'", getDescription(), value) : String.format("'%s => %s'", getDescription(), value);
     }
 }

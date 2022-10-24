@@ -1,5 +1,8 @@
 package org.untitled.phoenix.component;
 
+import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.InvalidElementStateException;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 
 import org.openqa.selenium.WebElement;
@@ -8,6 +11,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.untitled.phoenix.exception.ComponentActionException;
+import org.untitled.phoenix.exception.ComponentConditionException;
 import org.untitled.phoenix.exception.UnavailableComponentException;
 
 import java.util.function.Consumer;
@@ -46,12 +50,13 @@ public final class Action {
 
         while (true) {
             try {
+                Component.should(component, Requirement.byDisplayed(true).and(Requirement.byEnabled(true)), Duration.ZERO);
                 action.moveToElement(component.toWebElement()).build().perform();
                 return;
-            } catch (UnavailableComponentException exception) {
+            } catch (UnavailableComponentException | ComponentConditionException exception) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
                     throw exception;
-            } catch (Exception ignore) {
+            } catch (InvalidElementStateException ignore) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
                     throw new ComponentActionException(component, "Не удалось навести курсор мыши на компонент", component.getTimeout());
             }
@@ -78,7 +83,7 @@ public final class Action {
             } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
                     throw exception;
-            } catch (Exception ignore) {
+            } catch (InvalidElementStateException ignore) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
                     throw new ComponentActionException(component, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout());
             }
@@ -119,7 +124,7 @@ public final class Action {
             } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw exception;
-            } catch (Exception ignore) {
+            } catch (InvalidElementStateException ignore) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw new ComponentActionException(component, message, timeout);
             }
@@ -135,7 +140,7 @@ public final class Action {
             } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw exception;
-            } catch (Exception ignore) {
+            } catch (InvalidElementStateException ignore) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw new ComponentActionException(component, message, timeout);
             }

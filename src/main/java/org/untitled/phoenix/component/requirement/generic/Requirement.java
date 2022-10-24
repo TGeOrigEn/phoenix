@@ -76,7 +76,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
     }
 
     public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byAvailable(boolean isAvailable) {
-        return new Requirement<>(Component::isAvailable, isAvailable, "Доступен");
+        return new Requirement<>(TComponent::isAvailable, isAvailable, "Доступен");
     }
 
     public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byDisplayed(boolean isDisplayed) {

@@ -1,5 +1,6 @@
 package org.untitled.phoenix.component;
 
+import org.openqa.selenium.InvalidElementStateException;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.component.requirement.BaseRequirement;
 import org.untitled.phoenix.component.condition.generic.Condition;
@@ -31,7 +32,7 @@ public abstract class Component {
 
     private @NotNull Property property;
 
-    private @NotNull Duration timeout = Duration.ofSeconds(10);
+    private @NotNull Duration timeout = Duration.ofSeconds(15);
 
     private int index = 0;
 
@@ -73,6 +74,10 @@ public abstract class Component {
 
     public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement) {
         return findComponent(constructor, null, requirement, null);
+    }
+
+    public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponent(constructor, description, requirement, null);
     }
 
     public <TComponent extends Component> @NotNull TComponent findInside(@NotNull Supplier<@NotNull TComponent> constructor) {
@@ -146,7 +151,7 @@ public abstract class Component {
                     ? String.format("{'%s[%d](%d)'}", description.getName(), description.getIndex(), component.getIndex())
                     : String.format("{'%s[%d](%d)' ?? %s}", description.getName(), description.getIndex(), component.getIndex(), condition);
         });
-        return String.join("->", s.toArray(String[]::new));
+        return String.join(" -> ", s.toArray(String[]::new));
     }
 
     private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent) {
