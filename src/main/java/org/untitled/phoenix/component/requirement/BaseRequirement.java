@@ -6,12 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseRequirement<TComponent extends Component> {
 
-    private final @NotNull String description;
-
     private final boolean negative;
 
-    public BaseRequirement(@NotNull String description, boolean isNegative) {
-        this.description = description;
+    public BaseRequirement(boolean isNegative) {
         this.negative = isNegative;
     }
 
@@ -22,10 +19,6 @@ public abstract class BaseRequirement<TComponent extends Component> {
     public abstract @NotNull BaseRequirement<TComponent> toNegative();
 
     public abstract boolean isTrue(@NotNull TComponent component);
-
-    public final @NotNull String getDescription() {
-        return description;
-    }
 
     public final boolean isNegative() {
         return negative;

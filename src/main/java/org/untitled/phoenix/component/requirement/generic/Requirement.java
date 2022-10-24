@@ -64,9 +64,11 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
 
     private final @NotNull List<LinearRequirement<TComponent>> requirements = new ArrayList<>();
 
-    private final @Nullable BiPredicate<@Nullable TValue, @Nullable TValue> condition;
+    private final @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition;
 
-    private final @Nullable Function<@NotNull TComponent, @Nullable TValue> function;
+    private final @NotNull Function<@NotNull TComponent, @Nullable TValue> function;
+
+    private final @NotNull String description;
 
     private final @Nullable TValue value;
 
@@ -78,33 +80,38 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         this(function, value, description, condition, false);
     }
 
-    private Requirement(@Nullable Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @Nullable BiPredicate<@Nullable TValue, @Nullable TValue> condition, boolean isNegative) {
-        super(description, isNegative);
+    private Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition, boolean isNegative) {
+        super(isNegative);
+        this.description = description;
         this.condition = condition;
         this.function = function;
         this.value = value;
     }
 
     private Requirement(@NotNull Requirement<TComponent, TValue> requirement, boolean isNegative) {
-        super(requirement.getDescription(), isNegative);
+        super(isNegative);
         this.requirements.addAll(requirement.requirements);
+        this.description = requirement.description;
         this.condition = requirement.condition;
         this.function = requirement.function;
         this.value = requirement.value;
     }
 
     private Requirement(@NotNull Requirement<TComponent, TValue> requirement, @NotNull Operation operation, @NotNull BaseRequirement<TComponent> baseRequirement) {
-        super(requirement.getDescription(), requirement.isNegative());
+        super(requirement.isNegative());
         requirements.addAll(requirement.requirements);
-        this.condition = null;
-        this.function = null;
+        this.description = requirement.description;
+        this.condition = requirement.condition;
+        this.function = requirement.function;
         this.value = null;
 
         if (requirements.isEmpty()) {
-            final var instance = new Requirement<>(requirement.function, requirement.value, getDescription(), condition, isNegative());
-            instance.requirements.addAll(requirement.requirements);
-            instance.requirements.add(new LinearRequirement<>(operation, baseRequirement));
-            requirements.add(0, new LinearRequirement<>(Operation.AND, instance));
+            final var instance = new Requirement<>(requirement, isNegative());
+            final var base = new Requirement<>(this, isNegative());
+
+            base.requirements.add(new LinearRequirement<>(operation, baseRequirement));
+            base.requirements.add(0, new LinearRequirement<>(Operation.AND, instance));
+            requirements.add(new LinearRequirement<>(operation, base));
         } else
             requirements.add(new LinearRequirement<>(operation, baseRequirement));
 
@@ -172,15 +179,15 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
     @Override
     public @NotNull String toString() {
         if (requirements.isEmpty())
-            if (isNegative()) return String.format("НЕ '%s => %s'", getDescription(), value);
-            else return String.format("'%s => %s'", getDescription(), value);
+            if (isNegative()) return String.format("НЕ '%s => %s'", description, value);
+            else return String.format("'%s => %s'", description, value);
         else {
             final var descriptions = new ArrayList<>(requirements.stream().skip(1).map(requirement -> switch (requirement.getOperation()) {
                 case OR -> String.format("ИЛИ %s", requirement.getRequirement());
                 case AND -> String.format("И %s", requirement.getRequirement());
             }).toList());
             descriptions.add(0, requirements.get(0).getRequirement().toString());
-            return String.format("(%s)", String.join(" ", descriptions));
+            return requirements.size() == 1 ? String.join(" ", descriptions) : String.format("(%s)", String.join(" ", descriptions));
         }
     }
 }

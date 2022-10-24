@@ -9,17 +9,10 @@ public abstract class BaseCondition {
 
     private final @NotNull Component component;
 
-    private final @NotNull String description;
-
     private boolean enabled = true;
 
-    public BaseCondition(@NotNull Component component, @NotNull String description) {
-        this.description = description;
+    public BaseCondition(@NotNull Component component) {
         this.component = component;
-    }
-
-    public final @NotNull String getDescription() {
-        return description;
     }
 
     public final @NotNull Component getComponent()
