@@ -1,17 +1,15 @@
 package org.untitled.phoenix.component.requirement.generic;
 
 import org.untitled.phoenix.component.requirement.BaseRequirement;
+import org.untitled.phoenix.component.requirement.Operation;
 import org.untitled.phoenix.component.Component;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-import org.untitled.phoenix.component.requirement.LinearRequirement;
-import org.untitled.phoenix.component.requirement.Operation;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public final class Requirement<TComponent extends Component, TValue> extends BaseRequirement<TComponent> {
@@ -62,13 +60,11 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         }
     }
 
-    private final @NotNull List<LinearRequirement<TComponent>> requirements = new ArrayList<>();
+    private final @Nullable BiPredicate<@Nullable TValue, @Nullable TValue> condition;
 
-    private final @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition;
+    private final @Nullable Function<@NotNull TComponent, @Nullable TValue> function;
 
-    private final @NotNull Function<@NotNull TComponent, @Nullable TValue> function;
-
-    private final @NotNull String description;
+    private final @Nullable String description;
 
     private final @Nullable TValue value;
 
@@ -77,11 +73,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
     }
 
     public Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition) {
-        this(function, value, description, condition, false);
-    }
-
-    private Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition, boolean isNegative) {
-        super(isNegative);
+        super(false);
         this.description = description;
         this.condition = condition;
         this.function = function;
@@ -89,8 +81,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
     }
 
     private Requirement(@NotNull Requirement<TComponent, TValue> requirement, boolean isNegative) {
-        super(isNegative);
-        this.requirements.addAll(requirement.requirements);
+        super(requirement, isNegative);
         this.description = requirement.description;
         this.condition = requirement.condition;
         this.function = requirement.function;
@@ -98,24 +89,11 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
     }
 
     private Requirement(@NotNull Requirement<TComponent, TValue> requirement, @NotNull Operation operation, @NotNull BaseRequirement<TComponent> baseRequirement) {
-        super(requirement.isNegative());
-        requirements.addAll(requirement.requirements);
-        this.description = requirement.description;
-        this.condition = requirement.condition;
-        this.function = requirement.function;
+        super(requirement, operation, baseRequirement);
+        this.description = null;
+        this.condition = null;
+        this.function = null;
         this.value = null;
-
-        if (requirements.isEmpty()) {
-            final var instance = new Requirement<>(requirement, isNegative());
-            final var base = new Requirement<>(this, isNegative());
-
-            base.requirements.add(new LinearRequirement<>(operation, baseRequirement));
-            base.requirements.add(0, new LinearRequirement<>(Operation.AND, instance));
-            requirements.add(new LinearRequirement<>(operation, base));
-        } else
-            requirements.add(new LinearRequirement<>(operation, baseRequirement));
-
-        var s = 0;
     }
 
     public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byAvailable(boolean isAvailable) {
@@ -141,24 +119,23 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
     @Override
     public boolean isTrue(@NotNull TComponent component) {
 
-        if (requirements.isEmpty())
-            return condition.test(function.apply(component), value) != isNegative();
+        if (getRequirements().isEmpty())
+            if (condition != null && function != null)
+                return condition.test(function.apply(component), value) != isNegative();
+            else throw new RuntimeException();
 
-        if (requirements.size() == 1)
-            return switch (requirements.get(0).getOperation()) {
-                case AND -> (condition.test(function.apply(component), value) && requirements.get(0).getRequirement().isTrue(component)) != isNegative();
-                case OR -> (condition.test(function.apply(component), value) || requirements.get(0).getRequirement().isTrue(component)) != isNegative();
+        if (getRequirements().size() == 1)
+            return getRequirements().get(0).getRequirement().isTrue(component) != isNegative();
+
+        var isTrue = getRequirements().get(0).getRequirement().isTrue(component);
+
+        for (var index = 1; index < getRequirements().size(); index++)
+            isTrue = switch (getRequirements().get(index).getOperation()) {
+                case AND -> isTrue && getRequirements().get(index).getRequirement().isTrue(component);
+                case OR -> isTrue || getRequirements().get(index).getRequirement().isTrue(component);
             };
 
-        var result = requirements.get(0).getRequirement().isTrue(component);
-
-        for (var index = 1; index < requirements.size(); index++)
-            result = switch (requirements.get(index).getOperation()) {
-                case AND -> result && requirements.get(index).getRequirement().isTrue(component);
-                case OR -> result || requirements.get(index).getRequirement().isTrue(component);
-            };
-
-        return result != isNegative();
+        return isTrue != isNegative();
     }
 
     @Override
@@ -178,16 +155,20 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
 
     @Override
     public @NotNull String toString() {
-        if (requirements.isEmpty())
+        if (getRequirements().isEmpty())
             if (isNegative()) return String.format("НЕ '%s => %s'", description, value);
             else return String.format("'%s => %s'", description, value);
         else {
-            final var descriptions = new ArrayList<>(requirements.stream().skip(1).map(requirement -> switch (requirement.getOperation()) {
+            final var descriptions = new ArrayList<>(getRequirements().stream().skip(1).map(requirement -> switch (requirement.getOperation()) {
                 case OR -> String.format("ИЛИ %s", requirement.getRequirement());
                 case AND -> String.format("И %s", requirement.getRequirement());
             }).toList());
-            descriptions.add(0, requirements.get(0).getRequirement().toString());
-            return requirements.size() == 1 ? String.join(" ", descriptions) : String.format("(%s)", String.join(" ", descriptions));
+
+            descriptions.add(0, getRequirements().get(0).getRequirement().toString());
+
+            return isNegative()
+                    ? String.format("НЕ (%s)", String.join(" ", descriptions))
+                    : String.format("(%s)", String.join(" ", descriptions));
         }
     }
 }

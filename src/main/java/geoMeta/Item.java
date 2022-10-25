@@ -66,9 +66,9 @@ public class Item extends Component {
 
     public void expand() {
         expandButton.toAction().click();
-        final var quickTip = find(QuickTip::new);
-        if (Component.has(quickTip, Requirement.byAvailable(true), Duration.ofSeconds(2)))
-            quickTip.toAction().hover();
+        /*final var quickTip = find(QuickTip::new);
+        if (Component.has(quickTip, Requirement.byAvailable(true), Duration.ofMillis(500)))
+            quickTip.toAction().hover();*/
     }
 
     public boolean isExpendable() {

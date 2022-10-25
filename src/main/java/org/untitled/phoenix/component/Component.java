@@ -32,7 +32,7 @@ public abstract class Component {
 
     private @NotNull Property property;
 
-    private @NotNull Duration timeout = Duration.ofSeconds(15);
+    private @NotNull Duration timeout = Duration.ofSeconds(10);
 
     private int index = 0;
 
@@ -64,7 +64,8 @@ public abstract class Component {
 
         while (true) {
             if (condition.isTrue()) return component;
-            if (System.currentTimeMillis() - startTime >= timeout.toMillis()) throw new ComponentConditionException(component, condition, timeout);
+            if (System.currentTimeMillis() - startTime >= timeout.toMillis())
+                throw new ComponentConditionException(component, condition, timeout);
         }
     }
 
@@ -200,11 +201,17 @@ public abstract class Component {
 
             if (component.getProperties().getParent() != null) {
                 context = toWebElement(component.getProperties().getParent());
-                if (context == null) return null;
+                if (context == null) {
+                    component.getProperties().getParent().index = 0;
+                    return null;
+                }
             }
 
-            if (component.getCondition() == null || !component.getCondition().isEnabled())
-                return findWebElement(component.getDescription().getMechanism(), context, component.getIndex());
+            if (component.getCondition() == null || !component.getCondition().isEnabled()) {
+                final var element = findWebElement(component.getDescription().getMechanism(), context, component.getIndex());
+                if (element == null) component.index = 0;
+                return element;
+            }
 
             var elements = findWebElements(component.getDescription().getMechanism(), context);
             component.getCondition().setEnabled(false);
@@ -212,7 +219,6 @@ public abstract class Component {
 
             for (int index = 0; index < elements.size(); index++) {
                 component.index = index;
-
                 if (component.getCondition().isTrue())
                     if (++count == component.getDescription().getIndex()) {
                         component.getCondition().setEnabled(true);
@@ -221,8 +227,10 @@ public abstract class Component {
             }
 
             component.getCondition().setEnabled(true);
+            component.index = 0;
             return null;
         } catch (Exception e) {
+            component.index = 0;
             return null;
         }
     }

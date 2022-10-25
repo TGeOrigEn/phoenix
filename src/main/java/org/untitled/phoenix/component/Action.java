@@ -1,8 +1,7 @@
 package org.untitled.phoenix.component;
 
-import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.InvalidElementStateException;
-import org.untitled.phoenix.component.requirement.Operation;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 
@@ -57,7 +56,7 @@ public final class Action {
             } catch (UnavailableComponentException | ComponentConditionException exception) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
                     throw exception;
-            } catch (InvalidElementStateException ignore) {
+            } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
                     throw new ComponentActionException(component, "Не удалось навести курсор мыши на компонент", component.getTimeout());
             }
@@ -84,7 +83,7 @@ public final class Action {
             } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
                     throw exception;
-            } catch (InvalidElementStateException ignore) {
+            } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
                 if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
                     throw new ComponentActionException(component, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout());
             }
@@ -125,7 +124,7 @@ public final class Action {
             } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw exception;
-            } catch (InvalidElementStateException ignore) {
+            } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw new ComponentActionException(component, message, timeout);
             }
@@ -141,7 +140,7 @@ public final class Action {
             } catch (UnavailableComponentException exception) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw exception;
-            } catch (InvalidElementStateException ignore) {
+            } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
                 if (System.currentTimeMillis() - startTime >= timeout.toMillis())
                     throw new ComponentActionException(component, message, timeout);
             }

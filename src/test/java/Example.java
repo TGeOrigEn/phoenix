@@ -12,6 +12,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.time.Duration;
+
 public class Example {
 
     private static final Description CREATE_NEW_OBJECT_BUTTON_DESCRIPTION = new Description(By.cssSelector("a[data-qtip='Создать новый объект']"), "Кнопка 'Создать новый объект'");
@@ -34,20 +36,38 @@ public class Example {
         Configuration.getWebDriver().get("https://autotests.gemsdev.ru/");
     }
 
+    private void open() {
+        final var requirementB = Item.Requirements.Equals.byName("autotests")
+                .or(Item.Requirements.Equals.byName("AutoTestCatalog")).toNegative();
+
+        final var requirementC = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable(true));
+        final var requirement = requirementB.and(Item.Requirements.byExpand(false));
+
+        final var component = Component.find(Item::new, requirement);
+        while (true)
+            component.expand();
+    }
+
+    private void close() {
+        final var requirementB = Item.Requirements.Equals.byName("Шкотовский МР")
+                .or(Item.Requirements.Equals.byName("Владивостокский ГО"))
+                .or(Item.Requirements.Equals.byName("Приморский край"));
+
+        final var requirementC = Item.Requirements.byExpand(false).toNegative().and(Item.Requirements.byExpendable(false));
+        final var requirement = requirementB.and(requirementC);
+
+        final var component = Component.find(Item::new, requirement);
+        while (Component.has(component, Requirement.byAvailable(true), Duration.ofSeconds(1)))
+            component.expand();
+    }
+
     @Test
     public void test() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
-        for (var index = 0; index < 70; index++) {
-            final var requirementA = Item.Requirements.Equals.byName("Шкотовский МР").or(Item.Requirements.Equals.byName("Результаты запросов (Sapphire)")).and(Item.Requirements.Equals.byName("Показания"));
-            final var requirementB = Item.Requirements.Equals.byName("Владивостокский ГО").or(Item.Requirements.Equals.byName("Приморский край"));
-            final var requirementC = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable(true));
-            final var requirement = requirementA.or(requirementB).and(requirementC);
-            final var component = Component.find(Item::new, new Description(By.cssSelector("tr[class*='x-grid-row']"), "Элемент списка", 0), requirement);
-            //requirement.toString();
-            component.expand();
+        while (true) {
+            open();
+            //close();
         }
-
-        //Component.find(Item::new, Item.Requirements.Equals.byName("Результаты запросов (Sapphire)").toNegative().and(Item.Requirements.byExpand(false)).toNegative().and(Requirement.byReadonly(false)).and(Requirement.byDisplayed(true))).expand();
     }
 }
