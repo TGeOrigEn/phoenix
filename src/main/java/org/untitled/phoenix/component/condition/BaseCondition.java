@@ -3,7 +3,6 @@ package org.untitled.phoenix.component.condition;
 import org.untitled.phoenix.component.Component;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseCondition {
 
