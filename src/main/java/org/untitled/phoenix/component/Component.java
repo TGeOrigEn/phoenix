@@ -77,6 +77,8 @@ public abstract class Component {
 
     //region Методы глобального поиска
 
+    //region Одного
+
     // Без требования
 
     public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description) {
@@ -96,7 +98,7 @@ public abstract class Component {
     }
 
     public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, int index) {
-        return findComponent(constructor, null, null, null, null, index);
+        return findComponent(constructor, null, null, index);
     }
 
     public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor) {
@@ -122,7 +124,7 @@ public abstract class Component {
     }
 
     public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, int index, @NotNull BaseRequirement<TComponent> requirement) {
-        return findComponent(constructor, requirement, null, null, null, index);
+        return findComponent(constructor, requirement, null, index);
     }
 
     public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement) {
@@ -131,7 +133,103 @@ public abstract class Component {
 
     //endregion
 
+    //region Множество
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description) {
+        return findComponents(constructor, description, null, null, Duration.ZERO);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull String name) {
+        return findComponents(constructor, null, null, Duration.ZERO, mechanism, name);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism) {
+        return findComponents(constructor, null, null, Duration.ZERO, mechanism, null);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull String name) {
+        return findComponents(constructor, null, null, Duration.ZERO, null, name);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor) {
+        return findComponents(constructor, null, null, null, Duration.ZERO);
+    }
+
+    //
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull Duration timeout) {
+        return findComponents(constructor, description, null, null, timeout);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull String name, @NotNull Duration timeout) {
+        return findComponents(constructor, null, null, timeout, mechanism, name);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull Duration timeout) {
+        return findComponents(constructor, null, null, timeout, mechanism, null);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull String name, @NotNull Duration timeout) {
+        return findComponents(constructor, null, null, timeout, null, name);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Duration timeout) {
+        return findComponents(constructor, null, null, null, timeout);
+    }
+
+    // С требованием
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, description, requirement, null, Duration.ZERO);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull String name, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, requirement, null, Duration.ZERO, mechanism, name);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, requirement, null, Duration.ZERO, mechanism, null);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull String name, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, requirement, null, Duration.ZERO, null, name);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, null, requirement, null, Duration.ZERO);
+    }
+
+    //
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, description, requirement, null, timeout);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull String name, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, requirement, null, timeout, mechanism, name);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, requirement, null, timeout, mechanism, null);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull String name, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, requirement, null, timeout, null, name);
+    }
+
+    public static <TComponent extends Component> @NotNull List<TComponent> findEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, null, requirement, null, timeout);
+    }
+
+    //endregion
+
+    //endregion
+
     //region Методы внутреннего поиска
+
+    //region Одного
+
+    // Без требования
 
     public <TComponent extends Component> @NotNull TComponent findInside(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description) {
         return findComponent(constructor, description, null, this);
@@ -150,7 +248,7 @@ public abstract class Component {
     }
 
     public <TComponent extends Component> @NotNull TComponent findInside(@NotNull Supplier<@NotNull TComponent> constructor, int index) {
-        return findComponent(constructor, null, this, null, null, index);
+        return findComponent(constructor, null, this, index);
     }
 
     public <TComponent extends Component> @NotNull TComponent findInside(@NotNull Supplier<@NotNull TComponent> constructor) {
@@ -176,17 +274,106 @@ public abstract class Component {
     }
 
     public <TComponent extends Component> @NotNull TComponent findInside(@NotNull Supplier<@NotNull TComponent> constructor, int index, @NotNull BaseRequirement<TComponent> requirement) {
-        return findComponent(constructor, requirement, this, null, null, index);
+        return findComponent(constructor, requirement, this, index);
     }
 
     public <TComponent extends Component> @NotNull TComponent findInside(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement) {
         return findComponent(constructor, null, requirement, this);
     }
 
+    //endregion
+
+    //region Множество
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description) {
+        return findComponents(constructor, description, null, null, Duration.ZERO);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull String name) {
+        return findComponents(constructor, null, null, Duration.ZERO, mechanism, name);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism) {
+        return findComponents(constructor, null, null, Duration.ZERO, mechanism, null);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull String name) {
+        return findComponents(constructor, null, null, Duration.ZERO, null, name);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor) {
+        return findComponents(constructor, null, null, null, Duration.ZERO);
+    }
+
     //
 
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull Duration timeout) {
+        return findComponents(constructor, description, null, null, timeout);
+    }
 
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull String name, @NotNull Duration timeout) {
+        return findComponents(constructor, null, null, timeout, mechanism, name);
+    }
 
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull Duration timeout) {
+        return findComponents(constructor, null, null, timeout, mechanism, null);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull String name, @NotNull Duration timeout) {
+        return findComponents(constructor, null, null, timeout, null, name);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Duration timeout) {
+        return findComponents(constructor, null, null, null, timeout);
+    }
+
+    // С требованием
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, description, requirement, this, Duration.ZERO);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull String name, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, requirement, this, Duration.ZERO, mechanism, name);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, requirement, this, Duration.ZERO, mechanism, null);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull String name, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, requirement, this, Duration.ZERO, null, name);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement) {
+        return findComponents(constructor, null, requirement, this, Duration.ZERO);
+    }
+
+    //
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, description, requirement, this, timeout);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull String name, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, requirement, this, timeout, mechanism, name);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull By mechanism, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, requirement, this, timeout, mechanism, null);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull String name, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, requirement, this, timeout, null, name);
+    }
+
+    public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout) {
+        return findComponents(constructor, null, requirement, this, timeout);
+    }
+
+    //endregion
+
+    //endregion
 
     protected abstract @NotNull Description initialize();
 
@@ -248,25 +435,6 @@ public abstract class Component {
                 : String.format("{'%s(%d)' ?? %s}", description, index, condition);
     }
 
-    private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent, @Nullable By mechanism, @Nullable String name, int index) {
-        final var component = constructor.get();
-
-        final var condition = requirement != null
-                ? new Condition<>(component, requirement)
-                : null;
-
-        final var description = new Description(
-                mechanism == null ? component.getDescription().getMechanism() : mechanism,
-                name == null ? component.getDescription().getName() : name,
-                index);
-
-        ((Component) component).condition = condition;
-        ((Component) component).description = description;
-        ((Component) component).property = new Property(component, parent);
-
-        return component;
-    }
-
     private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent, @Nullable By mechanism, @Nullable String name) {
         final var component = constructor.get();
 
@@ -299,16 +467,47 @@ public abstract class Component {
         return component;
     }
 
-    private static <TComponent extends Component> @NotNull Supplier<List<TComponent>> findComponents(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent, @NotNull Duration timeout) {
-        return () -> {
-            final var components = new ArrayList<TComponent>();
-            for (int index1 = 0; index1 < Integer.MAX_VALUE; index1++) {
-                final var component = findComponent(constructor, description, requirement, parent);
-                if (!has(component, Requirement.byAvailable(true), timeout)) break;
-                components.add(component);
-            }
-            return components;
-        };
+    private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent, int index) {
+        final var component = constructor.get();
+
+        final var condition = requirement != null
+                ? new Condition<>(component, requirement)
+                : null;
+
+        final var description = new Description(
+                component.getDescription().getMechanism(),
+                component.getDescription().getName(),
+                index);
+
+        ((Component) component).condition = condition;
+        ((Component) component).description = description;
+        ((Component) component).property = new Property(component, parent);
+
+        return component;
+    }
+
+    private static <TComponent extends Component> @NotNull List<TComponent> findComponents(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent, @NotNull Duration timeout, @Nullable By mechanism, @Nullable String name) {
+        final var components = new ArrayList<TComponent>();
+
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
+            final var component = findComponent(constructor, requirement, parent, mechanism, name);
+            if (!has(component, Requirement.byAvailable(true), timeout)) break;
+            components.add(component);
+        }
+
+        return components;
+    }
+
+    private static <TComponent extends Component> @NotNull List<TComponent> findComponents(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent, @NotNull Duration timeout) {
+        final var components = new ArrayList<TComponent>();
+
+        for (int index = 0; index < Integer.MAX_VALUE; index++) {
+            final var component = findComponent(constructor, description, requirement, parent);
+            if (!has(component, Requirement.byAvailable(true), timeout)) break;
+            components.add(component);
+        }
+
+        return components;
     }
 
     private static @NotNull List<WebElement> findWebElements(By by, SearchContext context) {
