@@ -1,11 +1,8 @@
 import geoMeta.*;
 import org.untitled.phoenix.component.Component;
-import org.untitled.phoenix.component.requirement.BaseRequirement;
-import org.untitled.phoenix.component.requirement.Operation;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 import org.untitled.phoenix.component.Description;
-import org.gems.WebComponent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;

@@ -9,7 +9,7 @@ import java.time.Duration;
 
 public class ComponentConditionException extends ComponentException {
 
-    public ComponentConditionException(@NotNull Component component, @NotNull BaseCondition condition, @NotNull Duration timeout){
+    public ComponentConditionException(@NotNull Component component, @NotNull BaseCondition condition, @NotNull Duration timeout) {
         super(component, String.format("%s на протяжении %d миллисекунд", condition, timeout.toMillis()));
     }
 }
