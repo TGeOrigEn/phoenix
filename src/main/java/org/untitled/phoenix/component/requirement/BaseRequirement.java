@@ -3,7 +3,6 @@ package org.untitled.phoenix.component.requirement;
 import org.untitled.phoenix.component.Component;
 
 import org.jetbrains.annotations.NotNull;
-import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,53 +10,53 @@ import java.util.List;
 
 public abstract class BaseRequirement<TComponent extends Component> {
 
-    private final @NotNull List<LinearRequirement<TComponent>> requirements;
+    private final @NotNull List<Operation<TComponent>> operations;
 
     private final boolean isNegative;
 
     protected BaseRequirement(boolean isNegative) {
-        requirements = Collections.unmodifiableList(new ArrayList<>());
+        operations = Collections.unmodifiableList(new ArrayList<>());
         this.isNegative = isNegative;
     }
 
     protected BaseRequirement(@NotNull BaseRequirement<TComponent> requirement, boolean isNegative) {
-        requirements = requirement.requirements;
+        operations = requirement.operations;
         this.isNegative = isNegative;
     }
 
-    protected BaseRequirement(@NotNull BaseRequirement<TComponent> requirementA, @NotNull Operation operation, @NotNull BaseRequirement<TComponent> requirementB) {
-        final var requirements = new ArrayList<LinearRequirement<TComponent>>();
+    protected BaseRequirement(@NotNull BaseRequirement<TComponent> requirementA, @NotNull Operator operation, @NotNull BaseRequirement<TComponent> requirementB) {
+        final var requirements = new ArrayList<Operation<TComponent>>();
 
-        if (!requirementA.requirements.isEmpty() && !requirementB.requirements.isEmpty()) {
-            if (!requirementA.requirements.get(0).getRequirement().requirements.isEmpty())
-                requirements.addAll(requirementA.requirements);
-            else requirements.add(new LinearRequirement<>(Operation.AND, requirementA));
+        if (!requirementA.operations.isEmpty() && !requirementB.operations.isEmpty()) {
+            if (!requirementA.operations.get(0).getRequirement().operations.isEmpty())
+                requirements.addAll(requirementA.operations);
+            else requirements.add(new Operation<>(Operator.AND, requirementA));
 
-            requirements.add(new LinearRequirement<>(operation, requirementB));
+            requirements.add(new Operation<>(operation, requirementB));
         }
 
-        if (requirementA.requirements.isEmpty() && requirementB.requirements.isEmpty()) {
-            requirements.add(new LinearRequirement<>(Operation.AND, requirementA));
-            requirements.add(new LinearRequirement<>(operation, requirementB));
+        if (requirementA.operations.isEmpty() && requirementB.operations.isEmpty()) {
+            requirements.add(new Operation<>(Operator.AND, requirementA));
+            requirements.add(new Operation<>(operation, requirementB));
         }
 
-        if (!requirementA.requirements.isEmpty() && requirementB.requirements.isEmpty()) {
+        if (!requirementA.operations.isEmpty() && requirementB.operations.isEmpty()) {
             if (requirementA.isNegative())
-                requirements.add(new LinearRequirement<>(operation, requirementA));
-            else requirements.addAll(requirementA.requirements);
+                requirements.add(new Operation<>(operation, requirementA));
+            else requirements.addAll(requirementA.operations);
 
-            requirements.add(new LinearRequirement<>(operation, requirementB));
+            requirements.add(new Operation<>(operation, requirementB));
         }
 
-        if (requirementA.requirements.isEmpty() && !requirementB.requirements.isEmpty()) {
+        if (requirementA.operations.isEmpty() && !requirementB.operations.isEmpty()) {
             if (requirementB.isNegative())
-                requirements.add(new LinearRequirement<>(operation, requirementB));
-            else requirements.addAll(requirementB.requirements);
+                requirements.add(new Operation<>(operation, requirementB));
+            else requirements.addAll(requirementB.operations);
 
-            requirements.add(new LinearRequirement<>(operation, requirementA));
+            requirements.add(new Operation<>(operation, requirementA));
         }
 
-        this.requirements = Collections.unmodifiableList(requirements);
+        this.operations = Collections.unmodifiableList(requirements);
         isNegative = false;
     }
 
@@ -69,8 +68,8 @@ public abstract class BaseRequirement<TComponent extends Component> {
 
     public abstract boolean isTrue(@NotNull TComponent component);
 
-    public final @NotNull List<LinearRequirement<TComponent>> getRequirements() {
-        return requirements;
+    public final @NotNull List<Operation<TComponent>> getOperations() {
+        return operations;
     }
 
     public final boolean isNegative() {

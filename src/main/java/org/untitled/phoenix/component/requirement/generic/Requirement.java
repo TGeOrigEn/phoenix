@@ -6,6 +6,7 @@ import org.untitled.phoenix.component.Component;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.untitled.phoenix.component.requirement.Operator;
 
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -88,7 +89,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         this.value = requirement.value;
     }
 
-    private Requirement(@NotNull Requirement<TComponent, TValue> requirement, @NotNull Operation operation, @NotNull BaseRequirement<TComponent> baseRequirement) {
+    private Requirement(@NotNull Requirement<TComponent, TValue> requirement, @NotNull Operator operation, @NotNull BaseRequirement<TComponent> baseRequirement) {
         super(requirement, operation, baseRequirement);
         this.description = null;
         this.condition = null;
@@ -119,20 +120,20 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
     @Override
     public boolean isTrue(@NotNull TComponent component) {
 
-        if (getRequirements().isEmpty())
+        if (getOperations().isEmpty())
             if (condition != null && function != null)
                 return condition.test(function.apply(component), value) != isNegative();
             else throw new RuntimeException();
 
-        if (getRequirements().size() == 1)
-            return getRequirements().get(0).getRequirement().isTrue(component) != isNegative();
+        if (getOperations().size() == 1)
+            return getOperations().get(0).getRequirement().isTrue(component) != isNegative();
 
-        var isTrue = getRequirements().get(0).getRequirement().isTrue(component);
+        var isTrue = getOperations().get(0).getRequirement().isTrue(component);
 
-        for (var index = 1; index < getRequirements().size(); index++)
-            isTrue = switch (getRequirements().get(index).getOperation()) {
-                case AND -> isTrue && getRequirements().get(index).getRequirement().isTrue(component);
-                case OR -> isTrue || getRequirements().get(index).getRequirement().isTrue(component);
+        for (var index = 1; index < getOperations().size(); index++)
+            isTrue = switch (getOperations().get(index).getOperator()) {
+                case AND -> isTrue && getOperations().get(index).getRequirement().isTrue(component);
+                case OR -> isTrue || getOperations().get(index).getRequirement().isTrue(component);
             };
 
         return isTrue != isNegative();
@@ -145,26 +146,26 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
 
     @Override
     public @NotNull BaseRequirement<TComponent> and(@NotNull BaseRequirement<TComponent> requirement) {
-        return new Requirement<>(this, Operation.AND, requirement);
+        return new Requirement<>(this, Operator.AND, requirement);
     }
 
     @Override
     public @NotNull BaseRequirement<TComponent> or(@NotNull BaseRequirement<TComponent> requirement) {
-        return new Requirement<>(this, Operation.OR, requirement);
+        return new Requirement<>(this, Operator.OR, requirement);
     }
 
     @Override
     public @NotNull String toString() {
-        if (getRequirements().isEmpty())
+        if (getOperations().isEmpty())
             if (isNegative()) return String.format("НЕ '%s => %s'", description, value);
             else return String.format("'%s => %s'", description, value);
         else {
-            final var descriptions = new ArrayList<>(getRequirements().stream().skip(1).map(requirement -> switch (requirement.getOperation()) {
+            final var descriptions = new ArrayList<>(getOperations().stream().skip(1).map(requirement -> switch (requirement.getOperator()) {
                 case OR -> String.format("ИЛИ %s", requirement.getRequirement());
                 case AND -> String.format("И %s", requirement.getRequirement());
             }).toList());
 
-            descriptions.add(0, getRequirements().get(0).getRequirement().toString());
+            descriptions.add(0, getOperations().get(0).getRequirement().toString());
 
             return isNegative()
                     ? String.format("НЕ (%s)", String.join(" ", descriptions))
