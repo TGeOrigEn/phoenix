@@ -41,7 +41,7 @@ public class Example {
         final var requirement = requirementB.and(requirementC);
 
         final var component = Component.find(Item::new, requirement);
-        while (true)
+        while (Component.has(component, Requirement.byAvailable(true), Duration.ZERO))
             component.expand();
     }
 
@@ -54,7 +54,7 @@ public class Example {
         final var requirement = requirementB.and(requirementC);
 
         final var component = Component.find(Item::new, requirement);
-        while (Component.has(component, Requirement.byAvailable(true), Duration.ofSeconds(1)))
+        while (Component.has(component, Requirement.byAvailable(true), Duration.ZERO))
             component.expand();
     }
 
@@ -64,7 +64,7 @@ public class Example {
 
         while (true) {
             open();
-            //close();
+            close();
         }
     }
 }
