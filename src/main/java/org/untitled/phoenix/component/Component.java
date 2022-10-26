@@ -17,11 +17,10 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
 
-
-import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.ArrayList;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Component {
@@ -37,6 +36,12 @@ public abstract class Component {
     private @NotNull Duration timeout = Duration.ofSeconds(10);
 
     private int index = 0;
+
+    public Component(@NotNull Action action, @NotNull Description description){
+        this.action = action;
+        this.description = description;
+        this.property = new Property(this, null);
+    }
 
     public Component(@NotNull Description description) {
         this.action = new Action(this);
@@ -146,15 +151,9 @@ public abstract class Component {
 
     @Override
     public @NotNull String toString() {
-        final var s = Arrays.stream(property.getTrace()).map(component -> {
-            final var description = component.getDescription();
-            final var condition = component.condition;
-
-            return condition == null
-                    ? String.format("{'%s[%d](%d)'}", description.getName(), description.getIndex(), component.getIndex())
-                    : String.format("{'%s[%d](%d)' ?? %s}", description.getName(), description.getIndex(), component.getIndex(), condition);
-        });
-        return String.join(" -> ", s.toArray(String[]::new));
+        return condition == null
+                ? String.format("{'%s(%d)'}", description, index)
+                : String.format("{'%s(%d)' ?? %s}", description, index, condition);
     }
 
     private static <TComponent extends Component> @NotNull TComponent findComponent(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent) {

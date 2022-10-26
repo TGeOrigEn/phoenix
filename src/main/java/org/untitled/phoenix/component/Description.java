@@ -33,4 +33,9 @@ public final class Description {
     public int getIndex() {
         return index;
     }
+
+    @Override
+    public @NotNull String toString() {
+        return String.format("%s[%d]", name, index);
+    }
 }

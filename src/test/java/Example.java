@@ -41,7 +41,7 @@ public class Example {
                 .or(Item.Requirements.Equals.byName("AutoTestCatalog")).toNegative();
 
         final var requirementC = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable(true));
-        final var requirement = requirementB.and(Item.Requirements.byExpand(false));
+        final var requirement = requirementB.and(requirementC);
 
         final var component = Component.find(Item::new, requirement);
         while (true)

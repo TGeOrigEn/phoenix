@@ -1,7 +1,10 @@
 package org.untitled.phoenix.component;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 public final class Property {
 
@@ -30,5 +33,10 @@ public final class Property {
 
     public @NotNull Component[] getTrace() {
         return trace;
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return String.join("->", Arrays.stream(trace).map(Component::toString).toArray(String[]::new));
     }
 }
