@@ -1,12 +1,11 @@
 package org.untitled.phoenix.component.requirement.generic;
 
 import org.untitled.phoenix.component.requirement.BaseRequirement;
-import org.untitled.phoenix.component.requirement.Operation;
+import org.untitled.phoenix.component.requirement.Operator;
 import org.untitled.phoenix.component.Component;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-import org.untitled.phoenix.component.requirement.Operator;
 
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -22,7 +21,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssClass(@Nullable String value) {
-            return new Requirement<>(component -> component.toAction().getCssClass(), value, "Содержит значение класса", String::contains);
+            return new Requirement<>(component -> component.toAction().getAttribute("class"), value, "Содержит значение класса", String::contains);
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byValue(@Nullable String value) {
@@ -30,7 +29,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssId(@Nullable String value) {
-            return new Requirement<>(component -> component.toAction().getCssId(), value, "Содержит идентификатор", String::contains);
+            return new Requirement<>(component -> component.toAction().getAttribute("id"), value, "Содержит идентификатор", String::contains);
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byText(@Nullable String text) {
@@ -45,7 +44,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssClass(@Nullable String value) {
-            return new Requirement<>(component -> component.toAction().getCssClass(), value, "Имеет значение класса");
+            return new Requirement<>(component -> component.toAction().getAttribute("class"), value, "Имеет значение класса");
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byValue(@Nullable String value) {
@@ -53,7 +52,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssId(@Nullable String value) {
-            return new Requirement<>(component -> component.toAction().getCssId(), value, "Имеет идентификатор");
+            return new Requirement<>(component -> component.toAction().getAttribute("id"), value, "Имеет идентификатор");
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byText(@Nullable String value) {

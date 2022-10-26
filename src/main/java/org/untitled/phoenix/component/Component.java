@@ -1,10 +1,13 @@
 package org.untitled.phoenix.component;
 
-import org.openqa.selenium.InvalidElementStateException;
+import org.untitled.phoenix.exception.UnavailableComponentException;
+import org.untitled.phoenix.exception.ComponentConditionException;
+
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.component.requirement.BaseRequirement;
 import org.untitled.phoenix.component.condition.generic.Condition;
 import org.untitled.phoenix.component.condition.BaseCondition;
+
 import org.untitled.phoenix.configuration.Configuration;
 
 import org.jetbrains.annotations.Nullable;
@@ -13,8 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
-import org.untitled.phoenix.exception.ComponentConditionException;
-import org.untitled.phoenix.exception.UnavailableComponentException;
+
 
 import java.util.Arrays;
 import java.util.function.Supplier;

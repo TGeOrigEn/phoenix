@@ -76,6 +76,6 @@ public class Item extends Component {
     }
 
     public boolean isExpand(){
-       return toAction().getCssClass().contains("x-grid-tree-node-expanded");
+       return Component.has(this, Requirement.Contains.byCssClass("x-grid-tree-node-expanded"), Duration.ZERO);
     }
 }
