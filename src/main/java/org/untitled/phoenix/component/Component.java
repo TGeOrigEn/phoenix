@@ -415,13 +415,13 @@ public abstract class Component {
 
         while (true) {
             Component unavailable = this;
-            for (int index = trace.length - 1; index >= 0; index--) {
-                var element = toWebElement(trace[index]);
+            for (int index = trace.size() - 1; index >= 0; index--) {
+                var element = toWebElement(trace.get(index));
                 if (element != null) {
-                    if (trace[index] == this)
+                    if (trace.get(index) == this)
                         return element;
                     break;
-                } else unavailable = trace[index];
+                } else unavailable = trace.get(index);
             }
             if (System.currentTimeMillis() - startTime >= getTimeout().toMillis())
                 throw new UnavailableComponentException(unavailable);
