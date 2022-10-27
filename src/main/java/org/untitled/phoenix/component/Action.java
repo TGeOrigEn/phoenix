@@ -2,18 +2,16 @@ package org.untitled.phoenix.component;
 
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.InvalidElementStateException;
-
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.WebDriverException;
-import org.untitled.phoenix.component.requirement.generic.Requirement;
+import org.openqa.selenium.WebElement;
+
+import org.untitled.phoenix.exception.UnavailableComponentException;
+import org.untitled.phoenix.exception.ComponentActionException;
 import org.untitled.phoenix.configuration.Configuration;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.untitled.phoenix.exception.ComponentActionException;
-import org.untitled.phoenix.exception.UnavailableComponentException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -46,41 +44,11 @@ public class Action {
     }
 
     public void setValue(String value) {
-        final var startTime = System.currentTimeMillis();
-
-        while (true) {
-            try {
-                final var element = component.toWebElement();
-                element.clear();
-                element.sendKeys(value);
-                return;
-            } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
-                if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
-                    throw new ComponentActionException(component, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout());
-            } catch (UnavailableComponentException | WebDriverException exception) {
-                if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
-                    throw exception;
-            }
-        }
+        invoke(webElement -> { webElement.clear(); webElement.sendKeys(value); }, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout());
     }
 
     public void hover() {
-        final var action = new Actions(Configuration.getWebDriver());
-        final var startTime = System.currentTimeMillis();
-
-        while (true) {
-            try {
-                Component.should(component, Requirement.byDisplayed(true).and(Requirement.byEnabled(true)), Duration.ZERO);
-                action.moveToElement(component.toWebElement()).build().perform();
-                return;
-            } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
-                if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
-                    throw new ComponentActionException(component, "Не удалось навести курсор мыши на компонент", component.getTimeout());
-            } catch (UnavailableComponentException | WebDriverException exception) {
-                if (System.currentTimeMillis() - startTime >= component.getTimeout().toMillis())
-                    throw exception;
-            }
-        }
+        invoke((Consumer<WebElement>) webElement -> new Actions(Configuration.getWebDriver()).moveToElement(component.toWebElement()).build().perform(), "Не удалось навести курсор мыши на компонент", component.getTimeout());
     }
 
     public void click() {

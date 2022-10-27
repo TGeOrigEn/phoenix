@@ -33,9 +33,22 @@ public class Example {
         Configuration.getWebDriver().get("https://autotests.gemsdev.ru/");
     }
 
+    private void example() {
+        final var requirementB = Item.Requirements.Equals.byName("autotests").toNegative()
+                .and(Item.Requirements.Equals.byName("AutoTestCatalog").toNegative());
+
+        final var requirementC = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable(true));
+        final var requirement = requirementB.and(requirementC);
+
+        final var component = Component.find(Item::new, requirement);
+        while (Component.has(component, Requirement.byAvailable(true), Duration.ZERO))
+            component.expand();
+    }
+
     private void open() {
-        final var requirementB = Item.Requirements.Equals.byName("autotests")
-                .or(Item.Requirements.Equals.byName("AutoTestCatalog")).toNegative();
+        final var requirementB = Item.Requirements.Equals.byName("Шкотовский МР")
+                .or(Item.Requirements.Equals.byName("Владивостокский ГО"))
+                .or(Item.Requirements.Equals.byName("Приморский край"));
 
         final var requirementC = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable(true));
         final var requirement = requirementB.and(requirementC);
@@ -50,7 +63,7 @@ public class Example {
                 .or(Item.Requirements.Equals.byName("Владивостокский ГО"))
                 .or(Item.Requirements.Equals.byName("Приморский край"));
 
-        final var requirementC = Item.Requirements.byExpand(false).toNegative().and(Item.Requirements.byExpendable(false));
+        final var requirementC = Item.Requirements.byExpand(false).toNegative().and(Item.Requirements.byExpendable(true));
         final var requirement = requirementB.and(requirementC);
 
         final var component = Component.find(Item::new, requirement);
