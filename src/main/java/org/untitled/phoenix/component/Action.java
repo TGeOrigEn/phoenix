@@ -1,10 +1,7 @@
 package org.untitled.phoenix.component;
 
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
 
 import org.untitled.phoenix.exception.UnavailableComponentException;
 import org.untitled.phoenix.exception.ComponentActionException;
@@ -13,11 +10,19 @@ import org.untitled.phoenix.configuration.Configuration;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Arrays;
+
+import static java.lang.Thread.sleep;
 
 public class Action {
 
@@ -106,5 +111,74 @@ public class Action {
                     throw exception;
             }
         }
+    }
+
+    public static @NotNull String getPageContent(@NotNull URL url) {
+        try {
+            final var openConnection = url.openConnection();
+
+            final var bufferedReader = new BufferedReader(new InputStreamReader(openConnection.getInputStream()));
+            final var stringBuffer = new StringBuilder();
+
+            String inputLine;
+            while ((inputLine = bufferedReader.readLine()) != null)
+                stringBuffer.append(inputLine);
+
+            bufferedReader.close();
+
+            return stringBuffer.toString();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    public @NotNull File[] download(Duration timeout) {
+        final var startTime = System.currentTimeMillis();
+        final var filesBefore = getCurrentFiles();
+        final var files = new ArrayList<File>();
+
+        click();
+
+        while (true)
+            if (downloadCompleted(getCurrentFiles())) {
+                if (System.currentTimeMillis() - startTime >= timeout.toMillis())
+                    break;
+            } else
+                break;
+
+        while (true)
+            if (downloadCompleted(getCurrentFiles()))
+                break;
+
+        final var filesAfter = getCurrentFiles();
+
+        for (var i = 0; i < filesAfter.length; i++) {
+            final var index = i;
+            if (Arrays.stream(filesBefore).noneMatch(file -> file.equals(filesAfter[index])))
+                files.add(filesAfter[index]);
+        }
+
+        return files.toArray(File[]::new);
+    }
+
+    private static boolean downloadCompleted(@NotNull File[] filesBefore) {
+        final var lastChangesBefore = Arrays.stream(filesBefore).map(File::lastModified).mapToLong(value -> value).toArray();
+        final var lastChangesAfter = Arrays.stream(getCurrentFiles()).map(File::lastModified).mapToLong(value -> value).toArray();
+
+        if (lastChangesBefore.length < lastChangesAfter.length)
+            return false;
+
+        for (var i = 0; i < lastChangesAfter.length; i++) {
+            final var index = i;
+            if (Arrays.stream(lastChangesBefore).noneMatch(value -> value == lastChangesAfter[index]))
+                return false;
+        }
+
+        return true;
+    }
+
+    private static File @NotNull [] getCurrentFiles() {
+        final var files = new File(Configuration.getDownloadDirectory()).listFiles();
+        return files == null ? new File[0] : files;
     }
 }

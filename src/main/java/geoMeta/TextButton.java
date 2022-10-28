@@ -13,6 +13,10 @@ public class TextButton extends Component {
         return new Requirement<>(TextButton::getText, buttonText, "Имеет текст");
     }
 
+    public static @NotNull Requirement<TextButton, String> byQuickTipText(String quickTipText) {
+        return new Requirement<>(TextButton::getQuickTipText, quickTipText, "Имеет текст подсказки");
+    }
+
     private static final Description TEXT_DESCRIPTION = new Description(By.cssSelector("span[class^='x-btn-inner']"), "Текст кнопки");
 
     private final Component text;
@@ -23,7 +27,7 @@ public class TextButton extends Component {
 
     @Override
     protected @NotNull Description initialize() {
-        return new Description(By.cssSelector("a[class='x-btn x-unselectable x-box-item x-toolbar-item x-btn-default-small']:not([style*=display])"), "Текстовая кнопка");
+        return new Description(By.cssSelector("a[class*='x-btn x-unselectable x-box-item']:not([style*=display])"), "Текстовая кнопка");
     }
 
     public void click() {
@@ -32,5 +36,9 @@ public class TextButton extends Component {
 
     public String getText() {
         return text.toAction().getText();
+    }
+
+    public String getQuickTipText(){
+       return toAction().getAttribute("data-qtip");
     }
 }
