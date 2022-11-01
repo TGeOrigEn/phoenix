@@ -381,7 +381,7 @@ public abstract class Component {
         return description;
     }
 
-    public @NotNull Property getProperties() {
+    public @NotNull Property getProperty() {
         return property;
     }
 
@@ -411,7 +411,7 @@ public abstract class Component {
 
     public @NotNull WebElement toWebElement() {
         final var startTime = System.currentTimeMillis();
-        final var trace = getProperties().getTrace();
+        final var trace = getProperty().getTrace();
 
         while (true) {
             Component unavailable = this;
@@ -529,10 +529,10 @@ public abstract class Component {
         try {
             SearchContext context = null;
 
-            if (component.getProperties().getParent() != null) {
-                context = toWebElement(component.getProperties().getParent());
+            if (component.getProperty().getParent() != null) {
+                context = toWebElement(component.getProperty().getParent());
                 if (context == null) {
-                    component.getProperties().getParent().index = 0;
+                    component.getProperty().getParent().index = 0;
                     return null;
                 }
             }

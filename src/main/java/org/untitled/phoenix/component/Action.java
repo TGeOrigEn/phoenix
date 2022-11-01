@@ -61,7 +61,7 @@ public class Action {
     }
 
     public void clear() {
-        invoke(WebElement::clear, "Не удалось отчистить компонент", component.getTimeout());
+        invoke(WebElement::clear, "Не удалось очистить компонент", component.getTimeout());
     }
 
     public boolean isDisplayed() {

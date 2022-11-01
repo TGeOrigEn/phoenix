@@ -19,7 +19,7 @@ public final class Property {
         trace.add(component);
 
         if (parent != null)
-            trace.addAll(0, parent.getProperties().trace);
+            trace.addAll(0, parent.getProperty().trace);
 
         this.trace = Collections.unmodifiableList(trace);
         this.parent = parent;
