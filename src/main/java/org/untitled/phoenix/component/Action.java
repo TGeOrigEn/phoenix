@@ -22,6 +22,7 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Arrays;
 
+import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
 
 public class Action {
@@ -81,98 +82,83 @@ public class Action {
     }
 
     private void invoke(@NotNull Consumer<@NotNull WebElement> action, @NotNull String message, @NotNull Duration timeout) {
-        final var startTime = System.currentTimeMillis();
+        final var startTime = currentTimeMillis();
 
         while (true) {
             try {
                 action.accept(component.toWebElement());
                 return;
             } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
-                if (System.currentTimeMillis() - startTime >= timeout.toMillis())
+                if (currentTimeMillis() - startTime >= timeout.toMillis())
                     throw new ComponentActionException(component, message, timeout);
             } catch (UnavailableComponentException | WebDriverException exception) {
-                if (System.currentTimeMillis() - startTime >= timeout.toMillis())
+                if (currentTimeMillis() - startTime >= timeout.toMillis())
                     throw exception;
             }
         }
     }
 
     private <TValue> TValue invoke(@NotNull Function<@NotNull WebElement, TValue> action, @NotNull String message, @NotNull Duration timeout) {
-        final var startTime = System.currentTimeMillis();
+        final var startTime = currentTimeMillis();
 
         while (true) {
             try {
                 return action.apply(component.toWebElement());
             } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
-                if (System.currentTimeMillis() - startTime >= timeout.toMillis())
+                if (currentTimeMillis() - startTime >= timeout.toMillis())
                     throw new ComponentActionException(component, message, timeout);
             } catch (UnavailableComponentException | WebDriverException exception) {
-                if (System.currentTimeMillis() - startTime >= timeout.toMillis())
+                if (currentTimeMillis() - startTime >= timeout.toMillis())
                     throw exception;
             }
         }
     }
 
-    public static @NotNull String getPageContent(@NotNull URL url) {
-        try {
-            final var openConnection = url.openConnection();
+    public static @NotNull String getPageContent(@NotNull URL address) throws IOException {
+        final var bufferedReader = new BufferedReader(new InputStreamReader(address.openConnection().getInputStream()));
+        final var stringBuilder = new StringBuilder();
 
-            final var bufferedReader = new BufferedReader(new InputStreamReader(openConnection.getInputStream()));
-            final var stringBuffer = new StringBuilder();
+        while (true) {
+            final var readLine = bufferedReader.readLine();
 
-            String inputLine;
-            while ((inputLine = bufferedReader.readLine()) != null)
-                stringBuffer.append(inputLine);
+            if (readLine == null) {
+                bufferedReader.close();
+                break;
+            }
 
-            bufferedReader.close();
-
-            return stringBuffer.toString();
-        } catch (IOException e) {
-            throw new RuntimeException();
+            stringBuilder.append(readLine);
         }
+
+        return stringBuilder.toString();
     }
 
     public @NotNull File[] download(Duration timeout) {
-        final var startTime = System.currentTimeMillis();
+        final var downloadedFiles = new ArrayList<File>();
         final var filesBefore = getCurrentFiles();
-        final var files = new ArrayList<File>();
 
-        click();
+        invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout());
 
-        while (true)
-            if (downloadCompleted(getCurrentFiles())) {
-                if (System.currentTimeMillis() - startTime >= timeout.toMillis())
-                    break;
-            } else
-                break;
+        final var startTime = currentTimeMillis();
 
         while (true)
             if (downloadCompleted(getCurrentFiles()))
-                break;
+                if (currentTimeMillis() - startTime >= timeout.toMillis())
+                    break;
 
-        final var filesAfter = getCurrentFiles();
+        for (var fileAfter : getCurrentFiles())
+            if (Arrays.stream(filesBefore).noneMatch(fileBefore -> fileBefore.equals(fileAfter)))
+                downloadedFiles.add(fileAfter);
 
-        for (var i = 0; i < filesAfter.length; i++) {
-            final var index = i;
-            if (Arrays.stream(filesBefore).noneMatch(file -> file.equals(filesAfter[index])))
-                files.add(filesAfter[index]);
-        }
-
-        return files.toArray(File[]::new);
+        return downloadedFiles.toArray(File[]::new);
     }
 
     private static boolean downloadCompleted(@NotNull File[] filesBefore) {
-        final var lastChangesBefore = Arrays.stream(filesBefore).map(File::lastModified).mapToLong(value -> value).toArray();
+        final var lastChangesBefore = Arrays.stream(filesBefore).map(File::lastModified).mapToLong(value -> value);
         final var lastChangesAfter = Arrays.stream(getCurrentFiles()).map(File::lastModified).mapToLong(value -> value).toArray();
 
-        if (lastChangesBefore.length < lastChangesAfter.length)
-            return false;
-
-        for (var i = 0; i < lastChangesAfter.length; i++) {
-            final var index = i;
-            if (Arrays.stream(lastChangesBefore).noneMatch(value -> value == lastChangesAfter[index]))
+        for (final long currentValue : lastChangesAfter)
+            if (lastChangesBefore.noneMatch(value -> value == currentValue))
                 return false;
-        }
 
         return true;
     }
