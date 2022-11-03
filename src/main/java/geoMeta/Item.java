@@ -39,25 +39,15 @@ public class Item extends Component {
 
     private static final Description EXPAND_BUTTON_DESCRIPTION = new Description(By.cssSelector("img[class*='plus']"), "Кнопка 'Развернуть'");
 
-    private static final Description OPEN_TABLE_BUTTON_DESCRIPTION = new Description(By.cssSelector("a[data-qtip='Открыть таблицу']"), "Кнопка 'Открыть таблицу'");
-
-    private final WebComponent openTableButton;
-
     private final WebComponent expandButton;
 
     public Item() {
-        openTableButton = findInside(() -> new WebComponent(OPEN_TABLE_BUTTON_DESCRIPTION));
         expandButton = findInside(() -> new WebComponent(EXPAND_BUTTON_DESCRIPTION));
     }
 
     @Override
     protected @NotNull Description initialize() {
         return new Description(By.cssSelector("tr[class*='x-grid-row']"), "Элемент списка");
-    }
-
-    public void openTable() {
-        toAction().hover();
-        openTableButton.toAction().click();
     }
 
     public String getName() {
@@ -79,3 +69,4 @@ public class Item extends Component {
        return Component.has(this, Requirement.Contains.byCssClass("x-grid-tree-node-expanded"), Duration.ZERO);
     }
 }
+

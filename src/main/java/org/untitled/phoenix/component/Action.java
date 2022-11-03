@@ -1,8 +1,11 @@
 package org.untitled.phoenix.component;
 
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.untitled.phoenix.exception.UnavailableComponentException;
 import org.untitled.phoenix.exception.ComponentActionException;
 import org.untitled.phoenix.configuration.Configuration;
@@ -10,22 +13,25 @@ import org.untitled.phoenix.configuration.Configuration;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.time.Duration;
-import java.util.Objects;
-import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import static java.lang.System.currentTimeMillis;
-import static java.lang.Thread.sleep;
 
 public class Action {
+
+    private final static @NotNull String REGEX_HTTP = "http://.*:\\d*/";
+
+    private final static @NotNull String REGEX_HREF = "(?<=href=\").*(?=\")";
 
     private final @NotNull Component component;
 
@@ -132,39 +138,123 @@ public class Action {
         return stringBuilder.toString();
     }
 
-    public @NotNull File[] download(Duration timeout) {
-        final var downloadedFiles = new ArrayList<File>();
-        final var filesBefore = getCurrentFiles();
+    public @NotNull @Unmodifiable List<File> download(@NotNull Duration timeout, int countFiles) {
+        if (Configuration.isRemote()) {
+            try {
+                return remoteDownload(timeout, countFiles);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+         else return localDownload(timeout, countFiles, true);
+    }
+
+    private @NotNull @Unmodifiable List<File> remoteDownload(@NotNull Duration timeout, int countFiles) throws IOException {
 
         invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout());
 
         final var startTime = currentTimeMillis();
 
-        while (true)
-            if (downloadCompleted(getCurrentFiles()))
-                if (currentTimeMillis() - startTime >= timeout.toMillis())
-                    break;
+        while (true) {
 
-        for (var fileAfter : getCurrentFiles())
-            if (Arrays.stream(filesBefore).noneMatch(fileBefore -> fileBefore.equals(fileAfter)))
-                downloadedFiles.add(fileAfter);
+            if (currentTimeMillis() - startTime <= timeout.toMillis())
+                continue;
 
-        return downloadedFiles.toArray(File[]::new);
+            final var pageContent = getPageContent(new URL(getDownloadUrl())).replace("</a>", "</a>\n");
+            final var patter = Pattern.compile(REGEX_HREF);
+            final var matcher = patter.matcher(pageContent);
+            final var downloadedFiles = new ArrayList<File>();
+            final var namesDownloadedFiles = new ArrayList<String>();
+
+            while (matcher.find())
+                namesDownloadedFiles.add(matcher.group());
+
+            if (namesDownloadedFiles.size() < countFiles)
+                throw new RuntimeException();
+
+            for (var name : namesDownloadedFiles) {
+                InputStream in = new URL(String.format("%s/%s", getDownloadUrl(), name)).openStream();
+                Files.copy(in, Paths.get(Configuration.getDownloadDirectory(), name), StandardCopyOption.REPLACE_EXISTING);
+                downloadedFiles.add(Paths.get(Configuration.getDownloadDirectory(), name).toFile());
+            }
+
+            for (var name : namesDownloadedFiles) {
+                HttpURLConnection httpCon = (HttpURLConnection) new URL(String.format("%s/%s", getDownloadUrl(), name)).openConnection();
+                httpCon.setRequestMethod("DELETE");
+                httpCon.getResponseCode();
+            }
+
+            if (downloadedFiles.size() != countFiles)
+                throw new RuntimeException();
+
+            return Collections.unmodifiableList(downloadedFiles);
+        }
     }
 
     private static boolean downloadCompleted(@NotNull File[] filesBefore) {
-        final var lastChangesBefore = Arrays.stream(filesBefore).map(File::lastModified).mapToLong(value -> value);
+        final var lastChangesBefore = Arrays.stream(filesBefore).map(File::lastModified).mapToLong(value -> value).toArray();
         final var lastChangesAfter = Arrays.stream(getCurrentFiles()).map(File::lastModified).mapToLong(value -> value).toArray();
 
         for (final long currentValue : lastChangesAfter)
-            if (lastChangesBefore.noneMatch(value -> value == currentValue))
+            if (Arrays.stream(lastChangesBefore).noneMatch(value -> value == currentValue))
                 return false;
 
         return true;
     }
 
     private static File @NotNull [] getCurrentFiles() {
+        final var path = Configuration.getDownloadDirectory();
         final var files = new File(Configuration.getDownloadDirectory()).listFiles();
         return files == null ? new File[0] : files;
+    }
+
+    private @NotNull @UnmodifiableView List<File> localDownload(@NotNull Duration timeout, int countFiles, boolean isAction) {
+        final var downloadedFiles = new ArrayList<File>();
+        final var filesBefore = getCurrentFiles();
+
+        if (isAction)
+            invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout());
+
+        final var startTime = currentTimeMillis();
+
+        if (timeout.toMillis() <= 0)
+            throw new RuntimeException("GG");
+
+        while (true)
+            if (downloadCompleted(getCurrentFiles()))
+                if (currentTimeMillis() - startTime >= 1_000)
+                    break;
+
+        for (var fileAfter : getCurrentFiles())
+            if (Arrays.stream(filesBefore).noneMatch(fileBefore -> fileBefore.equals(fileAfter)))
+                downloadedFiles.add(fileAfter);
+
+        if (downloadedFiles.size() < countFiles)
+            downloadedFiles.addAll(localDownload(Duration.ofMillis(timeout.toMillis() - (currentTimeMillis() - startTime)), countFiles - downloadedFiles.size(), false));
+
+        if (downloadedFiles.size() != countFiles)
+            throw new RuntimeException();
+
+        return Collections.unmodifiableList(downloadedFiles);
+    }
+
+    private static @NotNull String getDownloadUrl() {
+
+        if (Configuration.isRemote()) {
+            final var patter = Pattern.compile(REGEX_HTTP);
+            final var remoteAddress = Configuration.getRemoteAddress();
+
+            if (remoteAddress == null)
+                throw new RuntimeException();
+
+            final var matcher = patter.matcher(remoteAddress.toString());
+
+            if (!matcher.find())
+                throw new RuntimeException();
+
+            return String.format("%s/download/%s", matcher.group(),((RemoteWebDriver) Configuration.getWebDriver()).getSessionId());
+        }
+
+        throw new RuntimeException();
     }
 }

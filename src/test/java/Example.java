@@ -13,6 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -46,14 +47,16 @@ public class Example {
         options.setCapability("screenResolution", "1920x1080x24");
         options.setBrowserVersion("test");
 
-        Configuration.setWebDriver(new RemoteWebDriver(new URL("http://10.5.1.167:4444/wd/hub"), options));
-        //Configuration.setWebDriver(new ChromeDriver());
+        final var file = Paths.get("build/downloads/").toFile();
+
+        //Configuration.setRemoteWebDriver(new URL("http://10.5.1.167:4444/wd/hub"), file.getAbsolutePath(), options);
+        Configuration.setWebDriver(file.getAbsolutePath(), options);
         var dimension = new Dimension(1920, 1080);
 
         Configuration.getWebDriver().manage().window().setSize(dimension);
         Configuration.getWebDriver().get("https://autotests.gemsdev.ru/");
 
-        final var sessionId = ((RemoteWebDriver) Configuration.getWebDriver()).getSessionId();
+/*        final var sessionId = ((RemoteWebDriver) Configuration.getWebDriver()).getSessionId();
         final var pageContent = Action.getPageContent(new URL(String.format("http://10.5.1.167:4444/download/%s/", sessionId))).replace("</a>", "</a>\n");
         final var patter = Pattern.compile("(?<=href=\").*(?=\")");
         final var matcher = patter.matcher(pageContent);
@@ -72,9 +75,7 @@ public class Example {
             HttpURLConnection httpCon = (HttpURLConnection) new URL(String.format("http://10.5.1.167:4444/download/%s/%s", sessionId, name)).openConnection();
             httpCon.setRequestMethod("DELETE");
             httpCon.getResponseCode();
-        }
-
-        var h = 0;
+        }*/
     }
 
     private void example() {
@@ -90,27 +91,31 @@ public class Example {
     }
 
     private void open() {
-        final var requirementB = Item.Requirements.Equals.byName("Шкотовский МР")
+
+        final var requirementA = Item.Requirements.Equals.byName("Шкотовский МР")
                 .or(Item.Requirements.Equals.byName("Владивостокский ГО"))
                 .or(Item.Requirements.Equals.byName("Приморский край"));
 
-        final var requirementC = Item.Requirements.byExpand(false).and(Item.Requirements.byExpendable(true));
-        final var requirement = requirementB.and(requirementC);
+        final var requirementB = Item.Requirements.byExpand(false)
+                .and(Item.Requirements.byExpendable(true));
 
-        final var component = Component.find(Item::new, requirement);
-        while (Component.has(component, Requirement.byAvailable(true), Duration.ZERO))
-            component.expand();
+        final var item = Component.find(Item::new, requirementA.and(requirementB));
+
+        while (Component.has(item, Requirement.byAvailable(true), Duration.ZERO))
+            item.expand();
     }
 
     private void close() {
-        final var requirementB = Item.Requirements.Equals.byName("Шкотовский МР")
+
+        final var requirementA = Item.Requirements.Equals.byName("Шкотовский МР")
                 .or(Item.Requirements.Equals.byName("Владивостокский ГО"))
                 .or(Item.Requirements.Equals.byName("Приморский край"));
 
-        final var requirementC = Item.Requirements.byExpand(false).toNegative().and(Item.Requirements.byExpendable(true));
-        final var requirement = requirementB.and(requirementC);
+        final var requirementB = Item.Requirements.byExpand(false).toNegative()
+                .and(Item.Requirements.byExpendable(true));
 
-        final var component = Component.find(Item::new, requirement);
+        final var component = Component.find(Item::new, requirementA.and(requirementB));
+
         while (Component.has(component, Requirement.byAvailable(true), Duration.ZERO))
             component.expand();
     }
@@ -119,9 +124,18 @@ public class Example {
     public void test() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
+/*        while (true) {
+            open();
+            close();
+        }*/
+
         Component.find(TextButton::new, TextButton.byQuickTipText("Графический отчет")).click();
         Component.find(TextButton::new, TextButton.byText("Далее")).click();
-        final var s = Component.find(TextButton::new, TextButton.byText("Сформировать")).toAction().download(Duration.ofSeconds(60));
+        Component.find(TextButton::new, TextButton.byText("Сформировать")).toAction().click();
+
+        Component.find(TextButton::new, TextButton.byQuickTipText("Графический отчет")).click();
+        Component.find(TextButton::new, TextButton.byText("Далее")).click();
+        final var s = Component.find(TextButton::new, TextButton.byText("Сформировать")).toAction().download(Duration.ofSeconds(20), 2);
         final var text = 0;
     }
 }
