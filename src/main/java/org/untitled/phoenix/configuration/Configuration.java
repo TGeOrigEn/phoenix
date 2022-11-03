@@ -2,12 +2,10 @@ package org.untitled.phoenix.configuration;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
@@ -17,22 +15,25 @@ import java.util.UUID;
 
 public final class Configuration {
 
-    private static @NotNull WebDriver webDriver;
+    private static @Nullable WebDriver webDriver;
 
-    private static @NotNull String downloadDirectory;
+    private static @Nullable String downloadDirectory;
 
     private static @Nullable URL remoteAddress = null;
 
     public static @NotNull String getDownloadDirectory() {
+        if (downloadDirectory == null)
+            throw new RuntimeException();
         return downloadDirectory;
     }
 
     public static @NotNull WebDriver getWebDriver() {
+        if (webDriver == null) throw new RuntimeException();
         return webDriver;
     }
 
     public static boolean isRemote() {
-        return webDriver.getClass().equals(RemoteWebDriver.class);
+        return getWebDriver().getClass().equals(RemoteWebDriver.class);
     }
 
     public static @Nullable URL getRemoteAddress() {
@@ -49,7 +50,7 @@ public final class Configuration {
         Configuration.webDriver = new RemoteWebDriver(remoteAddress, options);
 
         Configuration.remoteAddress = remoteAddress;
-        new File(Configuration.downloadDirectory).mkdirs();
+        new File(getDownloadDirectory()).mkdirs();
     }
 
     public static void setWebDriver(@NotNull String downloadDirectory, @NotNull ChromeOptions options) {
@@ -61,6 +62,6 @@ public final class Configuration {
         options.setExperimentalOption("prefs", prefs);
         Configuration.webDriver = new ChromeDriver(options);
 
-        new File(Configuration.downloadDirectory).mkdirs();
+        new File(getDownloadDirectory()).mkdirs();
     }
 }
