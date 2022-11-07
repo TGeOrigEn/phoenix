@@ -59,30 +59,82 @@ public class Action {
         invoke(webElement -> { webElement.clear(); webElement.sendKeys(value); }, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout());
     }
 
+    /**
+     * <p>Наводится мышкой на компонент, если это возможно.</p>
+     */
     public void hover() {
         invoke((Consumer<WebElement>) webElement -> new Actions(Configuration.getWebDriver()).moveToElement(component.toWebElement()).build().perform(), "Не удалось навести курсор мыши на компонент", component.getTimeout());
     }
 
+    /**
+     * <p>Нажимает левой кнопкой мыши на компонент, если это возможно.</p>
+     */
     public void click() {
         invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout());
     }
 
+    /**
+     * Если компонент является элементом ввода, то этот метод отчистит его значение.
+     */
     public void clear() {
         invoke(WebElement::clear, "Не удалось очистить компонент", component.getTimeout());
     }
 
+    /**
+     * <p>Нажимает левой кнопкой мыши на компонент, после чего ожидает, что начнётся загрузка, и будут скачено указанное количество файлов за указанное время ожидания.</p><br>
+     * <p><b>При использовании локального {@link WebDriver} скачивание осуществляется динамически</b>: если файлы загрузятся раньше указанного времени ожидания, то оставшееся время будет проигнорировано.</p>
+     * @param timeout время ожидания загрузки
+     * @param countFiles ожидаемое количество загруженных файлов
+     * @return список загруженных файлов
+     */
+    public @NotNull @Unmodifiable List<File> download(@NotNull Duration timeout, int countFiles) {
+        if (Configuration.isRemote()) {
+            try {
+                return remoteDownload(timeout, countFiles);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else return localDownload(timeout, countFiles, true);
+    }
+
+    /**
+     * <nobr>Определяет, виден ли компонент или нет.</nobr>
+     * @return
+     * <p><b>true</b> - если компонент виден</p>
+     * <p><b>false</b> - если компонент невиден</p>
+     */
     public boolean isDisplayed() {
         return invoke(WebElement::isDisplayed, "Не удалось установить отображается ли компонент", component.getTimeout());
     }
 
+    /**
+     * <nobr>Определяет, являет ли компонент только для чтения или нет.</nobr>
+     * @return
+     * <p><b>true</b> - если компонент выделен</p>
+     * <p><b>false</b> - если компонент не выделен</p>
+     */
     public boolean isReadonly() {
         return invoke(webElement -> !Objects.equals(webElement.getAttribute("readonly"), null), "Не удалось установить является ли компонент только для чтения", component.getTimeout());
     }
 
+    /**
+     * <p>Определяет, выделен ли компонент или нет.</p><br>
+     * <p>Этот метод поддерживается только в том случае, если компонент представляет собой один из следующих веб-элементов: <b>input</b>, <b>checkbox</b>, <b>options</b> в <b>select</b> и <b>radiobutton</b>.</p>
+     * @return
+     * <p><b>true</b> - если компонент выделен</p>
+     * <p><b>false</b> - если компонент не выделен</p>
+     */
     public boolean isSelected() {
         return invoke(WebElement::isSelected, "Не удалось установить выделен ли компонент", component.getTimeout());
     }
 
+    /**
+     * <nobr>Определяет, включен компонент или выключен.</nobr>
+     * @return
+     * <p><b>true</b> - если компонент включён</p>
+     * <p><b>false</b> - если компонент выключен</p>
+     */
     public boolean isEnabled() {
         return invoke(WebElement::isEnabled, "Не удалось установить включен ли компонент", component.getTimeout());
     }
@@ -136,17 +188,6 @@ public class Action {
         }
 
         return stringBuilder.toString();
-    }
-
-    public @NotNull @Unmodifiable List<File> download(@NotNull Duration timeout, int countFiles) {
-        if (Configuration.isRemote()) {
-            try {
-                return remoteDownload(timeout, countFiles);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-         else return localDownload(timeout, countFiles, true);
     }
 
     private @NotNull @Unmodifiable List<File> remoteDownload(@NotNull Duration timeout, int countFiles) throws IOException {

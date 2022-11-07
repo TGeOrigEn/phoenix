@@ -1,31 +1,32 @@
 package org.untitled.phoenix.component.condition;
 
-import org.untitled.phoenix.component.Component;
-
-import org.jetbrains.annotations.NotNull;
-
 public abstract class BaseCondition {
-
-    private final @NotNull Component component;
 
     private boolean enabled = true;
 
-    public BaseCondition(@NotNull Component component) {
-        this.component = component;
-    }
-
-    public final @NotNull Component getComponent()
-    {
-        return component;
-    }
-
+    /**
+     * <p>Позволяет выключить или включить проверку условия.</p>
+     * @param value будет ли проверяться условие
+     */
     public final void setEnabled(boolean value) {
         enabled = value;
     }
 
+    /**
+     * <nobr>Возвращает значение, указывающее, проверяется ли условие или нет.</nobr>
+     * @return
+     * <p><b>true</b> - если условие проверяется</p>
+     * <p><b>false</b> - если условие не проверяется</p>
+     */
     public final boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * <nobr>Возвращает значение, указывающее, выполняет ли компонент условие или нет.</nobr>
+     * @return
+     * <p><b>true</b> - если компонент выполняет условие</p>
+     * <p><b>false</b> - если компонент не выполняет условие</p>
+     */
     public abstract boolean isTrue();
 }

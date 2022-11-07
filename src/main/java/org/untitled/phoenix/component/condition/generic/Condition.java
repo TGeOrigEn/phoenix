@@ -13,7 +13,6 @@ public final class Condition<TComponent extends Component> extends BaseCondition
     private final @NotNull TComponent component;
 
     public Condition(@NotNull TComponent component, @NotNull BaseRequirement<TComponent> requirement) {
-        super(component);
         this.requirement = requirement;
         this.component = component;
     }
