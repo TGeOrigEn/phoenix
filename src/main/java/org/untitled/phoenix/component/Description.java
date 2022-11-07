@@ -4,6 +4,15 @@ import org.jetbrains.annotations.NotNull;
 
 import org.openqa.selenium.By;
 
+/**
+ * <p>Данный класс хранит базовую информацию, которая описывает компонент.</p>
+ * <ul>
+ *     <p><b><i>Виды информации</i></b>:</p>
+ *     <li>{@link #getIndex()} - возвращает значение логического индекса, который определяет порядковый номер компонента среди тех, что были найдены.</li>
+ *     <li>{@link #getName()} - возвращает строку, которая является описанием компонента или его именем.</li>
+ *     <li>{@link #getBy()} - возвращает механизм поиска компонента, описание которого определяет, чем будет являться компонент в документе.</li>
+ * </ul>
+ */
 public final class Description {
 
     private final @NotNull String name;
@@ -12,12 +21,24 @@ public final class Description {
 
     private final int index;
 
+    /**
+     * <p>Создаёт экземпляр описания в соответствии с указанными аргументами.</p>
+     * @param by механизм поиска
+     * @param name имя
+     * @param index логический индекс
+     */
     public Description(@NotNull By by, @NotNull String name, int index) {
         this.by = by;
         this.index = index;
         this.name = name;
     }
 
+    /**
+     * <p>Создаёт экземпляр описания в соответствии с указанными аргументами.</p>
+     * <p><b>Логический индекс будет равен нулю</b>.</p>
+     * @param by механизм поиска
+     * @param name имя
+     */
     public Description(@NotNull By by, @NotNull String name) {
         this(by, name, 0);
     }
