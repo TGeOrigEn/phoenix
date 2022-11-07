@@ -1,17 +1,18 @@
 package org.untitled.phoenix.configuration;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.WebDriver;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 import java.io.File;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.UUID;
 
 public final class Configuration {
 

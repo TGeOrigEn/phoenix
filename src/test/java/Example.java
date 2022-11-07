@@ -1,8 +1,5 @@
 import geoMeta.*;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.untitled.phoenix.component.Action;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
@@ -11,21 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 public class Example {
 
@@ -101,7 +87,7 @@ public class Example {
 
         final var item = Component.find(Item::new, requirementA.and(requirementB));
 
-        while (Component.has(item, Requirement.byAvailable(true), Duration.ZERO))
+        for (int i = 0; i < 3; i++)
             item.expand();
     }
 
@@ -114,28 +100,28 @@ public class Example {
         final var requirementB = Item.Requirements.byExpand(false).toNegative()
                 .and(Item.Requirements.byExpendable(true));
 
-        final var component = Component.find(Item::new, requirementA.and(requirementB));
+        final var item = Component.find(Item::new, requirementA.and(requirementB));
 
-        while (Component.has(component, Requirement.byAvailable(true), Duration.ZERO))
-            component.expand();
+        for (int i = 0; i < 3; i++)
+            item.expand();
     }
 
     @Test
     public void test() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
-/*        while (true) {
+        while (true) {
             open();
             close();
-        }*/
+        }
+
+        /*Component.find(TextButton::new, TextButton.byQuickTipText("Графический отчет")).click();
+        Component.find(TextButton::new, TextButton.byText("Далее")).click();
+        Component.find(TextButton::new, TextButton.byText("Сформировать")).getAction().click();
 
         Component.find(TextButton::new, TextButton.byQuickTipText("Графический отчет")).click();
         Component.find(TextButton::new, TextButton.byText("Далее")).click();
-        Component.find(TextButton::new, TextButton.byText("Сформировать")).toAction().click();
-
-        Component.find(TextButton::new, TextButton.byQuickTipText("Графический отчет")).click();
-        Component.find(TextButton::new, TextButton.byText("Далее")).click();
-        final var s = Component.find(TextButton::new, TextButton.byText("Сформировать")).toAction().download(Duration.ofSeconds(20), 2);
-        final var text = 0;
+        final var s = Component.find(TextButton::new, TextButton.byText("Сформировать")).getAction().download(Duration.ofSeconds(3600), 2);
+        final var text = 0;*/
     }
 }

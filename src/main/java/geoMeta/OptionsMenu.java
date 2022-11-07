@@ -17,6 +17,6 @@ public class OptionsMenu extends Component {
     }
 
     public void clickOnOption(String optionName) {
-        findInside(() -> new WebComponent(OPTION_DESCRIPTION), Requirement.Equals.byText(optionName)).toAction().click();
+        findInside(() -> new WebComponent(OPTION_DESCRIPTION), Requirement.Equals.byText(optionName)).getAction().click();
     }
 }

@@ -51,14 +51,14 @@ public class Item extends Component {
     }
 
     public String getName() {
-        return toAction().getAttribute("data-qtip");
+        return getAction().getAttribute("data-qtip");
     }
 
     public void expand() {
-        expandButton.toAction().click();
+        expandButton.getAction().click();
         final var quickTip = find(QuickTip::new);
         if (Component.has(quickTip, Requirement.byAvailable(true), Duration.ofSeconds(1)))
-            quickTip.toAction().hover();
+            quickTip.getAction().hover();
     }
 
     public boolean isExpendable() {
