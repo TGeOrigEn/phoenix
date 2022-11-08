@@ -1,12 +1,13 @@
-package geoMeta;
+package example;
 
-import org.untitled.phoenix.component.Component;
-import org.untitled.phoenix.component.Description;
+import geoMeta.QuickTip;
 import org.gems.WebComponent;
-import org.untitled.phoenix.component.requirement.BaseRequirement;
-import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
+import org.untitled.phoenix.component.Component;
+import org.untitled.phoenix.component.Description;
+import org.untitled.phoenix.component.requirement.BaseRequirement;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.time.Duration;
 
@@ -37,17 +38,24 @@ public class Item extends Component {
         }
     }
 
-    private static final Description EXPAND_BUTTON_DESCRIPTION = new Description(By.cssSelector("img[class*='plus']"), "Кнопка 'Развернуть'");
+    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("tr[class*='x-grid-row']"), "Элемент списка");
 
-    private final WebComponent expandButton;
+    private static final @NotNull Description OPEN_TABLE_BUTTON_DESCRIPTION = new Description(By.cssSelector("span[class*='fg-table']"), "Кнопка 'Открыть таблицу'");
+
+    private static final @NotNull Description EXPAND_BUTTON_DESCRIPTION = new Description(By.cssSelector("img[class*='plus']"), "Кнопка 'Развернуть/Свернуть'");
+
+    private final @NotNull Component openTableButton;
+
+    private final @NotNull Component expandButton;
 
     public Item() {
+        openTableButton = findInside(() -> new WebComponent(OPEN_TABLE_BUTTON_DESCRIPTION));
         expandButton = findInside(() -> new WebComponent(EXPAND_BUTTON_DESCRIPTION));
     }
 
     @Override
     protected @NotNull Description initialize() {
-        return new Description(By.cssSelector("tr[class*='x-grid-row']"), "Элемент списка");
+        return DEFAULT_DESCRIPTION;
     }
 
     public String getName() {
@@ -56,17 +64,18 @@ public class Item extends Component {
 
     public void expand() {
         expandButton.toAction().click();
-        final var quickTip = find(QuickTip::new);
-        if (Component.has(quickTip, Requirement.byAvailable(true), Duration.ofSeconds(1)))
-            quickTip.toAction().hover();
     }
 
     public boolean isExpendable() {
         return expandButton.isAvailable();
     }
 
-    public boolean isExpand(){
-       return Component.has(this, Requirement.Contains.byCssClass("x-grid-tree-node-expanded"), Duration.ZERO);
+    public void openTable() {
+        toAction().hover();
+        openTableButton.toAction().click();
+    }
+
+    public boolean isExpand() {
+        return toAction().getCssClass().contains("x-grid-tree-node-expanded");
     }
 }
-

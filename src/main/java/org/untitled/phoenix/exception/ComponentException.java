@@ -16,6 +16,6 @@ public class ComponentException extends RuntimeException {
 
     @Override
     public String toString() {
-        return String.format("%s :: %s.", component, message);
+        return String.format("%s :: %s.", component.getContext(), message);
     }
 }

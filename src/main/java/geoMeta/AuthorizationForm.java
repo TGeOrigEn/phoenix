@@ -42,8 +42,8 @@ public final class AuthorizationForm extends Component {
     // Метод авторизации
 
     public void logIn(@NotNull String username, @NotNull String password) {
-        usernameField.getAction().setValue(username);
-        passwordField.getAction().setValue(password);
-        loginButton.getAction().click();
+        usernameField.toAction().setValue(username);
+        passwordField.toAction().setValue(password);
+        loginButton.toAction().click();
     }
 }

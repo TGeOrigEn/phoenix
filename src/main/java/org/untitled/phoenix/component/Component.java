@@ -193,7 +193,7 @@ public abstract class Component {
         return context;
     }
 
-    public @NotNull Action getAction() {
+    public @NotNull Action toAction() {
         return action;
     }
 
@@ -285,7 +285,13 @@ public abstract class Component {
                 }
             }
 
-            if (component.getCondition() == null || !component.getCondition().isEnabled()) {
+            if (component.getCondition() == null) {
+                final var element = findWebElement(component.getDescription().getBy(), context, component.getDescription().getIndex());
+                if (element == null) component.index = 0;
+                return element;
+            }
+
+            if (!component.getCondition().isEnabled()) {
                 final var element = findWebElement(component.getDescription().getBy(), context, component.getIndex());
                 if (element == null) component.index = 0;
                 return element;

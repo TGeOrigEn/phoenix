@@ -27,10 +27,10 @@ public class ObjectCard extends Component {
     }
 
     public void save() {
-        saveButton.getAction().click();
+        saveButton.toAction().click();
     }
 
     public void close() {
-        closeButton.getAction().click();
+        closeButton.toAction().click();
     }
 }

@@ -39,16 +39,20 @@ public class Action {
         this.component = component;
     }
 
-    public @Nullable String getAttribute(@NotNull String attributeName) {
-        return invoke((Function<WebElement, String>) webElement -> webElement.getAttribute(attributeName), String.format("Не удалось получить значение атрибута '%s' компонента", attributeName), component.getTimeout());
+    public @NotNull String getAttribute(@NotNull String attributeName) {
+        return invoke(webElement -> { final var attribute = webElement.getAttribute(attributeName); return attribute == null ? "" : attribute; }, String.format("Не удалось получить значение атрибута '%s' компонента", attributeName), component.getTimeout());
     }
 
-    public @Nullable String getValue() {
-        return invoke((Function<WebElement, String>) webElement -> webElement.getAttribute("value"), "Не удалось значение компонента", component.getTimeout());
+    public @NotNull String getCssClass() {
+        return invoke(webElement -> { final var attribute = webElement.getAttribute("class"); return attribute == null ? "" : attribute; }, "Не удалось получить значение класса", component.getTimeout());
     }
 
-    public @Nullable String getText() {
-        return invoke(WebElement::getText, "Не удалось получить текст компонента", component.getTimeout());
+    public @NotNull String getValue() {
+        return invoke(webElement -> { final var attribute = webElement.getAttribute("value"); return attribute == null ? "" : attribute; }, "Не удалось получить значение компонента", component.getTimeout());
+    }
+
+    public @NotNull String getText() {
+        return invoke(webElement -> { final var text = webElement.getText(); return text == null ? "" : text; }, "Не удалось получить текст компонента", component.getTimeout());
     }
 
     public void sendKeys(@NotNull CharSequence... keys) {

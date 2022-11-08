@@ -31,14 +31,14 @@ public class TextButton extends Component {
     }
 
     public void click() {
-        getAction().click();
+        toAction().click();
     }
 
     public String getText() {
-        return text.getAction().getText();
+        return text.toAction().getText();
     }
 
     public String getQuickTipText(){
-       return getAction().getAttribute("data-qtip");
+       return toAction().getAttribute("data-qtip");
     }
 }
