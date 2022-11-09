@@ -43,25 +43,41 @@ public class Example {
     }
 
     @Test
-    public void test_0() {
+    public void test_0() throws InterruptedException {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
         Component.find(Item::new, Item.Requirements.Equals.byName("Приморский край")).expand();
         Component.find(Item::new, Item.Requirements.Equals.byName("Базовая карта")).expand();
         Component.find(Item::new, Item.Requirements.Equals.byName("Городское поселение (СТП ОП)")).openTable();
 
+        Thread.sleep(500);
+
         Component.find(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).click();
 
-        Component.find(Card::new).findInside(Text::new, Field.Requirements.Equals.byTitle("Площадь, кв. м.:")).setValue("123");
+        Component.find(Card::new).findInside(Text::new, Field.Requirements.Equals.byTitle("Площадь, кв. м.:")).setValue("1");
 
         ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Субъект градостроительных отношений:")))
-                .clickOnArrow().getOptionBy(Option.Requirements.Equals.byText("Российская Федерация")).click();
+                .clickOnArrowButton().getOptionBy(Option.Requirements.Equals.byText("Российская Федерация")).click();
 
         Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Код ОКАТО:")).setValue("Код ОКАТО");
 
-        Component.find(Card::new).findInside(Text::new, Field.Requirements.Equals.byTitle("Идентификатор:")).setValue("1234");
+        Component.find(Card::new).findInside(Text::new, Field.Requirements.Equals.byTitle("Идентификатор:")).setValue("Идентификатор");
 
+        Component.find(Card::new).findInside(Text::new, Field.Requirements.Equals.byTitle("Численность населения, тыс. чел:")).setValue("3");
 
+        ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Вид объекта:")))
+                .clickOnArrowButton().getOptionBy(Option.Requirements.Equals.byText("Городское поселение")).click();
+
+        ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Статус объекта административно-территориального деления:")))
+                .clickOnAddButton(Duration.ofSeconds(2)).close();
+
+        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Собственное название:")).setValue("Собственное название");
+
+        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Код ОКТМО:")).setValue("Код ОКТМО");
+
+        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Примечание:")).setValue("Примечание");
+
+        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Источник данных:")).setValue("Источник данных");
     }
 
     @Test
@@ -71,14 +87,14 @@ public class Example {
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
 
         Component.find(Select::new, Select.DEFAULT_DESCRIPTION.copy(1))
-                .clickOnArrow()
+                .clickOnArrowButton()
                 .getOptionBy(Option.Requirements.Equals.byText("А4, Альбомный (PDF)"))
                 .click();
 
         Component.find(Button::new, Button.Requirements.Equals.byText("Далее")).click();
 
         Component.find(Select::new, Select.DEFAULT_DESCRIPTION.copy(2))
-                .clickOnArrow()
+                .clickOnArrowButton()
                 .getOptionBy(Option.Requirements.Equals.byText("~1:1600"))
                 .click();
 

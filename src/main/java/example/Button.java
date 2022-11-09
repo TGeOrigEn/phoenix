@@ -44,7 +44,7 @@ public class Button extends Component {
         }
     }
 
-    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("a[class*='x-btn']:not([style*=display])"), "Кнопка");
+    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("a[class*='x-btn']:not([style*='display: none'])"), "Кнопка");
 
     private static final @NotNull Description ARROW_DESCRIPTION = new Description(By.cssSelector("[class*='x-btn-arrow-right']"), "Стрелка");
 

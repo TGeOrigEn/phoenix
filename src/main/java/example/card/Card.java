@@ -6,11 +6,16 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
-import org.untitled.phoenix.component.requirement.generic.Requirement;
 
+import java.time.Duration;
+import java.util.Comparator;
 import java.util.List;
 
 public class Card extends Component {
+
+    public static class Requirements {
+
+    }
 
     public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^=window].grad-test-wincard"), "Карточка");
 
@@ -42,6 +47,12 @@ public class Card extends Component {
         title = findInside(() -> new WebComponent(TITLE_DESCRIPTION));
     }
 
+    public static @NotNull Card getActiveCard(Duration timeout) {
+        final var cards = Component.findEveryone(Card::new, timeout).stream().sorted(Comparator.comparing(Card::getCssIndex)).toList();
+        if (cards.isEmpty()) throw new RuntimeException();
+        return cards.get(0);
+    }
+
     @Override
     protected @NotNull Description initialize() {
         return DEFAULT_DESCRIPTION;
@@ -66,5 +77,9 @@ public class Card extends Component {
     public @NotNull Card toProperty() {
         buttonProperty.toAction().click();
         return this;
+    }
+
+    private int getCssIndex() {
+        return Integer.parseInt(toAction().getAttribute("z-index"));
     }
 }

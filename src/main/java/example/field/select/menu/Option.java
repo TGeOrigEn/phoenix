@@ -1,5 +1,6 @@
 package example.field.select.menu;
 
+import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
@@ -26,7 +27,15 @@ public class Option extends Component {
         }
     }
 
-    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("li[class*='x-boundlist-item']"), "Вариант");
+    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("[class*='x-boundlist-item']"), "Вариант");
+
+    private final @NotNull Description DIV_DESCRIPTION = new Description(By.tagName("div"), "Текст");
+
+    private final @NotNull Component text;
+
+    public Option() {
+        text = findInside(() -> new WebComponent(DIV_DESCRIPTION));
+    }
 
     @Override
     protected @NotNull Description initialize() {
@@ -34,7 +43,7 @@ public class Option extends Component {
     }
 
     public @NotNull String getText() {
-       return toAction().getText();
+       return text.isAvailable() ? text.toAction().getText() : toAction().getText();
     }
 
     public void click() {

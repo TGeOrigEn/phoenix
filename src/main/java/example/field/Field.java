@@ -1,6 +1,5 @@
 package example.field;
 
-import example.Button;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -15,6 +14,10 @@ public abstract class Field extends Component {
 
         public static class Equals {
 
+            public static @NotNull BaseRequirement<Field> byValue(@NotNull String value) {
+                return new Requirement<>(Field::getValue, value, "Имеет значение");
+            }
+
             public static @NotNull BaseRequirement<Field> byTitle(@NotNull String title) {
                 return new Requirement<>(Field::getTitle, title, "Имеет заголовок");
             }
@@ -22,9 +25,21 @@ public abstract class Field extends Component {
 
         public static class Contains {
 
+            public static @NotNull BaseRequirement<Field> byValue(@NotNull String value) {
+                return new Requirement<>(Field::getValue, value, "Имеет значение", String::contains);
+            }
+
             public static @NotNull BaseRequirement<Field> byTitle(@NotNull String title) {
                 return new Requirement<>(Field::getTitle, title, "Имеет заголовок", String::contains);
             }
+        }
+
+        public static @NotNull BaseRequirement<Field> isReadonly(boolean isReadonly) {
+            return new Requirement<>(Field::isReadonly, isReadonly, "Является только для чтения");
+        }
+
+        public static @NotNull BaseRequirement<Field> isRequired(boolean isRequired) {
+            return new Requirement<>(Field::isRequired, isRequired, "Является обязательным");
         }
     }
 
