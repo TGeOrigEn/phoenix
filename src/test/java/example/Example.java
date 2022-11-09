@@ -12,10 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.untitled.phoenix.component.Component;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.UUID;
 
 public class Example {
 
@@ -50,7 +52,8 @@ public class Example {
         Component.find(Item::new, Item.Requirements.Equals.byName("Базовая карта")).expand();
         Component.find(Item::new, Item.Requirements.Equals.byName("Городское поселение (СТП ОП)")).openTable();
 
-        Thread.sleep(500);
+        Component.should(Component.find(Spinner::new), Requirement.byAvailable(true), Duration.ofSeconds(1));
+        Component.should(Component.find(Spinner::new), Requirement.byAvailable(false), Duration.ofSeconds(1));
 
         Component.find(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).click();
 
@@ -68,14 +71,21 @@ public class Example {
         ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Вид объекта:")))
                 .clickOnArrowButton().getOptionBy(Option.Requirements.Equals.byText("Городское поселение")).click();
 
-        ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Статус объекта административно-территориального деления:")))
-                .clickOnAddButton(Duration.ofSeconds(2)).close();
-
         Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Собственное название:")).setValue("Собственное название");
+
+        var card = ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Статус объекта административно-территориального деления:"))).clickOnAddButton();
+        card.findInside(Text::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue(UUID.randomUUID().toString());
+        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.close();
 
         Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Код ОКТМО:")).setValue("Код ОКТМО");
 
         Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Примечание:")).setValue("Примечание");
+
+        card = ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Тип муниципального образования:"))).clickOnAddButton();
+        card.findInside(Text::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue(UUID.randomUUID().toString());
+        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.close();
 
         Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Источник данных:")).setValue("Источник данных");
     }

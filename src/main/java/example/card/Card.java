@@ -47,8 +47,8 @@ public class Card extends Component {
         title = findInside(() -> new WebComponent(TITLE_DESCRIPTION));
     }
 
-    public static @NotNull Card getActiveCard(Duration timeout) {
-        final var cards = Component.findEveryone(Card::new, timeout).stream().sorted(Comparator.comparing(Card::getCssIndex)).toList();
+    public static @NotNull Card getActiveCard() {
+        final var cards = Component.findEveryone(Card::new).stream().sorted(Comparator.comparing(Card::getCssIndex).reversed()).toList();
         if (cards.isEmpty()) throw new RuntimeException();
         return cards.get(0);
     }
@@ -80,6 +80,6 @@ public class Card extends Component {
     }
 
     private int getCssIndex() {
-        return Integer.parseInt(toAction().getAttribute("z-index"));
+        return Integer.parseInt(toAction().getCssValue("z-index"));
     }
 }

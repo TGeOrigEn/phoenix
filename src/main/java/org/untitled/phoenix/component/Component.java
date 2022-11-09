@@ -236,6 +236,7 @@ public abstract class Component {
 
         for (int index = 0; index < Integer.MAX_VALUE; index++) {
             final var component = findComponent(constructor, description, requirement, parent);
+            ((Component)component).description = component.getDescription().copy(index);
             if (!has(component, Requirement.byAvailable(true), timeout)) break;
             components.add(component);
         }

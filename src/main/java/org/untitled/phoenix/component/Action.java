@@ -43,6 +43,10 @@ public class Action {
         return invoke(webElement -> { final var attribute = webElement.getAttribute(attributeName); return attribute == null ? "" : attribute; }, String.format("Не удалось получить значение атрибута '%s' компонента", attributeName), component.getTimeout());
     }
 
+    public @NotNull String getCssValue(@NotNull String propertyName) {
+        return invoke(webElement -> { final var attribute = webElement.getCssValue(propertyName); return attribute == null ? "" : attribute; }, String.format("Не удалось получить значение '%s' компонента", propertyName), component.getTimeout());
+    }
+
     public @NotNull String getCssClass() {
         return invoke(webElement -> { final var attribute = webElement.getAttribute("class"); return attribute == null ? "" : attribute; }, "Не удалось получить значение класса", component.getTimeout());
     }

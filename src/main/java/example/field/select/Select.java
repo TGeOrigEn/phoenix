@@ -14,24 +14,24 @@ import java.time.Duration;
 
 public class Select extends Field {
 
-    private static final Description INPUT_DESCRIPTION = new Description(By.tagName("input"), "Ввод");
+    private static final @NotNull Description ARROW_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-arrow-trigger']"), "Кнопка 'Стрелка'");
 
-    private static final Description ARROW_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-arrow-trigger']"), "Стрелка");
+    private static final @NotNull Description PARENT_DIV_DESCRIPTION = new Description(By.xpath("./../.."), "Контейнер-родитель");
 
-    private static final Description PARENT_DIV_DESCRIPTION = new Description(By.xpath("/parent::div/parent::div"), "")
+    private static final @NotNull Description INPUT_DESCRIPTION = new Description(By.tagName("input"), "Ввод");
 
-    private final Component arrowButton;
+    private final @NotNull Component arrowButton;
 
-    private final Button addButton;
+    private final @NotNull Button addButton;
 
-    private final @NotNull Component div;
-
-    private final Component input;
+    private final @NotNull Component input;
 
     public Select() {
-        addButton = findInside(Button::new, Button.Requirements.Equals.byTip("Добавить новый объект"));
         arrowButton = findInside(() -> new WebComponent(ARROW_BUTTON_DESCRIPTION));
         input = findInside(() -> new WebComponent(INPUT_DESCRIPTION));
+
+        addButton = findInside(() -> new WebComponent(PARENT_DIV_DESCRIPTION))
+                .findInside(Button::new, Button.Requirements.Equals.byTip("Добавить новый объект"));
     }
 
     @Override
@@ -39,10 +39,10 @@ public class Select extends Field {
         return input;
     }
 
-    public @NotNull Card clickOnAddButton(Duration timeout) {
+    public @NotNull Card clickOnAddButton() {
         toAction().hover();
         addButton.click();
-        return Card.getActiveCard(timeout);
+        return Card.getActiveCard();
     }
 
     public @NotNull Menu clickOnArrowButton() {
