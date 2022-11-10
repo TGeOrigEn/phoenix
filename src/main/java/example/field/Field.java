@@ -14,6 +14,10 @@ public abstract class Field extends Component {
 
         public static class Equals {
 
+            public static @NotNull BaseRequirement<Field> byPlaceholder(@NotNull String placeholder) {
+                return new Requirement<>(Field::getPlaceholder, placeholder, "Имеет шаблонный текст");
+            }
+
             public static @NotNull BaseRequirement<Field> byValue(@NotNull String value) {
                 return new Requirement<>(Field::getValue, value, "Имеет значение");
             }
@@ -24,6 +28,10 @@ public abstract class Field extends Component {
         }
 
         public static class Contains {
+
+            public static @NotNull BaseRequirement<Field> byPlaceholder(@NotNull String placeholder) {
+                return new Requirement<>(Field::getPlaceholder, placeholder, "Содержит шаблонный текст", String::contains);
+            }
 
             public static @NotNull BaseRequirement<Field> byValue(@NotNull String value) {
                 return new Requirement<>(Field::getValue, value, "Имеет значение", String::contains);
@@ -63,6 +71,10 @@ public abstract class Field extends Component {
     @Override
     protected @NotNull Description initialize() {
         return DEFAULT_DESCRIPTION;
+    }
+
+    public @NotNull String getPlaceholder() {
+        return getInput().toAction().getAttribute("placeholder");
     }
 
     public @NotNull String getTitle() {

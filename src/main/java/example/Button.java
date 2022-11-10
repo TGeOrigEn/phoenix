@@ -83,7 +83,7 @@ public class Button extends Component {
         toAction().click();
     }
 
-    public @NotNull Menu showOptions() {
+    public @NotNull Menu showMenu() {
         arrow.toAction().click();
         return find(Menu::new);
     }

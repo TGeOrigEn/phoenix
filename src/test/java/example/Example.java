@@ -77,10 +77,7 @@ public class Example {
 
         ((DropdownField) card.findInside(DropdownField::new,  Field.Requirements.Equals.byTitle("Статус объекта административно-территориального деления:"))).addNewObject();
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue(UUID.randomUUID().toString());
-        card.close();
-
-        Component.find(Alert::new).findInside(Button::new, Button.Requirements.Equals.byText("Да")).click();
-
+        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
         card.close();
 
         card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Код ОКТМО:")).setValue("Код ОКТМО");
@@ -89,10 +86,7 @@ public class Example {
 
         ((DropdownField) Component.find(Card::new).findInside(DropdownField::new,  Field.Requirements.Equals.byTitle("Тип муниципального образования:"))).addNewObject();
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue(UUID.randomUUID().toString());
-        card.close();
-
-        Component.find(Alert::new).findInside(Button::new, Button.Requirements.Equals.byText("Да")).click();
-
+        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
         card.close();
 
         card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Источник данных:")).setValue("Источник данных");
