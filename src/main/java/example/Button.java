@@ -1,6 +1,5 @@
 package example;
 
-import example.menu.Menu;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -84,8 +83,8 @@ public class Button extends Component {
         toAction().click();
     }
 
-    public Menu clickOnArrow() {
-        toAction().click();
+    public @NotNull Menu showOptions() {
+        arrow.toAction().click();
         return find(Menu::new);
     }
 }

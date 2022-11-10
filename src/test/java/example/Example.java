@@ -1,18 +1,18 @@
 package example;
 
-import example.card.Card;
+import example.window.Alert;
+import example.window.Card;
+import example.window.Window;
 import example.field.Field;
-import example.field.Text;
-import example.field.TextArea;
-import example.field.select.Select;
-import example.field.select.menu.Option;
-import geoMeta.AuthorizationForm;
+import example.field.TextField;
+import example.field.TextAreaField;
+import example.field.dropdown.DropdownField;
+import example.field.dropdown.Dropdown;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.untitled.phoenix.component.Component;
-import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 
 import java.nio.file.Paths;
@@ -45,49 +45,57 @@ public class Example {
     }
 
     @Test
-    public void test_0() throws InterruptedException {
+    public void test_0() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
         Component.find(Item::new, Item.Requirements.Equals.byName("Приморский край")).expand();
         Component.find(Item::new, Item.Requirements.Equals.byName("Базовая карта")).expand();
-        Component.find(Item::new, Item.Requirements.Equals.byName("Городское поселение (СТП ОП)")).openTable();
 
-        Component.should(Component.find(Spinner::new), Requirement.byAvailable(true), Duration.ofSeconds(1));
-        Component.should(Component.find(Spinner::new), Requirement.byAvailable(false), Duration.ofSeconds(1));
+        Component.find(Item::new, Item.Requirements.Equals.byName("Городское поселение (СТП ОП)")).open(Item.Option.TABLE);
+
+        Component.find(Spinner::new).wait(Duration.ofSeconds(60));
 
         Component.find(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).click();
 
-        Component.find(Card::new).findInside(Text::new, Field.Requirements.Equals.byTitle("Площадь, кв. м.:")).setValue("1");
+        final var card = Component.find(Card::new, Window.Requirements.isActive(true));
 
-        ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Субъект градостроительных отношений:")))
-                .clickOnArrowButton().getOptionBy(Option.Requirements.Equals.byText("Российская Федерация")).click();
+        card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Площадь, кв. м.:")).setValue("1");
 
-        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Код ОКАТО:")).setValue("Код ОКАТО");
+        ((DropdownField) card.findInside(DropdownField::new,  Field.Requirements.Equals.byTitle("Субъект градостроительных отношений:")))
+                .openDropdown().findInside(Dropdown.Option::new, Dropdown.Option.Requirements.Equals.byText("Российская Федерация")).click();
 
-        Component.find(Card::new).findInside(Text::new, Field.Requirements.Equals.byTitle("Идентификатор:")).setValue("Идентификатор");
+        card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Код ОКАТО:")).setValue("Код ОКАТО");
 
-        Component.find(Card::new).findInside(Text::new, Field.Requirements.Equals.byTitle("Численность населения, тыс. чел:")).setValue("3");
+        card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Идентификатор:")).setValue("Идентификатор");
 
-        ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Вид объекта:")))
-                .clickOnArrowButton().getOptionBy(Option.Requirements.Equals.byText("Городское поселение")).click();
+        card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Численность населения, тыс. чел:")).setValue("3");
 
-        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Собственное название:")).setValue("Собственное название");
+        ((DropdownField) card.findInside(DropdownField::new,  Field.Requirements.Equals.byTitle("Вид объекта:")))
+                .openDropdown().findInside(Dropdown.Option::new,Dropdown.Option.Requirements.Equals.byText("Городское поселение")).click();
 
-        var card = ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Статус объекта административно-территориального деления:"))).clickOnAddButton();
-        card.findInside(Text::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue(UUID.randomUUID().toString());
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Собственное название:")).setValue("Собственное название");
+
+        ((DropdownField) card.findInside(DropdownField::new,  Field.Requirements.Equals.byTitle("Статус объекта административно-территориального деления:"))).addNewObject();
+        card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue(UUID.randomUUID().toString());
         card.close();
 
-        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Код ОКТМО:")).setValue("Код ОКТМО");
+        Component.find(Alert::new).findInside(Button::new, Button.Requirements.Equals.byText("Да")).click();
 
-        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Примечание:")).setValue("Примечание");
-
-        card = ((Select) Component.find(Card::new).findInside(Select::new,  Field.Requirements.Equals.byTitle("Тип муниципального образования:"))).clickOnAddButton();
-        card.findInside(Text::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue(UUID.randomUUID().toString());
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
         card.close();
 
-        Component.find(Card::new).findInside(TextArea::new, Field.Requirements.Equals.byTitle("Источник данных:")).setValue("Источник данных");
+        card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Код ОКТМО:")).setValue("Код ОКТМО");
+
+        card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Примечание:")).setValue("Примечание");
+
+        ((DropdownField) Component.find(Card::new).findInside(DropdownField::new,  Field.Requirements.Equals.byTitle("Тип муниципального образования:"))).addNewObject();
+        card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue(UUID.randomUUID().toString());
+        card.close();
+
+        Component.find(Alert::new).findInside(Button::new, Button.Requirements.Equals.byText("Да")).click();
+
+        card.close();
+
+        card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Источник данных:")).setValue("Источник данных");
     }
 
     @Test
@@ -96,16 +104,16 @@ public class Example {
 
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
 
-        Component.find(Select::new, Select.DEFAULT_DESCRIPTION.copy(1))
-                .clickOnArrowButton()
-                .getOptionBy(Option.Requirements.Equals.byText("А4, Альбомный (PDF)"))
+        Component.find(DropdownField::new, DropdownField.DEFAULT_DESCRIPTION.copy(1))
+                .openDropdown()
+                .findInside(Dropdown.Option::new,Dropdown.Option.Requirements.Equals.byText("А4, Альбомный (PDF)"))
                 .click();
 
         Component.find(Button::new, Button.Requirements.Equals.byText("Далее")).click();
 
-        Component.find(Select::new, Select.DEFAULT_DESCRIPTION.copy(2))
-                .clickOnArrowButton()
-                .getOptionBy(Option.Requirements.Equals.byText("~1:1600"))
+        Component.find(DropdownField::new, DropdownField.DEFAULT_DESCRIPTION.copy(2))
+                .openDropdown()
+                .findInside(Dropdown.Option::new,Dropdown.Option.Requirements.Equals.byText("~1:1600"))
                 .click();
 
         final var file = Component.find(Button::new, Button.Requirements.Equals.byText("Сформировать")).toAction().download(Duration.ofSeconds(600), 1);

@@ -6,13 +6,13 @@ import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 
-public class TextArea extends Field {
+public class TextAreaField extends Field {
 
-    private static final Description TEXT_AREA_DESCRIPTION = new Description(By.tagName("textarea"), "Текстовая область");
+    private static final @NotNull Description TEXT_AREA_DESCRIPTION = new Description(By.tagName("textarea"), "Текстовая область");
 
-    private final Component textArea;
+    private final @NotNull Component textArea;
 
-    public TextArea() {
+    public TextAreaField() {
         textArea = findInside(() -> new WebComponent(TEXT_AREA_DESCRIPTION));
     }
 

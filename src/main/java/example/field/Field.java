@@ -43,15 +43,15 @@ public abstract class Field extends Component {
         }
     }
 
-    public static final Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*=x-field]"), "Поле");
+    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*=x-field]"), "Поле");
 
-    private static final Description LABEL_DESCRIPTION = new Description(By.cssSelector("span[class*='x-form-item-label-inner']"), "Лейбл");
+    private static final @NotNull Description LABEL_DESCRIPTION = new Description(By.cssSelector("span[class*='x-form-item-label-inner']"), "Лейбл");
 
-    private static final Description REQUIRED_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-required-field']"), "Обязательность");
+    private static final @NotNull Description REQUIRED_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-required-field']"), "Обязательность");
 
-    protected final Component required;
+    protected final @NotNull Component required;
 
-    protected final Component label;
+    protected final @NotNull Component label;
 
     public Field() {
         required = findInside(() -> new WebComponent(REQUIRED_DESCRIPTION));

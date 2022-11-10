@@ -1,4 +1,4 @@
-package geoMeta;
+package example;
 
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
@@ -10,19 +10,19 @@ public final class AuthorizationForm extends Component {
 
     // Описание для внутренних компонентов
 
-    private static final Description LOGIN_BUTTON_DESCRIPTION = new Description(By.cssSelector("button[class='btn btn-primary btn-block']"), "Кнопка 'Войти'");
+    private static final @NotNull Description LOGIN_BUTTON_DESCRIPTION = new Description(By.cssSelector("button[class='btn btn-primary btn-block']"), "Кнопка 'Войти'");
 
-    private static final Description USERNAME_FILED_DESCRIPTION = new Description(By.cssSelector("input[id='Username']"), "Поле 'Имя пользователя'");
+    private static final @NotNull Description USERNAME_FILED_DESCRIPTION = new Description(By.cssSelector("input[id='Username']"), "Поле 'Имя пользователя'");
 
-    private static final Description PASSWORD_FILED_DESCRIPTION = new Description(By.cssSelector("input[id='Password']"), "Поле 'Пароль'");
+    private static final @NotNull Description PASSWORD_FILED_DESCRIPTION = new Description(By.cssSelector("input[id='Password']"), "Поле 'Пароль'");
 
     // Внутренние компоненты
 
-    private final WebComponent usernameField;
+    private final @NotNull WebComponent usernameField;
 
-    private final WebComponent passwordField;
+    private final @NotNull WebComponent passwordField;
 
-    private final WebComponent loginButton;
+    private final @NotNull WebComponent loginButton;
 
     // Конструктор компонента
 

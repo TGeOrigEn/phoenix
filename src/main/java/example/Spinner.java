@@ -4,6 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
+
+import java.time.Duration;
 
 public class Spinner extends Component {
 
@@ -12,5 +15,10 @@ public class Spinner extends Component {
     @Override
     protected @NotNull Description initialize() {
         return DEFAULT_DESCRIPTION;
+    }
+
+    public void wait(@NotNull Duration timeout) {
+        Component.should(this, Requirement.byAvailable(true), timeout);
+        Component.should(this, Requirement.byAvailable(false), timeout);
     }
 }

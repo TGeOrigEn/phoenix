@@ -1,18 +1,16 @@
-package example.field.select;
+package example.field.dropdown;
 
 import example.Button;
-import example.card.Card;
+import example.window.Card;
+import example.window.Window;
 import example.field.Field;
-import example.field.select.menu.Menu;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 
-import java.time.Duration;
-
-public class Select extends Field {
+public class DropdownField extends Field {
 
     private static final @NotNull Description ARROW_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-arrow-trigger']"), "Кнопка 'Стрелка'");
 
@@ -26,7 +24,7 @@ public class Select extends Field {
 
     private final @NotNull Component input;
 
-    public Select() {
+    public DropdownField() {
         arrowButton = findInside(() -> new WebComponent(ARROW_BUTTON_DESCRIPTION));
         input = findInside(() -> new WebComponent(INPUT_DESCRIPTION));
 
@@ -39,14 +37,14 @@ public class Select extends Field {
         return input;
     }
 
-    public @NotNull Card clickOnAddButton() {
+    public @NotNull Card addNewObject() {
         toAction().hover();
         addButton.click();
-        return Card.getActiveCard();
+        return (Card) Component.find(Card::new, Window.Requirements.isActive(true));
     }
 
-    public @NotNull Menu clickOnArrowButton() {
+    public @NotNull Dropdown openDropdown() {
         arrowButton.toAction().click();
-        return find(Menu::new);
+        return find(Dropdown::new);
     }
 }
