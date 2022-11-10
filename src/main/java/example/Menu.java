@@ -1,7 +1,7 @@
 package example;
 
-import example.window.Card;
 import org.gems.WebComponent;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
@@ -86,7 +86,7 @@ public class Menu extends Component {
 
     public static class Requirements {
 
-        public static BaseRequirement<Menu> isActive(boolean isActive) {
+        public static @NotNull BaseRequirement<Menu> isActive(boolean isActive) {
             return new Requirement<>(Menu::isActive, isActive, "Является активным");
         }
     }

@@ -1,6 +1,5 @@
 package example;
 
-import example.window.Alert;
 import example.window.Card;
 import example.window.Window;
 import example.field.Field;

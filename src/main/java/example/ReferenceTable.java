@@ -31,9 +31,15 @@ public class ReferenceTable extends Component {
             public @NotNull BaseRequirement<Tab> isActive(boolean isActive) {
                 return new Requirement<>(Tab::isActive, isActive, "Является активным");
             }
+
+            public static @NotNull BaseRequirement<Tab> isFiltered(boolean isFiltered) {
+                return new Requirement<>(Tab::isFiltered, isFiltered, "Является отфильтрованным");
+            }
         }
 
         public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("a[class^='x-tab x-unselectable']"), "Вкладка таблицы");
+
+        private static final @NotNull Description FILTER_ICON_DESCRIPTION = new Description(By.cssSelector("span[class*='fg-map-filtered']"), "Иконка фильтрации");
 
         private static final @NotNull Description CLOSE_BUTTON_DESCRIPTION = new Description(By.cssSelector("span[class='x-tab-close-btn']"), "Кнопка 'Закрыть'");
 
@@ -41,10 +47,13 @@ public class ReferenceTable extends Component {
 
         private final @NotNull Component closeButton;
 
+        private final @NotNull Component filterIcon;
+
         private final @NotNull Component text;
 
         public Tab() {
             closeButton = findInside(() -> new WebComponent(CLOSE_BUTTON_DESCRIPTION));
+            filterIcon = findInside(() -> new WebComponent(FILTER_ICON_DESCRIPTION));
             text = findInside(() -> new WebComponent(TEXT_DESCRIPTION));
         }
 
@@ -59,6 +68,10 @@ public class ReferenceTable extends Component {
 
         public @NotNull String getName() {
             return text.toAction().getText();
+        }
+
+        public boolean isFiltered() {
+            return filterIcon.isAvailable();
         }
 
         public void close() {
@@ -83,39 +96,28 @@ public class ReferenceTable extends Component {
                     return new Requirement<>(Header::getName, name, "Содержит имя", String::contains);
                 }
             }
-
-            public static @NotNull BaseRequirement<Header> isFiltered(boolean isFiltered) {
-                return new Requirement<>(Header::isFiltered, isFiltered, "Является отфильтрованным");
-            }
         }
 
         public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*='x-column-header x-column-header-align-left']:not([style*='display'])"), "Заголовок таблицы");
 
         private static final @NotNull Description ARROW_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class='x-column-header-trigger']"), "Кнопка 'Стрелка'");
 
-        private static final @NotNull Description FILTER_ICON_DESCRIPTION = new Description(By.cssSelector("span[class*='fg-map-filtered']"), "Иконка фильтрации");
-
         private static final @NotNull Description TEXT_DESCRIPTION = new Description(By.cssSelector("span[class='x-column-header-text']"), "Текст");
 
         private final @NotNull Component arrowButton;
 
-        private final @NotNull Component filterIcon;
+
 
         private final @NotNull Component text;
 
         public Header() {
             arrowButton = findInside(() -> new WebComponent(ARROW_BUTTON_DESCRIPTION));
-            filterIcon = findInside(() -> new WebComponent(FILTER_ICON_DESCRIPTION));
             text = findInside(() -> new WebComponent(TEXT_DESCRIPTION));
         }
 
         @Override
         protected @NotNull Description initialize() {
             return DEFAULT_DESCRIPTION;
-        }
-
-        public boolean isFiltered() {
-            return filterIcon.isAvailable();
         }
 
         public @NotNull String getName() {
@@ -165,6 +167,17 @@ public class ReferenceTable extends Component {
             return DEFAULT_DESCRIPTION;
         }
 
+        public boolean isSelected() {
+            return toAction().getCssClass().contains("selected");
+        }
+
+        public @NotNull String getValue(@NotNull String columnName) {
+            final var column = findInside(ReferenceTable::new).findInside(Header::new, Header.Requirements.Equals.byName(columnName));
+            column.toAction().hover();
+
+            return findInside(() -> new WebComponent(VALUE_DESCRIPTION.copy(column.getIndex() - 1))).toAction().getText();
+        }
+
         public void show(@NotNull Option option) {
             switch (option){
                 case MAP -> showOnMapButton.toAction().click();
@@ -173,11 +186,8 @@ public class ReferenceTable extends Component {
             }
         }
 
-        public @NotNull String getValue(@NotNull String columnName) {
-            final var column = findInside(ReferenceTable::new).findInside(Header::new, Header.Requirements.Equals.byName(columnName));
-            column.toAction().hover();
-
-            return findInside(() -> new WebComponent(VALUE_DESCRIPTION.copy(column.getIndex() - 1))).toAction().getText();
+        public void select() {
+            toAction().click();
         }
     }
 

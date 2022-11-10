@@ -6,13 +6,15 @@ import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 
+import java.io.File;
+import java.time.Duration;
 import java.util.Comparator;
 
 public class Card extends Window {
 
     public static class Section extends Component {
 
-        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*='x-panel x-box-item x-panel-default']"), "Секция");
+        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*='x-box-item x-panel-default'][id*='panel']"), "Секция");
 
         private static final @NotNull Description BUTTON_EXPAND_DESCRIPTION = new Description(By.tagName("img"), "Кнопка 'Развернуть/Свернуть'");
 
