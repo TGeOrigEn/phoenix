@@ -1,7 +1,6 @@
 package example;
 
 import org.gems.WebComponent;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
