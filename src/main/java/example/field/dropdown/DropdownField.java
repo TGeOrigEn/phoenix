@@ -1,8 +1,6 @@
 package example.field.dropdown;
 
 import example.Button;
-import example.window.Card;
-import example.window.Window;
 import example.field.Field;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +13,8 @@ public class DropdownField extends Field {
     private static final @NotNull Description ARROW_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-arrow-trigger']"), "Кнопка 'Стрелка'");
 
     private static final @NotNull Description PARENT_DIV_DESCRIPTION = new Description(By.xpath("./../.."), "Контейнер-родитель");
+
+    private static final @NotNull Description VALUE_DESCRIPTION = new Description(By.cssSelector("div[class='x-tagfield-item-text']"), "Значение");
 
     private static final @NotNull Description INPUT_DESCRIPTION = new Description(By.tagName("input"), "Ввод");
 
@@ -37,10 +37,20 @@ public class DropdownField extends Field {
         return input;
     }
 
-    public @NotNull Card addNewObject() {
+    @Override
+    public void setValue(@NotNull String name) {
+        arrowButton.toAction().click();
+        find(Dropdown::new).findInside(Dropdown.Option::new, Dropdown.Option.Requirements.Equals.byText(name)).click();
+    }
+
+    @Override
+    public @NotNull String getValue() {
+       return String.join("; ", findInsideEveryone(() -> new WebComponent(VALUE_DESCRIPTION)).stream().map(value -> value.toAction().getText()).toList());
+    }
+
+    public void addNewObject() {
         toAction().hover();
         addButton.click();
-        return (Card) Component.find(Card::new, Window.Requirements.isActive(true));
     }
 
     public @NotNull Dropdown openDropdown() {

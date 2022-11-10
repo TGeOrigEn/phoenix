@@ -47,10 +47,10 @@ public class Example {
     public void test_0() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
-        Component.find(Item::new, Item.Requirements.Equals.byName("Приморский край")).expand();
-        Component.find(Item::new, Item.Requirements.Equals.byName("Базовая карта")).expand();
+        Component.find(NavigationPanel.Item::new, NavigationPanel.Item.Requirements.Equals.byName("Приморский край")).expand();
+        Component.find(NavigationPanel.Item::new, NavigationPanel.Item.Requirements.Equals.byName("Базовая карта")).expand();
 
-        Component.find(Item::new, Item.Requirements.Equals.byName("Городское поселение (СТП ОП)")).open(Item.Option.TABLE);
+        Component.find(NavigationPanel.Item::new, NavigationPanel.Item.Requirements.Equals.byName("Городское поселение (СТП ОП)")).open(NavigationPanel.Item.Option.TABLE);
 
         Component.find(Spinner::new).wait(Duration.ofSeconds(60));
 

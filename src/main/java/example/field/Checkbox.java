@@ -25,7 +25,7 @@ public class Checkbox extends Field {
         return toAction().getCssClass().contains("checked");
     }
 
-    public void click() {
+    public void check() {
         input.toAction().click();
     }
 }

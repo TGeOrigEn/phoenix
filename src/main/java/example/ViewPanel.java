@@ -8,7 +8,7 @@ import org.untitled.phoenix.component.Description;
 import org.untitled.phoenix.component.requirement.BaseRequirement;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
-public class ReferenceTable extends Component {
+public class ViewPanel extends Component {
 
     public static class Tab extends Component {
 
@@ -124,7 +124,7 @@ public class ReferenceTable extends Component {
             return text.toAction().getText();
         }
 
-        public @NotNull Menu openMenu() {
+        public @NotNull Menu openSort() {
             toAction().hover();
             arrowButton.toAction().click();
             return Component.find(Menu::new, Menu.Requirements.isActive(true));
@@ -132,6 +132,23 @@ public class ReferenceTable extends Component {
     }
 
     public static class Item extends Component {
+
+        public static class Requirements {
+
+            public static class Equals {
+
+                public static @NotNull BaseRequirement<Item> byValue(@NotNull String columnName, @NotNull String value) {
+                    return new Requirement<>(item -> item.getValue(columnName), value, String.format("Имеет значение в столбце '%s'", columnName));
+                }
+            }
+
+            public static class Contains {
+
+                public static @NotNull BaseRequirement<Item> byValue(@NotNull String columnName, @NotNull String value) {
+                    return new Requirement<>(item -> item.getValue(columnName), value, String.format("Содержит значение в столбце '%s'", columnName), String::contains);
+                }
+            }
+        }
 
         public enum Option { MAP, ATTACHMENT, CARD }
 
@@ -154,7 +171,7 @@ public class ReferenceTable extends Component {
         private final @NotNull Component openCardButton;
 
         public Item() {
-            final var containerForButtons = findInside(ReferenceTable::new)
+            final var containerForButtons = find(ViewPanel::new)
                     .findInside(() -> new WebComponent(CONTAINER_FOR_BUTTONS_DESCRIPTION.copy(getIndex())));
 
             attachmentButton = containerForButtons.findInside(() -> new WebComponent(ATTACHMENT_BUTTON_DESCRIPTION));
@@ -172,9 +189,8 @@ public class ReferenceTable extends Component {
         }
 
         public @NotNull String getValue(@NotNull String columnName) {
-            final var column = findInside(ReferenceTable::new).findInside(Header::new, Header.Requirements.Equals.byName(columnName));
+            final var column = find(ViewPanel::new).findInside(Header::new, Header.Requirements.Equals.byName(columnName));
             column.toAction().hover();
-
             return findInside(() -> new WebComponent(VALUE_DESCRIPTION.copy(column.getIndex() - 1))).toAction().getText();
         }
 
