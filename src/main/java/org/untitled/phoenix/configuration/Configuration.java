@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebDriver;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -41,28 +42,26 @@ public final class Configuration {
         return remoteAddress;
     }
 
-    public static void setRemoteWebDriver(@NotNull URL remoteAddress, @NotNull String downloadDirectory, @NotNull ChromeOptions options) {
+    public static void setChromeDriver(@Nullable String remoteAddress, @NotNull String downloadDirectory, @NotNull ChromeOptions options) throws MalformedURLException {
         Configuration.downloadDirectory = String.format("%s\\%s", downloadDirectory, UUID.randomUUID());
 
         final var prefs = new HashMap<String, Object>();
         prefs.put("download.default_directory", Configuration.downloadDirectory);
 
         options.setExperimentalOption("prefs", prefs);
-        Configuration.webDriver = new RemoteWebDriver(remoteAddress, options);
 
-        Configuration.remoteAddress = remoteAddress;
-        new File(getDownloadDirectory()).mkdirs();
-    }
+        if (remoteAddress == null) {
+            Configuration.webDriver = new ChromeDriver(options);
+            Configuration.remoteAddress = null;
+        } else {
+            final var address = new URL(remoteAddress);
+            Configuration.webDriver = new RemoteWebDriver(address, options);
+            Configuration.remoteAddress = address;
+        }
 
-    public static void setWebDriver(@NotNull String downloadDirectory, @NotNull ChromeOptions options) {
-        Configuration.downloadDirectory = String.format("%s\\%s", downloadDirectory, UUID.randomUUID());
+        final var directory = new File(getDownloadDirectory());
 
-        final var prefs = new HashMap<String, Object>();
-        prefs.put("download.default_directory", Configuration.downloadDirectory);
-
-        options.setExperimentalOption("prefs", prefs);
-        Configuration.webDriver = new ChromeDriver(options);
-
-        new File(getDownloadDirectory()).mkdirs();
+        if (!directory.mkdirs() || !directory.exists())
+            throw new RuntimeException("Не удалось создать директорию для загруженных файлов");
     }
 }
