@@ -7,8 +7,11 @@ import example.field.dropdown.DropdownField;
 import example.window.Alert;
 import example.window.Card;
 import example.window.Window;
+import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
@@ -19,6 +22,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.time.Duration;
 
+@DisplayName("Вложения")
 public class AttachmentTest extends BaseTest {
 
     private static final Card card = (Card) Component.find(Card::new, Window.Requirements.isActive(true));
@@ -31,6 +35,7 @@ public class AttachmentTest extends BaseTest {
     }
 
     @BeforeEach
+    @Step("Подготовка тестовых данных")
     public void beforeEach() throws URISyntaxException {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
@@ -56,12 +61,19 @@ public class AttachmentTest extends BaseTest {
     }
 
     @Test
-    public void test() throws IOException {
+    @Step("Скачать вложенный файл")
+    public void downloadAttachment() throws IOException {
         viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Земельный участок", "Земельный участок №25:36:030101:1")).show(ViewPanel.Item.Option.ATTACHMENT);
         final var file = Component.find(Attachment::new).findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("TextDocument.txt")).download(Duration.ofSeconds(2));
 
         if (new BufferedReader(new FileReader(file)).readLine().equals(""))
             throw new RuntimeException("This is a test text document.");
+    }
+
+    @AfterEach
+    @Step("Удаление тестовых данных")
+    public void afterEach() {
+        removeAllItem();
     }
 
     private static void refreshTable() {

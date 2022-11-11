@@ -37,7 +37,7 @@ public class ViewPanel extends Component {
             }
         }
 
-        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("a[class^='x-tab x-unselectable']"), "Вкладка таблицы");
+        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("a[class^='x-tab x-unselectable']"), "Вкладка");
 
         private static final @NotNull Description FILTER_ICON_DESCRIPTION = new Description(By.cssSelector("span[class*='fg-map-filtered']"), "Иконка фильтрации");
 
@@ -98,7 +98,7 @@ public class ViewPanel extends Component {
             }
         }
 
-        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*='x-column-header x-column-header-align-left']:not([style*='display'])"), "Заголовок таблицы");
+        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*='x-column-header x-column-header-align-left']:not([style*='display'])"), "Заголовок столбца");
 
         private static final @NotNull Description ARROW_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class='x-column-header-trigger']"), "Кнопка 'Стрелка'");
 
@@ -152,7 +152,7 @@ public class ViewPanel extends Component {
 
         public enum Option { MAP, ATTACHMENT, CARD }
 
-        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id*='normal'] table[class^='x-grid-item']"), "Элемент таблицы");
+        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id*='normal'] table[class^='x-grid-item']"), "Элемент");
 
         private static final @NotNull Description CONTAINER_FOR_BUTTONS_DESCRIPTION = new Description(By.cssSelector("div[id*='locked'] table[class^='x-grid-item']"), "Контейнер для кнопок");
 
@@ -207,7 +207,7 @@ public class ViewPanel extends Component {
         }
     }
 
-    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^='pptab'][class='x-panel x-tabpanel-child x-panel-default x-closable x-panel-closable x-panel-default-closable']:not([style*=display])"), "Справочная таблица");
+    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^='pptab'][class='x-panel x-tabpanel-child x-panel-default x-closable x-panel-closable x-panel-default-closable']:not([style*=display])"), "Панель представления");
 
     @Override
     protected @NotNull Description initialize() {

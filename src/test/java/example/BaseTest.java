@@ -1,13 +1,16 @@
 package example;
 
 import example.drivers.Chrome;
+import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.other.Allure;
 import org.untitled.phoenix.configuration.Configuration;
 
 import java.net.MalformedURLException;
@@ -29,6 +32,7 @@ public abstract class BaseTest {
     }
 
     @BeforeEach
+    @Step("Инициализировать веб-драйвер")
     public void webDriverInitialization() throws MalformedURLException {
         final var pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chromedriver.exe");
         final var downloadDirectory = Paths.get("build/downloads/").toFile();
@@ -41,11 +45,19 @@ public abstract class BaseTest {
     }
 
     @BeforeEach
+    @Step("Перейти на стартовую страницу")
     public void openAddress() {
         Configuration.getWebDriver().get(getAddress());
     }
 
     @AfterEach
+    @Step("Добавить видео")
+    public void attachVideo() {
+        Allure.attachVideo();
+    }
+
+    @AfterEach
+    @Step("Закрыть веб-драйвер")
     public void closeWebDriver() {
         Configuration.getWebDriver().quit();
     }

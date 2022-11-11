@@ -9,9 +9,11 @@ import example.field.dropdown.DropdownField;
 import example.window.Alert;
 import example.window.Card;
 import example.window.Window;
+import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
@@ -19,6 +21,7 @@ import org.untitled.phoenix.configuration.Configuration;
 
 import java.time.Duration;
 
+@DisplayName("Фильтрация по текстовому полю")
 public class TextFilterTest extends BaseTest {
 
     private static final Card card = (Card) Component.find(Card::new, Window.Requirements.isActive(true));
@@ -31,6 +34,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     @BeforeEach
+    @Step("Подготовка тестовых данных")
     public void beforeEach() {
         Configuration.getWebDriver().navigate().to("https://autotests.gemsdev.ru/");
 
@@ -69,6 +73,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по текстовому полю (Не пусто)")
     public void textFilterByNoEmpty() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -83,6 +88,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по текстовому полю (Пусто)")
     public void textFilterByEmpty() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -97,6 +103,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по текстовому полю (Не содержит)")
     public void textFilterByNoContains() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -112,6 +119,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по текстовому полю (Содержит)")
     public void textFilterByContains() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -127,6 +135,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по текстовому полю (Не равно)")
     public void textFilterByNoEquals() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -142,6 +151,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по текстовому полю (Равно)")
     public void textFilterByEquals() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -157,6 +167,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     @AfterEach
+    @Step("Удаление тестовых данных")
     public void afterEach() {
         removeAllItem();
     }

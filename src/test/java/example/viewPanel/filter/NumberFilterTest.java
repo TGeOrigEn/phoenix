@@ -6,9 +6,11 @@ import example.field.TextField;
 import example.window.Alert;
 import example.window.Card;
 import example.window.Window;
+import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
@@ -16,6 +18,7 @@ import org.untitled.phoenix.configuration.Configuration;
 
 import java.time.Duration;
 
+@DisplayName("Фильтрация по числовому полю")
 public class NumberFilterTest extends BaseTest {
 
     private static final Card card = (Card) Component.find(Card::new, Window.Requirements.isActive(true));
@@ -28,6 +31,7 @@ public class NumberFilterTest extends BaseTest {
     }
 
     @BeforeEach
+    @Step("Подготовка тестовых данных")
     public void beforeEach() {
         Configuration.getWebDriver().navigate().to("https://autotests.gemsdev.ru/");
 
@@ -63,6 +67,7 @@ public class NumberFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по числовому полю (Равно)")
     public void numberFilterByLess() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -78,6 +83,7 @@ public class NumberFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по числовому полю (Больше)")
     public void numberFilterByMore() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -93,6 +99,7 @@ public class NumberFilterTest extends BaseTest {
     }
 
     @Test
+    @Step("Фильтровать по числовому полю (Равно)")
     public void numberFilterByEquals() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
@@ -108,6 +115,7 @@ public class NumberFilterTest extends BaseTest {
     }
 
     @AfterEach
+    @Step("Удаление тестовых данных")
     public void afterEach() {
         removeAllItem();
     }

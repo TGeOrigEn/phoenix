@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 public class DynamicStep {
 
     public static void invokeStep(@NotNull Component component, String actionName, Runnable runnable) {
-        var aStepName = String.format("%s :: %s", actionName, component);
+        var aStepName = String.format("%s :: %s", actionName, component.getContext());
 
         var uuid = UUID.randomUUID().toString();
         StepResult result = new StepResult().setName(aStepName);
@@ -32,7 +32,7 @@ public class DynamicStep {
     }
 
     public static <T> T invokeStep(@NotNull Component component, String actionName, Supplier<T> runnable) {
-        var aStepName = String.format("%s :: %s", actionName, component);
+        var aStepName = String.format("%s :: %s", actionName, component.getContext());
 
         var uuid = UUID.randomUUID().toString();
         StepResult result = new StepResult().setName(aStepName);
