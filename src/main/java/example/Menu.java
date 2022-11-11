@@ -12,44 +12,44 @@ import java.util.Comparator;
 
 public class Menu extends Component {
 
-    public static class Option extends Component {
+    public static class Item extends Component {
 
         public static class Requirements {
 
             public static class Equals {
 
-                public static @NotNull BaseRequirement<Option> byText(@NotNull String text) {
-                    return new Requirement<>(Option::getText, text, "Имеет текст");
+                public static @NotNull BaseRequirement<Item> byText(@NotNull String text) {
+                    return new Requirement<>(Item::getText, text, "Имеет текст");
                 }
             }
 
             public static class Contains {
 
-                public static @NotNull BaseRequirement<Option> byText(@NotNull String text) {
-                    return new Requirement<>(Option::getText, text, "Содержит текст", String::contains);
+                public static @NotNull BaseRequirement<Item> byText(@NotNull String text) {
+                    return new Requirement<>(Item::getText, text, "Содержит текст", String::contains);
                 }
             }
 
-            public static @NotNull BaseRequirement<Option> isCheckable(boolean isCheckable) {
-                return new Requirement<>(Option::isCheckable, isCheckable, "Является выделяемым");
+            public static @NotNull BaseRequirement<Item> isCheckable(boolean isCheckable) {
+                return new Requirement<>(Item::isCheckable, isCheckable, "Является выделяемым");
             }
 
-            public static @NotNull BaseRequirement<Option> isChecked(boolean isChecked) {
-                return new Requirement<>(Option::isChecked, isChecked, "Является выделенным");
+            public static @NotNull BaseRequirement<Item> isChecked(boolean isChecked) {
+                return new Requirement<>(Item::isChecked, isChecked, "Является выделенным");
             }
 
-            public static @NotNull BaseRequirement<Option> isEnabled(boolean isEnabled) {
-                return new Requirement<>(Option::isEnabled, isEnabled, "Включен");
+            public static @NotNull BaseRequirement<Item> isEnabled(boolean isEnabled) {
+                return new Requirement<>(Item::isEnabled, isEnabled, "Включен");
             }
         }
 
-        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id*='item'][class*='x-box-item']:not([style*=display])"), "Вариант");
+        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id*='item'][class*='x-box-item']:not([style*=display])"), "Элемент");
 
         private static final @NotNull Description TEXT_DESCRIPTION = new Description(By.cssSelector("span[class*='x-menu-item-text']"), "Текст");
 
         private final @NotNull Component text;
 
-        public Option() {
+        public Item() {
             text = findInside(() -> new WebComponent(TEXT_DESCRIPTION));
         }
 

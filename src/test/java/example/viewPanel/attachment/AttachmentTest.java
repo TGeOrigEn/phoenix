@@ -2,8 +2,7 @@ package example.viewPanel.attachment;
 
 import example.*;
 import example.field.Field;
-import example.field.TextField;
-import example.field.dropdown.DropdownField;
+import example.field.DropdownField;
 import example.window.Alert;
 import example.window.Card;
 import example.window.Window;
@@ -15,11 +14,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
-import org.untitled.phoenix.configuration.Configuration;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.time.Duration;
 
 @DisplayName("Вложения")
@@ -87,7 +84,7 @@ public class AttachmentTest extends BaseTest {
         while (Component.has(item,  Requirement.byAvailable(true), Duration.ofSeconds(1))) {
             item.show(ViewPanel.Item.Option.CARD);
 
-            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).showMenu().findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Удалить объект")).click();
+            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).showMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
             alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
 
             refreshTable();

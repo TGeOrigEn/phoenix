@@ -2,11 +2,16 @@ package example;
 
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 import org.untitled.phoenix.component.requirement.BaseRequirement;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
+
+import java.io.File;
+import java.time.Duration;
+import java.util.List;
 
 public class Button extends Component {
 
@@ -81,6 +86,10 @@ public class Button extends Component {
 
     public void click() {
         toAction().click();
+    }
+
+    public @NotNull @Unmodifiable List<File> download(@NotNull Duration timeout, int countFiles) {
+        return toAction().download(timeout, countFiles);
     }
 
     public @NotNull Menu showMenu() {

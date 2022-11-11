@@ -70,7 +70,7 @@ public class NumberFilterTest extends BaseTest {
     @Step("Фильтровать по числовому полю (Равно)")
     public void numberFilterByLess() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(0), Field.Requirements.Equals.byPlaceholder("Введите число ...")).toAction().click();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(0), Field.Requirements.Equals.byPlaceholder("Введите число ...")).setValue("10");
 
@@ -86,7 +86,7 @@ public class NumberFilterTest extends BaseTest {
     @Step("Фильтровать по числовому полю (Больше)")
     public void numberFilterByMore() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(1), Field.Requirements.Equals.byPlaceholder("Введите число ...")).toAction().click();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(1), Field.Requirements.Equals.byPlaceholder("Введите число ...")).setValue("0");
 
@@ -102,7 +102,7 @@ public class NumberFilterTest extends BaseTest {
     @Step("Фильтровать по числовому полю (Равно)")
     public void numberFilterByEquals() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(2), Field.Requirements.Equals.byPlaceholder("Введите число ...")).toAction().click();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(2), Field.Requirements.Equals.byPlaceholder("Введите число ...")).setValue("0");
 
@@ -126,7 +126,7 @@ public class NumberFilterTest extends BaseTest {
     }
 
     private static void checkItems() {
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Фильтры")).showMenu().findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Сбросить все фильтры")).click();
+        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Фильтры")).showMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сбросить все фильтры")).click();
 
         refreshTable();
 
@@ -140,7 +140,7 @@ public class NumberFilterTest extends BaseTest {
         while (Component.has(item,  Requirement.byAvailable(true), Duration.ofSeconds(1))) {
             item.show(ViewPanel.Item.Option.CARD);
 
-            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).showMenu().findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Удалить объект")).click();
+            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).showMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
             alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
 
             refreshTable();

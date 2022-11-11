@@ -98,25 +98,26 @@ public class Action {
      * @return список загруженных файлов
      */
     public @NotNull @Unmodifiable List<File> download(@NotNull Duration timeout, int countFiles) {
-        final var files = DynamicStep.invokeStep(component, "Скачать файлы", () -> {
+        return DynamicStep.invokeStep(component, "Скачать файлы", () -> {
+            List<File> files;
             if (Configuration.isRemote()) {
                 try {
-                    return remoteDownload(timeout, countFiles);
+                    files =  remoteDownload(timeout, countFiles);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            } else return localDownload(timeout, countFiles, true);
-        });
+            } else files = localDownload(timeout, countFiles, true);
 
-        for(var file : files) {
-            try {
-                Allure.attachFile(file, file.getName());
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+            for (var file : files) {
+                try {
+                    Allure.attachFile(file, file.getName());
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        }
 
-        return files;
+            return files;
+        });
     }
 
     /**

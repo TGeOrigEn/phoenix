@@ -1,11 +1,11 @@
 package example.viewPanel.filter;
 
 import example.*;
-import example.field.Checkbox;
+import example.field.CheckboxField;
 import example.field.Field;
 import example.field.TextAreaField;
 import example.field.TextField;
-import example.field.dropdown.DropdownField;
+import example.field.DropdownField;
 import example.window.Alert;
 import example.window.Card;
 import example.window.Window;
@@ -76,8 +76,8 @@ public class TextFilterTest extends BaseTest {
     @Step("Фильтровать по текстовому полю (Не пусто)")
     public void textFilterByNoEmpty() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
-        ((Checkbox) sort.findInside(Checkbox::new, Field.Requirements.Equals.byTitle("Не пусто"))).check();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
+        ((CheckboxField) sort.findInside(CheckboxField::new, Field.Requirements.Equals.byTitle("Не пусто"))).check();
 
         refreshTable();
 
@@ -91,8 +91,8 @@ public class TextFilterTest extends BaseTest {
     @Step("Фильтровать по текстовому полю (Пусто)")
     public void textFilterByEmpty() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
-        ((Checkbox) sort.findInside(Checkbox::new, Field.Requirements.Equals.byTitle("Пусто"))).check();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
+        ((CheckboxField) sort.findInside(CheckboxField::new, Field.Requirements.Equals.byTitle("Пусто"))).check();
 
         refreshTable();
 
@@ -106,7 +106,7 @@ public class TextFilterTest extends BaseTest {
     @Step("Фильтровать по текстовому полю (Не содержит)")
     public void textFilterByNoContains() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Не содержит")).toAction().click();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Не содержит")).setValue("Не");
 
@@ -122,7 +122,7 @@ public class TextFilterTest extends BaseTest {
     @Step("Фильтровать по текстовому полю (Содержит)")
     public void textFilterByContains() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Содержит")).toAction().click();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Содержит")).setValue("Не");
 
@@ -138,7 +138,7 @@ public class TextFilterTest extends BaseTest {
     @Step("Фильтровать по текстовому полю (Не равно)")
     public void textFilterByNoEquals() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Не равно")).toAction().click();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Не равно")).setValue("Не пусто");
 
@@ -154,7 +154,7 @@ public class TextFilterTest extends BaseTest {
     @Step("Фильтровать по текстовому полю (Равно)")
     public void textFilterByEquals() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
-        sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
+        sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Равно")).toAction().click();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Равно")).setValue("Не пусто");
 
@@ -178,7 +178,7 @@ public class TextFilterTest extends BaseTest {
     }
 
     private static void checkItems() {
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Фильтры")).showMenu().findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Сбросить все фильтры")).click();
+        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Фильтры")).showMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сбросить все фильтры")).click();
 
         refreshTable();
 
@@ -192,7 +192,7 @@ public class TextFilterTest extends BaseTest {
         while (Component.has(item,  Requirement.byAvailable(true), Duration.ofSeconds(1))) {
             item.show(ViewPanel.Item.Option.CARD);
 
-            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).showMenu().findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Удалить объект")).click();
+            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).showMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
             alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
 
             refreshTable();
