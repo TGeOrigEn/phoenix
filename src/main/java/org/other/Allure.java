@@ -16,8 +16,9 @@ public final class Allure {
 
     @Attachment(value = "Видео", type = "text/html", fileExtension = ".html")
     public static @NotNull String attachVideo() {
+        final  var s = getVideoAddress();
         return "<html><body><video width='100%' height='100%' controls autoplay><source src='"
-                + getVideoAddress()
+                + s
                 + "' type='video/mp4'></video></body></html>";
     }
 
@@ -33,6 +34,10 @@ public final class Allure {
         if (!matcher.find())
             throw new RuntimeException();
 
-        return String.format("%s/video/%s.mp4", matcher.group(),((RemoteWebDriver) Configuration.getWebDriver()).getSessionId());
+        final var s = matcher.group();
+
+        final var f = ((RemoteWebDriver) Configuration.getWebDriver()).getSessionId();
+
+        return String.format("%svideo/%s.mp4", s, f);
     }
 }

@@ -51,15 +51,10 @@ public abstract class BaseTest {
     }
 
     @AfterEach
-    @DisplayName("Добавить видео")
-    public void attachVideo() {
+    public void closeWebDriver() {
         if (Configuration.isRemote())
             Allure.attachVideo();
-    }
 
-    @AfterEach
-    @DisplayName("Закрыть веб-драйвер")
-    public void closeWebDriver() {
         Configuration.getWebDriver().quit();
     }
 }
