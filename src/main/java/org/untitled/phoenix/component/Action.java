@@ -79,7 +79,7 @@ public class Action {
      * <p>Нажимает левой кнопкой мыши на компонент, если это возможно.</p>
      */
     public void click() {
-        DynamicStep.invokeStep(component, "Нажать левой кнопкой мыши", () -> invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout()));
+        DynamicStep.invokeStep(component, "Нажать", () -> invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout()));
     }
 
     /**
