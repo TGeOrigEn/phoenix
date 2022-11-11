@@ -19,6 +19,7 @@ public class Assert {
         }
     }
 
+
     public static <T, V> void should(@NotNull T executor, @NotNull Function<@NotNull T, V> getter, V expected, @NotNull BiPredicate<V, V> condition, @NotNull String message, @NotNull Duration timeout) {
         final var startTime = System.currentTimeMillis();
 
