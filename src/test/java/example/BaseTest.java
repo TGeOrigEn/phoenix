@@ -32,7 +32,7 @@ public abstract class BaseTest {
     }
 
     @BeforeEach
-    @Step("Инициализировать веб-драйвер")
+    @DisplayName("Инициализировать веб-драйвер")
     public void webDriverInitialization() throws MalformedURLException {
         final var pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chromedriver.exe");
         final var downloadDirectory = Paths.get("build/downloads/").toFile();
@@ -45,20 +45,20 @@ public abstract class BaseTest {
     }
 
     @BeforeEach
-    @Step("Перейти на стартовую страницу")
+    @DisplayName("Перейти на стартовую страницу")
     public void openAddress() {
         Configuration.getWebDriver().get(getAddress());
     }
 
     @AfterEach
-    @Step("Добавить видео")
+    @DisplayName("Добавить видео")
     public void attachVideo() {
         if (Configuration.isRemote())
             Allure.attachVideo();
     }
 
     @AfterEach
-    @Step("Закрыть веб-драйвер")
+    @DisplayName("Закрыть веб-драйвер")
     public void closeWebDriver() {
         Configuration.getWebDriver().quit();
     }

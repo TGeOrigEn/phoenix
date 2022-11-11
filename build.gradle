@@ -47,6 +47,7 @@ allure {
 test {
     useJUnitPlatform()
     compileJava.options.encoding = 'UTF-8'
+
 }
 
 task all(type: Test) {
@@ -54,5 +55,5 @@ task all(type: Test) {
         includeTags 'all'
     }
 }
-sourceCompatibility = JavaVersion.VERSION_14
-targetCompatibility = JavaVersion.VERSION_14
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11

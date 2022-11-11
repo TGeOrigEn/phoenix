@@ -31,7 +31,7 @@ public class NumberFilterTest extends BaseTest {
     }
 
     @BeforeEach
-    @Step("Подготовка тестовых данных")
+    @DisplayName("Подготовка тестовых данных")
     public void beforeEach() {
         Configuration.getWebDriver().navigate().to("https://autotests.gemsdev.ru/");
 
@@ -115,7 +115,7 @@ public class NumberFilterTest extends BaseTest {
     }
 
     @AfterEach
-    @Step("Удаление тестовых данных")
+    @DisplayName("Удаление тестовых данных")
     public void afterEach() {
         removeAllItem();
     }

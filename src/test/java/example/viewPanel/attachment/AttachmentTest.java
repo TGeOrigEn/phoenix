@@ -35,7 +35,7 @@ public class AttachmentTest extends BaseTest {
     }
 
     @BeforeEach
-    @Step("Подготовка тестовых данных")
+    @DisplayName("Подготовка тестовых данных")
     public void beforeEach() throws URISyntaxException {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
@@ -71,7 +71,7 @@ public class AttachmentTest extends BaseTest {
     }
 
     @AfterEach
-    @Step("Удаление тестовых данных")
+    @DisplayName("Удаление тестовых данных")
     public void afterEach() {
         removeAllItem();
     }
