@@ -2,6 +2,8 @@ package org.other;
 
 import io.qameta.allure.Attachment;
 import org.jetbrains.annotations.NotNull;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.untitled.phoenix.configuration.Configuration;
 
@@ -20,6 +22,10 @@ public final class Allure {
         return "<html><body><video width='100%' height='100%' controls autoplay><source src='"
                 + s
                 + "' type='video/mp4'></video></body></html>";
+    }
+
+    public static byte @NotNull [] attachScreenshot(@NotNull String screenshotName) {
+        return ((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }
 
     private static @NotNull String getVideoAddress() {
