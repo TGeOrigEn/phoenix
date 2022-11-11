@@ -24,6 +24,7 @@ public final class Allure {
                 + "' type='video/mp4'></video></body></html>";
     }
 
+    @Attachment(value = "{screenshotName}", type = "image/png")
     public static byte @NotNull [] attachScreenshot(@NotNull String screenshotName) {
         return ((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }

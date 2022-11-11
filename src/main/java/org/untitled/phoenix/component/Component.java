@@ -227,8 +227,8 @@ public abstract class Component {
     @Override
     public @NotNull String toString() {
         return condition == null
-                ? String.format("{ %s(%d) }", description, index)
-                : String.format("{ %s(%d) ?? %s }", description, index, condition);
+                ? String.format("{ %s }", description.getName())
+                : String.format("{ %s ?? %s }", description.getName(), condition);
     }
 
     private static <TComponent extends Component> @NotNull List<TComponent> findComponents(@NotNull Supplier<@NotNull TComponent> constructor, @Nullable Description description, @Nullable BaseRequirement<TComponent> requirement, @Nullable Component parent, @NotNull Duration timeout) {
