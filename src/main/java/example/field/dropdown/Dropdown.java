@@ -10,33 +10,38 @@ import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 public class Dropdown extends Component {
 
-    public static class Option extends Component {
+    public static class Item extends Component {
 
         public static class Requirements {
 
             public static class Equals {
 
-                public static @NotNull BaseRequirement<Option> byText(@NotNull String text) {
-                    return new Requirement<>(Option::getText, text, "Имеет текст");
+                public static @NotNull BaseRequirement<Item> byText(@NotNull String text) {
+                    return new Requirement<>(Item::getTextDiv, text, "Имеет текст");
                 }
             }
 
             public static class Contains {
 
-                public static @NotNull BaseRequirement<Option> byText(@NotNull String text) {
-                    return new Requirement<>(Option::getText, text, "Содержит текст", String::contains);
+                public static @NotNull BaseRequirement<Item> byText(@NotNull String text) {
+                    return new Requirement<>(Item::getTextDiv, text, "Содержит текст", String::contains);
                 }
             }
         }
 
         public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("[class*='x-boundlist-item']"), "Вариант");
 
-        private final @NotNull Description DIV_DESCRIPTION = new Description(By.tagName("div"), "Текст");
+        private static final @NotNull Description SPAN_DESCRIPTION = new Description(By.cssSelector("span:not([class='chkBoundListItem'])"), "Текст");
 
-        private final @NotNull Component text;
+        private static final @NotNull Description DIV_DESCRIPTION = new Description(By.tagName("div"), "Текст");
 
-        public Option() {
-            text = findInside(() -> new WebComponent(DIV_DESCRIPTION));
+        private final @NotNull Component textSpan;
+
+        private final @NotNull Component textDiv;
+
+        public Item() {
+            textSpan = findInside(() -> new WebComponent(SPAN_DESCRIPTION));
+            textDiv = findInside(() -> new WebComponent(DIV_DESCRIPTION));
         }
 
         @Override
@@ -44,8 +49,10 @@ public class Dropdown extends Component {
             return DEFAULT_DESCRIPTION;
         }
 
-        public @NotNull String getText() {
-            return text.isAvailable() ? text.toAction().getText() : toAction().getText();
+        public @NotNull String getTextDiv() {
+            return textDiv.isAvailable() ? textSpan.isAvailable()
+                    ? textSpan.toAction().getText() : textDiv.toAction().getText()
+                    : toAction().getText();
         }
 
         public void click() {

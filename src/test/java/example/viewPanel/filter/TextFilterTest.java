@@ -1,4 +1,4 @@
-package example.referenceTable;
+package example.viewPanel.filter;
 
 import example.*;
 import example.field.Checkbox;
@@ -19,7 +19,7 @@ import org.untitled.phoenix.configuration.Configuration;
 
 import java.time.Duration;
 
-public class FilterTest extends BaseTest {
+public class TextFilterTest extends BaseTest {
 
     private static final Card card = (Card) Component.find(Card::new, Window.Requirements.isActive(true));
     private static final ViewPanel viewPanel = Component.find(ViewPanel::new);
@@ -69,7 +69,7 @@ public class FilterTest extends BaseTest {
     }
 
     @Test
-    public void sortTexNoEmpty() {
+    public void textFilterByNoEmpty() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
         ((Checkbox) sort.findInside(Checkbox::new, Field.Requirements.Equals.byTitle("Не пусто"))).check();
@@ -83,7 +83,7 @@ public class FilterTest extends BaseTest {
     }
 
     @Test
-    public void sortTexEmpty() {
+    public void textFilterByEmpty() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
         ((Checkbox) sort.findInside(Checkbox::new, Field.Requirements.Equals.byTitle("Пусто"))).check();
@@ -97,7 +97,7 @@ public class FilterTest extends BaseTest {
     }
 
     @Test
-    public void sortTexNoContains() {
+    public void textFilterByNoContains() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Не содержит")).toAction().click();
@@ -112,7 +112,7 @@ public class FilterTest extends BaseTest {
     }
 
     @Test
-    public void sortTexContains() {
+    public void textFilterByContains() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Содержит")).toAction().click();
@@ -127,7 +127,7 @@ public class FilterTest extends BaseTest {
     }
 
     @Test
-    public void sortTexNoEquals() {
+    public void textFilterByNoEquals() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Не равно")).toAction().click();
@@ -142,7 +142,7 @@ public class FilterTest extends BaseTest {
     }
 
     @Test
-    public void sortTexEquals() {
+    public void textFilterByEquals() {
         var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Примечание")).openSort();
         sort.findInside(Menu.Option::new, Menu.Option.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.Requirements.Equals.byTitle("Равно")).toAction().click();
@@ -187,5 +187,4 @@ public class FilterTest extends BaseTest {
             refreshTable();
         }
     }
-
 }

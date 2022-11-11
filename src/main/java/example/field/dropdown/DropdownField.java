@@ -40,7 +40,7 @@ public class DropdownField extends Field {
     @Override
     public void setValue(@NotNull String name) {
         arrowButton.toAction().click();
-        find(Dropdown::new).findInside(Dropdown.Option::new, Dropdown.Option.Requirements.Equals.byText(name)).click();
+        find(Dropdown::new).findInside(Dropdown.Item::new, Dropdown.Item.Requirements.Equals.byText(name)).click();
     }
 
     @Override

@@ -7,7 +7,6 @@ import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 
 import java.io.File;
-import java.time.Duration;
 import java.util.Comparator;
 
 public class Card extends Window {
@@ -49,6 +48,8 @@ public class Card extends Window {
 
     public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^=window].grad-test-wincard"), "Карточка");
 
+    private static final @NotNull Description UPLOAD_INPUT_DESCRIPTION = new Description(By.cssSelector("input[type='file']"), "Ввод для вложений");
+
     private static final @NotNull Description BUTTON_PROPERTY_DESCRIPTION = new Description(By.cssSelector("a[style='cursor: pointer;']"), "Кнопка 'К свойствам'");
 
     private final @NotNull Component propertyButton;
@@ -67,6 +68,10 @@ public class Card extends Window {
     @Override
     protected @NotNull Description initialize() {
         return DEFAULT_DESCRIPTION;
+    }
+
+    public void upload(@NotNull File file) {
+        findInside(() -> new WebComponent(UPLOAD_INPUT_DESCRIPTION)).toAction().sendKeys(file.getAbsolutePath());
     }
 
     public @NotNull Window toProperty() {

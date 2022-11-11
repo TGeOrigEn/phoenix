@@ -3,6 +3,7 @@ package org.untitled.phoenix.configuration;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -55,8 +56,10 @@ public final class Configuration {
             Configuration.remoteAddress = null;
         } else {
             final var address = new URL(remoteAddress);
-            Configuration.webDriver = new RemoteWebDriver(address, options);
+            final var remote = new RemoteWebDriver(address, options);
+            remote.setFileDetector(new LocalFileDetector());
             Configuration.remoteAddress = address;
+            Configuration.webDriver = remote;
         }
 
         final var directory = new File(getDownloadDirectory());

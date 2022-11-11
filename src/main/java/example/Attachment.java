@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
+import org.untitled.phoenix.component.requirement.BaseRequirement;
+import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.io.File;
 import java.time.Duration;
@@ -14,6 +16,23 @@ import java.util.List;
 public class Attachment extends Component {
 
     public static class Item extends Component {
+
+        public static class Requirements {
+
+            public static class Equals {
+
+                public static @NotNull BaseRequirement<Item> byName(@NotNull String name) {
+                    return new Requirement<>(Item::getName, name, "Имеет имя", String::contains);
+                }
+            }
+
+            public static class Contains {
+
+                public static @NotNull BaseRequirement<Item> byName(@NotNull String name) {
+                    return new Requirement<>(Item::getName, name, "Содержит имя", String::contains);
+                }
+            }
+        }
 
         public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("tr[class*='x-grid-row']"), "Вложение");
 

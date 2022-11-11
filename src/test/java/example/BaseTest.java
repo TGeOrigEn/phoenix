@@ -25,7 +25,7 @@ public abstract class BaseTest {
     protected abstract @NotNull String getAddress();
 
     protected @NotNull MutableCapabilities getCapabilities() {
-        return Chrome.getOptionsWithCryptography(getTimeout());
+        return Chrome.getDefaultOptions(getTimeout());
     }
 
     @BeforeEach
