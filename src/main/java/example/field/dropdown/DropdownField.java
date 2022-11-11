@@ -45,7 +45,7 @@ public class DropdownField extends Field {
 
     @Override
     public @NotNull String getValue() {
-       return String.join("; ", findInsideEveryone(() -> new WebComponent(VALUE_DESCRIPTION)).stream().map(value -> value.toAction().getText()).toList());
+       return String.join("; ", findInsideEveryone(() -> new WebComponent(VALUE_DESCRIPTION)).stream().map(value -> value.toAction().getText()).toArray(String[]::new));
     }
 
     public void addNewObject() {

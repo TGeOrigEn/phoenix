@@ -27,9 +27,9 @@ public class Alert extends Window {
 
     @Override
     public boolean isActive() {
-        final var cards = Component.findEveryone(Alert::new).stream().sorted(Comparator.comparing(Alert::getCssIndex).reversed()).toList();
-        if (cards.isEmpty()) throw new RuntimeException();
-        return cards.get(0).getCssIndex() == getCssIndex();
+        final var cards = Component.findEveryone(Alert::new).stream().sorted(Comparator.comparing(Alert::getCssIndex).reversed()).toArray(Alert[]::new);
+        if (cards.length == 0) throw new RuntimeException();
+        return cards[0].getCssIndex() == getCssIndex();
     }
 
     public @NotNull String getMessage() {

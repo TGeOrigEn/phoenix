@@ -60,9 +60,9 @@ public class Card extends Window {
 
     @Override
     public boolean isActive() {
-        final var cards = Component.findEveryone(Card::new).stream().sorted(Comparator.comparing(Card::getCssIndex).reversed()).toList();
-        if (cards.isEmpty()) throw new RuntimeException();
-        return cards.get(0).getCssIndex() == getCssIndex();
+        final var cards = Component.findEveryone(Card::new).stream().sorted(Comparator.comparing(Card::getCssIndex).reversed()).toArray(Card[]::new);
+        if (cards.length == 0) throw new RuntimeException();
+        return cards[0].getCssIndex() == getCssIndex();
     }
 
     @Override
