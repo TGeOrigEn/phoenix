@@ -24,9 +24,10 @@ public final class Operation<TComponent extends Component> {
 
     @Override
     public String toString() {
-        return switch (operator) {
-            case AND -> String.format("И %S", requirement);
-            case OR -> String.format("ИЛИ %S", requirement);
-        };
+        switch (operator) {
+            case AND: return String.format("И %S", requirement);
+            case OR: return String.format("ИЛИ %S", requirement);
+            default: throw new RuntimeException();
+        }
     }
 }

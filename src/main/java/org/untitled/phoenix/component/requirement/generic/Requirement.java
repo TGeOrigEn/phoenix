@@ -7,6 +7,7 @@ import org.untitled.phoenix.component.Component;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.ArrayList;
@@ -130,10 +131,12 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         var isTrue = getOperations().get(0).getRequirement().isTrue(component);
 
         for (var index = 1; index < getOperations().size(); index++)
-            isTrue = switch (getOperations().get(index).getOperator()) {
-                case AND -> isTrue && getOperations().get(index).getRequirement().isTrue(component);
-                case OR -> isTrue || getOperations().get(index).getRequirement().isTrue(component);
-            };
+            switch (getOperations().get(index).getOperator()) {
+                case AND:
+                    isTrue = isTrue && getOperations().get(index).getRequirement().isTrue(component);
+                case OR:
+                    isTrue = isTrue || getOperations().get(index).getRequirement().isTrue(component);
+            }
 
         return isTrue != isNegative();
     }
@@ -159,10 +162,11 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
             if (isNegative()) return String.format("НЕ '%s => %s'", description, value);
             else return String.format("'%s => %s'", description, value);
         else {
-            final var descriptions = new ArrayList<>(getOperations().stream().skip(1).map(requirement -> switch (requirement.getOperator()) {
-                case OR -> String.format("ИЛИ %s", requirement.getRequirement());
-                case AND -> String.format("И %s", requirement.getRequirement());
-            }).toList());
+            final var descriptions = new ArrayList<>(List.of(getOperations().stream().skip(1).map(requirement -> {
+                if (requirement.getOperator() == Operator.OR)
+                    return String.format("ИЛИ %s", requirement.getRequirement());
+                else return String.format("И %s", requirement.getRequirement());
+            }).toArray(String[]::new)));
 
             descriptions.add(0, getOperations().get(0).getRequirement().toString());
 

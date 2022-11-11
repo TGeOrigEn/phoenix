@@ -81,9 +81,9 @@ public class NavigationPanel extends Component {
             toAction().hover();
 
             switch (option) {
-                case MAP -> findInside(Button::new, Button.Requirements.Equals.byTip("Открыть карту")).click();
-                case LAYER -> findInside(Button::new, Button.Requirements.Equals.byTip("Открыть слой")).click();
-                case TABLE -> { findInside(Button::new, Button.Requirements.Equals.byTip("Открыть таблицу")).click(); find(Spinner::new).wait(Duration.ofSeconds(60)); }
+                case MAP: findInside(Button::new, Button.Requirements.Equals.byTip("Открыть карту")).click();
+                case LAYER: findInside(Button::new, Button.Requirements.Equals.byTip("Открыть слой")).click();
+                case TABLE: { findInside(Button::new, Button.Requirements.Equals.byTip("Открыть таблицу")).click(); find(Spinner::new).wait(Duration.ofSeconds(60)); }
             }
         }
 

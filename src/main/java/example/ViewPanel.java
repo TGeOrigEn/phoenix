@@ -196,9 +196,9 @@ public class ViewPanel extends Component {
 
         public void show(@NotNull Option option) {
             switch (option){
-                case MAP -> showOnMapButton.toAction().click();
-                case ATTACHMENT -> attachmentButton.toAction().click();
-                case CARD -> openCardButton.toAction().click();
+                case MAP: showOnMapButton.toAction().click();
+                case ATTACHMENT: attachmentButton.toAction().click();
+                case CARD: openCardButton.toAction().click();
             }
         }
 
