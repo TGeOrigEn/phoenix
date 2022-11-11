@@ -32,7 +32,7 @@ public abstract class Component {
 
     private @NotNull Context context;
 
-    private @NotNull Duration timeout = Duration.ofSeconds(10);
+    private @NotNull Duration timeout = Duration.ofSeconds(60);
 
     private int index = 0;
 
