@@ -12,6 +12,7 @@ public final class Chrome {
         final var chromeOptions = new ChromeOptions();
 
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
+        chromeOptions.addArguments("--browser.download.folderList=2");
         chromeOptions.setCapability("browser.download.manager.showWhenStarting", false);
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
         chromeOptions.setCapability("browserName", "chrome");
@@ -29,7 +30,7 @@ public final class Chrome {
         chromeOptions.addExtensions(new File("/opt/cades_plugin.crx"));
 
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
-        chromeOptions.setCapability("browser.download.manager.showWhenStarting", false);
+        chromeOptions.addArguments("--browser.download.folderList=2");
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
         chromeOptions.setCapability("version", "cryptochrome");
         chromeOptions.setCapability("browserName", "chrome");

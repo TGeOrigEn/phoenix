@@ -2,11 +2,11 @@ package example.viewPanel.filter;
 
 import example.*;
 import example.button.Button;
-import example.field.CheckboxField;
+import example.field.nested.CheckboxField;
 import example.field.Field;
-import example.field.TextAreaField;
-import example.field.TextField;
-import example.field.DropdownField;
+import example.field.nested.TextAreaField;
+import example.field.nested.TextField;
+import example.field.nested.DropdownField;
 import example.window.Alert;
 import example.window.Card;
 import example.window.Window;

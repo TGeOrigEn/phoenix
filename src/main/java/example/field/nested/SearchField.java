@@ -1,5 +1,6 @@
-package example.field;
+package example.field.nested;
 
+import example.field.Field;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
