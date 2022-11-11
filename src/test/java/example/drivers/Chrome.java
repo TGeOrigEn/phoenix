@@ -14,6 +14,7 @@ public final class Chrome {
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
         chromeOptions.setCapability("browserName", "chrome");
+        chromeOptions.setCapability("enableVideo", true);
         chromeOptions.setCapability("enableVNC", true);
         chromeOptions.setCapability("version", "98.0");
 
@@ -28,6 +29,7 @@ public final class Chrome {
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
         chromeOptions.setCapability("browserName", "chrome");
+        chromeOptions.setCapability("enableVideo", true);
         chromeOptions.setCapability("enableVNC", true);
         chromeOptions.setCapability("version", "cryptochrome");
 
