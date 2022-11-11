@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 
-public abstract class BaseCryptographyTest extends BaseTest {
+public abstract class BaseCryptoProTest extends BaseTest {
 
     private static final @NotNull Description INPUT_DESCRIPTION = new Description(By.cssSelector("input[placeholder='Добавить новый']"), "Ввод 'Добавить новый'");
 

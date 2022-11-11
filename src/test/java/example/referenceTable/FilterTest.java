@@ -19,16 +19,16 @@ import org.untitled.phoenix.configuration.Configuration;
 
 import java.time.Duration;
 
-public class FilterTest extends BaseCryptographyTest {
-
-    @Override
-    protected @NotNull String[] getAcceptedAddresses() {
-        return new String[] { "https://autotests.gemsdev.ru/" };
-    }
+public class FilterTest extends BaseTest {
 
     private static final Card card = (Card) Component.find(Card::new, Window.Requirements.isActive(true));
     private static final ViewPanel viewPanel = Component.find(ViewPanel::new);
     private static final Alert alert = Component.find(Alert::new);
+
+    @Override
+    protected @NotNull String getAddress() {
+        return "https://autotests.gemsdev.ru/";
+    }
 
     @BeforeEach
     public void beforeEach() {
@@ -187,6 +187,5 @@ public class FilterTest extends BaseCryptographyTest {
             refreshTable();
         }
     }
-
 
 }
