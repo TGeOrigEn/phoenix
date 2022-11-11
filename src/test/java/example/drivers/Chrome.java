@@ -15,6 +15,7 @@ public final class Chrome {
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
         chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.setCapability("enableVNC", true);
+        chromeOptions.setCapability("version", "98.0");
 
         return chromeOptions;
     }
@@ -28,6 +29,7 @@ public final class Chrome {
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
         chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.setCapability("enableVNC", true);
+        chromeOptions.setCapability("version", "cryptochrome");
 
         return chromeOptions;
     }

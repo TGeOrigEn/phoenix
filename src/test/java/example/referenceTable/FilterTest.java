@@ -15,14 +15,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
+import org.untitled.phoenix.configuration.Configuration;
 
 import java.time.Duration;
 
-public class FilterTest extends BaseTest {
+public class FilterTest extends BaseCryptographyTest {
 
     @Override
-    protected @NotNull String getAddress() {
-        return "https://autotests.gemsdev.ru/";
+    protected @NotNull String[] getAcceptedAddresses() {
+        return new String[] { "https://autotests.gemsdev.ru/" };
     }
 
     private static final Card card = (Card) Component.find(Card::new, Window.Requirements.isActive(true));
@@ -31,6 +32,8 @@ public class FilterTest extends BaseTest {
 
     @BeforeEach
     public void beforeEach() {
+        Configuration.getWebDriver().navigate().to("https://autotests.gemsdev.ru/");
+
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
         Component.find(NavigationPanel.Item::new, NavigationPanel.Item.Requirements.Equals.byName("Приморский край")).expand();
