@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'io.qameta.allure' version '2.11.0'
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 group 'org.example'
@@ -25,7 +25,23 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+allure {
+    version = '2.14.0'
+    aspectjweaver = true
+    autoconfigure = true
+
+    useJUnit5 {
+        version = '2.14.0'
+    }
+}
+
 test {
     useJUnitPlatform()
     compileJava.options.encoding = 'UTF-8'
+}
+
+task all(type: Test) {
+    useJUnitPlatform {
+        includeTags 'all'
+    }
 }
