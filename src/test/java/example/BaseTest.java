@@ -53,7 +53,8 @@ public abstract class BaseTest {
     @AfterEach
     @Step("Добавить видео")
     public void attachVideo() {
-        Allure.attachVideo();
+        if (Configuration.isRemote())
+            Allure.attachVideo();
     }
 
     @AfterEach
