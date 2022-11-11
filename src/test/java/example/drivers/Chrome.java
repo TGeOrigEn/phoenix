@@ -12,11 +12,13 @@ public final class Chrome {
         final var chromeOptions = new ChromeOptions();
 
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
+        chromeOptions.setCapability("browser.download.manager.showWhenStarting", false);
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
         chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.setCapability("enableVideo", true);
         chromeOptions.setCapability("enableVNC", true);
         chromeOptions.setCapability("version", "98.0");
+
 
         return chromeOptions;
     }
@@ -27,11 +29,12 @@ public final class Chrome {
         chromeOptions.addExtensions(new File("/opt/cades_plugin.crx"));
 
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
+        chromeOptions.setCapability("browser.download.manager.showWhenStarting", false);
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
+        chromeOptions.setCapability("version", "cryptochrome");
         chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.setCapability("enableVideo", true);
         chromeOptions.setCapability("enableVNC", true);
-        chromeOptions.setCapability("version", "cryptochrome");
 
         return chromeOptions;
     }

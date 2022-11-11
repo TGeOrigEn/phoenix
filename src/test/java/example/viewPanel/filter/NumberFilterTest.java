@@ -1,6 +1,7 @@
 package example.viewPanel.filter;
 
 import example.*;
+import example.button.Button;
 import example.field.Field;
 import example.field.TextField;
 import example.window.Alert;

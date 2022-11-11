@@ -1,6 +1,5 @@
 package example.window;
 
-import example.Button;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;

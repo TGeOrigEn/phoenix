@@ -1,5 +1,6 @@
-package example;
+package example.button;
 
+import example.Menu;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;

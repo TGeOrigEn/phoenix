@@ -1,6 +1,7 @@
 package example.graphicReport;
 
 import example.*;
+import example.button.Button;
 import example.field.Field;
 import example.field.DropdownField;
 import io.qameta.allure.Step;
