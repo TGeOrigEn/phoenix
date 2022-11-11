@@ -6,6 +6,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.untitled.phoenix.DynamicStep;
 import org.untitled.phoenix.exception.UnavailableComponentException;
 import org.untitled.phoenix.exception.ComponentActionException;
 import org.untitled.phoenix.configuration.Configuration;
@@ -60,32 +61,32 @@ public class Action {
     }
 
     public void sendKeys(@NotNull CharSequence... keys) {
-        invoke((Consumer<WebElement>) webElement -> webElement.sendKeys(keys), String.format("Не удалось отправить нажатие клавиш '%s' компоненту", Arrays.toString(keys)), component.getTimeout());
+        DynamicStep.invokeStep(component, String.format("Отправить клавиши '%s'", Arrays.toString(keys)), () -> invoke((Consumer<WebElement>) webElement -> webElement.sendKeys(keys), String.format("Не удалось отправить нажатие клавиш '%s' компоненту", Arrays.toString(keys)), component.getTimeout()));
     }
 
-    public void setValue(String value) {
-        invoke(webElement -> { webElement.clear(); webElement.sendKeys(value); }, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout());
+    public void setValue(@NotNull String value) {
+        DynamicStep.invokeStep(component, String.format("Установить значение '%s'", value), () -> invoke(webElement -> { webElement.clear(); webElement.sendKeys(value); }, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout()));
     }
 
     /**
      * <p>Наводится мышкой на компонент, если это возможно.</p>
      */
     public void hover() {
-        invoke((Consumer<WebElement>) webElement -> new Actions(Configuration.getWebDriver()).moveToElement(component.toWebElement()).build().perform(), "Не удалось навести курсор мыши на компонент", component.getTimeout());
+        DynamicStep.invokeStep(component, "Навести курсор мыши", () -> invoke((Consumer<WebElement>) webElement -> new Actions(Configuration.getWebDriver()).moveToElement(component.toWebElement()).build().perform(), "Не удалось навести курсор мыши на компонент", component.getTimeout()));
     }
 
     /**
      * <p>Нажимает левой кнопкой мыши на компонент, если это возможно.</p>
      */
     public void click() {
-        invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout());
+        DynamicStep.invokeStep(component, "Нажать левой кнопкой мыши", () -> invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout()));
     }
 
     /**
      * Если компонент является элементом ввода, то этот метод отчистит его значение.
      */
     public void clear() {
-        invoke(WebElement::clear, "Не удалось очистить компонент", component.getTimeout());
+        DynamicStep.invokeStep(component, "Отчистить", () -> invoke(WebElement::clear, "Не удалось очистить компонент", component.getTimeout()));
     }
 
     /**
@@ -96,14 +97,15 @@ public class Action {
      * @return список загруженных файлов
      */
     public @NotNull @Unmodifiable List<File> download(@NotNull Duration timeout, int countFiles) {
-        if (Configuration.isRemote()) {
-            try {
-                return remoteDownload(timeout, countFiles);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        else return localDownload(timeout, countFiles, true);
+        return DynamicStep.invokeStep(component, "Скачать файлы", () -> {
+            if (Configuration.isRemote()) {
+                try {
+                    return remoteDownload(timeout, countFiles);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else return localDownload(timeout, countFiles, true);
+        });
     }
 
     /**
@@ -200,7 +202,7 @@ public class Action {
 
     private @NotNull @Unmodifiable List<File> remoteDownload(@NotNull Duration timeout, int countFiles) throws IOException {
 
-        invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout());
+        click();
 
         final var startTime = currentTimeMillis();
 
@@ -252,7 +254,6 @@ public class Action {
     }
 
     private static File @NotNull [] getCurrentFiles() {
-        final var path = Configuration.getDownloadDirectory();
         final var files = new File(Configuration.getDownloadDirectory()).listFiles();
         return files == null ? new File[0] : files;
     }
@@ -262,7 +263,7 @@ public class Action {
         final var filesBefore = getCurrentFiles();
 
         if (isAction)
-            invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout());
+            click();
 
         final var startTime = currentTimeMillis();
 
