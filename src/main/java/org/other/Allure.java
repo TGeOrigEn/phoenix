@@ -2,11 +2,15 @@ package org.other;
 
 import io.qameta.allure.Attachment;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.untitled.phoenix.configuration.Configuration;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 
 public final class Allure {
@@ -27,6 +31,10 @@ public final class Allure {
     @Attachment(value = "{screenshotName}", type = "image/png")
     public static byte @NotNull [] attachScreenshot(@NotNull String screenshotName) {
         return ((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+    }
+
+    public static void attachFile(@NotNull File file, @NotNull String fileName) throws FileNotFoundException {
+        io.qameta.allure.Allure.attachment(fileName, new FileInputStream(file));
     }
 
     private static @NotNull String getVideoAddress() {

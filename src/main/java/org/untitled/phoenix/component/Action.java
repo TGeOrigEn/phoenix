@@ -6,6 +6,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.other.Allure;
 import org.untitled.phoenix.DynamicStep;
 import org.untitled.phoenix.exception.UnavailableComponentException;
 import org.untitled.phoenix.exception.ComponentActionException;
@@ -97,7 +98,7 @@ public class Action {
      * @return список загруженных файлов
      */
     public @NotNull @Unmodifiable List<File> download(@NotNull Duration timeout, int countFiles) {
-        return DynamicStep.invokeStep(component, "Скачать файлы", () -> {
+        final var files = DynamicStep.invokeStep(component, "Скачать файлы", () -> {
             if (Configuration.isRemote()) {
                 try {
                     return remoteDownload(timeout, countFiles);
@@ -106,6 +107,16 @@ public class Action {
                 }
             } else return localDownload(timeout, countFiles, true);
         });
+
+        for(var file : files) {
+            try {
+                Allure.attachFile(file, file.getName());
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return files;
     }
 
     /**
