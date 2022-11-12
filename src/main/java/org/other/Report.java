@@ -103,18 +103,14 @@ public final class Report {
 
     @Step("Ошибки")
     private static void computeErrors() throws IOException {
-        for (var error : errors) {
-            final var duration = Duration.ofMillis(System.currentTimeMillis() - milliseconds);
-            attachErrorScreenshot(error, String.format("%s [%d:%d.%d]", error.name, duration.toHours(), duration.toMinutes(), duration.toMillis()));
-        }
+        for (var error : errors)
+            attachErrorScreenshot(error, String.format("%s [%s]", error.name, getTime()));
     }
 
     @Step("Шаги")
     private static void computeComponents() throws IOException {
-        for (var component : components) {
-            final var duration = Duration.ofMillis(System.currentTimeMillis() - milliseconds);
-            attachComponentScreenshot(component, String.format("%s [%d:%d.%d]", component.name, duration.toHours(), duration.toMinutes(), duration.toMillis()));
-        }
+        for (var component : components)
+            attachComponentScreenshot(component, String.format("%s [%s]", component.name, getTime()));
     }
 
     @Attachment(value = "{name}", type = "image/png")
@@ -176,5 +172,12 @@ public final class Report {
         final var f = ((RemoteWebDriver) Configuration.getWebDriver()).getSessionId();
 
         return String.format("%svideo/%s.mp4", s, f);
+    }
+
+    public static @NotNull String getTime() {
+        final var duration = Duration.ofMillis(System.currentTimeMillis() - milliseconds);
+        final long seconds = duration.getSeconds();
+
+        return String.format("%d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
     }
 }
