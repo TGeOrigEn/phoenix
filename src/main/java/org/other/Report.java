@@ -34,10 +34,13 @@ public final class Report {
 
         private final @NotNull String name;
 
+        private final long milliseconds;
+
         public ErrorScreenshot(@NotNull String name, @NotNull Component component) {
             final var element = component.toWebElement();
 
             this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
+            milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
             this.size = element.getSize();
             this.name = name;
@@ -45,6 +48,7 @@ public final class Report {
 
         public ErrorScreenshot(@NotNull String name) {
             this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
+            milliseconds = System.currentTimeMillis();
             this.location = null;
             this.size = null;
             this.name = name;
@@ -61,10 +65,13 @@ public final class Report {
 
         private final @NotNull String name;
 
+        private final long milliseconds;
+
         public ComponentScreenshot(@NotNull String name, @NotNull Component component) {
             final var element = component.toWebElement();
 
             this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
+            milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
             this.size = element.getSize();
             this.name = name;
@@ -104,13 +111,13 @@ public final class Report {
     @Step("Ошибки")
     private static void computeErrors() throws IOException {
         for (var error : errors)
-            attachErrorScreenshot(error, String.format("%s [%s]", error.name, getTime()));
+            attachErrorScreenshot(error, String.format("%s [%s]", error.name, getTime(error.milliseconds)));
     }
 
     @Step("Шаги")
     private static void computeComponents() throws IOException {
         for (var component : components)
-            attachComponentScreenshot(component, String.format("%s [%s]", component.name, getTime()));
+            attachComponentScreenshot(component, String.format("%s [%s]", component.name, getTime(component.milliseconds)));
     }
 
     @Attachment(value = "{name}", type = "image/png")
@@ -174,10 +181,8 @@ public final class Report {
         return String.format("%svideo/%s.mp4", s, f);
     }
 
-    public static @NotNull String getTime() {
-        final var duration = Duration.ofMillis(System.currentTimeMillis() - milliseconds);
-        final long seconds = duration.getSeconds();
-
-        return String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+    public static @NotNull String getTime(long milliseconds) {
+        final long seconds = System.currentTimeMillis() - milliseconds - Report.milliseconds;
+        return String.format("%d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
     }
 }
