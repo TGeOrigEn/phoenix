@@ -68,7 +68,7 @@ public abstract class BaseTest {
         Configuration.getWebDriver().quit();
         if (Report.isFailed()) {
             final var uuid = UUID.randomUUID().toString();
-            final var result = new StepResult();
+            final var result = new StepResult().setName("");
             Allure.getLifecycle().startStep(uuid, result);
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.FAILED));
         }
