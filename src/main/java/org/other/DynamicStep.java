@@ -1,4 +1,4 @@
-package org.untitled.phoenix;
+package org.other;
 
 import io.qameta.allure.Allure;
 import io.qameta.allure.model.Status;

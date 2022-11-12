@@ -7,7 +7,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.other.Report;
-import org.untitled.phoenix.DynamicStep;
+import org.other.DynamicStep;
 import org.untitled.phoenix.exception.UnavailableComponentException;
 import org.untitled.phoenix.exception.ComponentActionException;
 import org.untitled.phoenix.configuration.Configuration;

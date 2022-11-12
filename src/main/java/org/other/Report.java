@@ -143,20 +143,20 @@ public final class Report {
     @Step("Ошибки")
     private static void computeErrors() throws IOException {
         for (var error : errors)
-            attachErrorScreenshot(error, String.format("[%s] ---------- %s", getTime(error.milliseconds), error.name));
+            attachErrorScreenshot(error, getName(error.name, error.milliseconds));
     }
 
     @Step("Шаги")
     private static void computeComponents() throws IOException {
         for (var component : components)
-            attachComponentScreenshot(component, String.format("[%s] ---------- %s", getTime(component.milliseconds), component.name));
+            attachComponentScreenshot(component, getName(component.name, component.milliseconds));
     }
 
     @Step("Загруженные файлы")
     private static void computedDownloads() {
         for (var downloadedFile : downloads) {
             try {
-                io.qameta.allure.Allure.attachment(downloadedFile.file.getName(), new FileInputStream(downloadedFile.file));
+                io.qameta.allure.Allure.attachment(getName(downloadedFile.file.getName(), downloadedFile.milliseconds), new FileInputStream(downloadedFile.file));
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -198,10 +198,9 @@ public final class Report {
     }
 
     @Attachment(value = "Видео", type = "text/html", fileExtension = ".html")
-    public static @NotNull String attachVideo() {
-        final  var s = getVideoAddress();
+    private static @NotNull String attachVideo() {
         return "<html><body><video width='100%' height='100%' controls autoplay><source src='"
-                + s
+                + getVideoAddress()
                 + "' type='video/mp4'></video></body></html>";
     }
 
@@ -224,7 +223,8 @@ public final class Report {
         return String.format("%svideo/%s.mp4", s, f);
     }
 
-    public static @NotNull String getTime(long milliseconds) {
-        return new SimpleDateFormat("HH:mm:ss.SSSS").format(milliseconds - Report.milliseconds);
+    private static @NotNull String getName(@NotNull String name, long milliseconds) {
+        final var time = new SimpleDateFormat("HH:mm:ss.SSSS").format(milliseconds - Report.milliseconds);
+        return String.format("[%s] ---------- %s", time, name);
     }
 }
