@@ -32,7 +32,6 @@ public class GraphicReportTest extends BaseTest {
     }
 
     @Test
-    @Tag("all")
     @Step("Графический отчёт (PDF)")
     public void graphicReport_PDF() {
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
