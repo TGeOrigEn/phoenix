@@ -27,7 +27,9 @@ public class GraphicReportTest extends BaseTest {
     @DisplayName("Подготовка тестовых данных")
     public void beforeEach() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
-        Component.find(Button::new, Button.Requirements.Equals.byTip("Подложки")).click();
+        final var button = Component.find(Button::new, Button.Requirements.Equals.byTip("Подложки"));
+        Report.addError("Кнопки появляется раньше, чем интерфейс", button);
+        button.click();
         Component.find(Substrates::new).findInside(Substrates.Item::new, Substrates.Item.Requirements.Equals.byName("Нет")).select();
     }
 
@@ -45,12 +47,6 @@ public class GraphicReportTest extends BaseTest {
     @Tag("all")
     @Step("Графический отчёт с выделенной геометрией (PDF)")
     public void graphicReportWithGeometry_PDF() {
-        final var button = Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет"));
-
-        Report.addError("Кнопки появляется раньше, чем интерфейс", button);
-
-        button.click();
-
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Выберите шаблон:")).setValue("А4, Альбомный (PDF)");
         Component.find(Button::new, Button.Requirements.Equals.byText("Далее")).click();
