@@ -135,13 +135,13 @@ public final class Report {
     @Step("Ошибки")
     private static void computeErrors() throws IOException {
         for (var error : errors)
-            attachErrorScreenshot(error, String.format("[%s] %s", getTime(error.milliseconds), error.name));
+            attachErrorScreenshot(error, String.format("[%s] ---------- %s", getTime(error.milliseconds), error.name));
     }
 
     @Step("Шаги")
     private static void computeComponents() throws IOException {
         for (var component : components)
-            attachComponentScreenshot(component, String.format("[%s] %s", getTime(component.milliseconds), component.name));
+            attachComponentScreenshot(component, String.format("[%s] ---------- %s", getTime(component.milliseconds), component.name));
     }
 
     @Step("Загруженные файлы")
