@@ -4,6 +4,7 @@ import example.drivers.Chrome;
 import io.qameta.allure.Allure;
 import io.qameta.allure.model.Status;
 import io.qameta.allure.model.StepResult;
+import org.jcodec.api.JCodecException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +18,7 @@ import org.untitled.phoenix.configuration.Configuration;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -64,7 +66,7 @@ public abstract class BaseTest {
     }
 
     @AfterEach
-    public void closeWebDriver() throws IOException {
+    public void closeWebDriver() throws IOException, JCodecException, URISyntaxException {
         Report.perform();
         Configuration.getWebDriver().quit();
         if (Report.isFailed()) Assertions.fail("Зафиксированы ошибки");
