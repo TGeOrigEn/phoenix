@@ -10,16 +10,16 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.other.Allure;
+import org.other.Report;
 import org.untitled.phoenix.configuration.Configuration;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Duration;
 
 public abstract class BaseTest {
-
-
 
     private final static @Nullable String REMOTE_ADDRESS = "http://10.5.1.167:4444/wd/hub";
 
@@ -34,7 +34,6 @@ public abstract class BaseTest {
     }
 
     @BeforeEach
-    @DisplayName("Инициализировать веб-драйвер")
     public void webDriverInitialization() throws MalformedURLException {
         URL pathToWebDriver;
 
@@ -51,19 +50,23 @@ public abstract class BaseTest {
     }
 
     @BeforeEach
-    @DisplayName("Перейти на стартовую страницу")
     public void openAddress() {
         Configuration.getWebDriver().get(getAddress());
     }
 
+    @BeforeEach
+    public void reportInitialization() {
+        Report.clear();
+    }
+
+    @AfterEach
+    public void reportFinalization() throws IOException {
+        Report.perform();
+    }
+
     @AfterEach
     public void closeWebDriver() {
-
         Allure.attachScreenshot("Последний снимок");
-
-        if (Configuration.isRemote())
-            Allure.attachVideo();
-
         Configuration.getWebDriver().quit();
     }
 }

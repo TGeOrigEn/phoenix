@@ -34,25 +34,6 @@ public final class Allure {
         return ((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }
 
-    @Attachment(value = "{screenshotName}", type = "image/png")
-    public static byte @NotNull [] attachScreenshotComponent(@NotNull Component component, @NotNull String screenshotName) throws IOException {
-        return (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
-        /*final var element = component.toWebElement();
-
-        final var location = element.getLocation();
-        final var size = element.getSize();
-
-        final var graphics = screenshot.createGraphics();
-        graphics.setColor(Color.RED);
-        graphics.setStroke(new BasicStroke(2));
-        graphics.draw(new Rectangle(location.x, location.y, size.width, size.height));
-
-        final var outputStream = new ByteArrayOutputStream();
-        ImageIO.write(screenshot, "png", outputStream);
-
-        return outputStream.toByteArray();*/
-    }
-
     public static void attachFile(@NotNull File file, @NotNull String fileName) throws FileNotFoundException {
         io.qameta.allure.Allure.attachment(fileName, new FileInputStream(file));
     }

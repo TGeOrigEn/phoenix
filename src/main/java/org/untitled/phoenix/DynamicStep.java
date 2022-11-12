@@ -7,6 +7,7 @@ import io.qameta.allure.util.ResultsUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.other.Report;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.configuration.Configuration;
 
@@ -24,7 +25,7 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            org.other.Allure.attachScreenshotComponent(component, aStepName);
+            Report.addStep(new Report.ComponentScreenshot(aStepName, component));
              runnable.run();
 
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
@@ -32,11 +33,7 @@ public class DynamicStep {
             Allure.getLifecycle().updateStep(uuid, s -> s
                     .setStatus(ResultsUtils.getStatus(e).orElse(Status.BROKEN))
                     .setStatusDetails(ResultsUtils.getStatusDetails(e).orElse(null)));
-            try {
-                throw e;
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            throw e;
         } finally {
             Allure.getLifecycle().stopStep(uuid);
         }
@@ -49,7 +46,7 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            org.other.Allure.attachScreenshotComponent(component, aStepName);
+            Report.addStep(new Report.ComponentScreenshot(aStepName, component));
             final var value = runnable.get();
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
             return value;
@@ -57,11 +54,7 @@ public class DynamicStep {
             Allure.getLifecycle().updateStep(uuid, s -> s
                     .setStatus(ResultsUtils.getStatus(e).orElse(Status.BROKEN))
                     .setStatusDetails(ResultsUtils.getStatusDetails(e).orElse(null)));
-            try {
-                throw e;
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            throw e;
         } finally {
             Allure.getLifecycle().stopStep(uuid);
         }
