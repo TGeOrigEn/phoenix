@@ -21,7 +21,7 @@ public final class Chrome {
         chromeOptions.addArguments("--browser.download.manager.showAlertOnComplete=false");
         chromeOptions.addArguments("--browser.download.manager.useWindow=false");
         // You will need to find the content-type of your app and set it here.
-        chromeOptions.setCapability("--browser.helperApps.neverAsk.saveToDisk", "application/octet-stream");
+        chromeOptions.addArguments("--browser.helperApps.neverAsk.saveToDisk=application/octet-stream");
 
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
@@ -49,7 +49,7 @@ public final class Chrome {
         chromeOptions.addArguments("--browser.download.manager.showAlertOnComplete=false");
         chromeOptions.addArguments("--browser.download.manager.useWindow=false");
         // You will need to find the content-type of your app and set it here.
-        chromeOptions.setCapability("--browser.helperApps.neverAsk.saveToDisk", "application/octet-stream");
+        chromeOptions.addArguments("--browser.helperApps.neverAsk.saveToDisk=application/octet-stream");
 
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
