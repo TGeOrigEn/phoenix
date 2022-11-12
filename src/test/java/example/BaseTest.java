@@ -1,7 +1,6 @@
 package example;
 
 import example.drivers.Chrome;
-import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +13,7 @@ import org.other.Allure;
 import org.untitled.phoenix.configuration.Configuration;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Duration;
 
@@ -34,7 +34,11 @@ public abstract class BaseTest {
     @BeforeEach
     @DisplayName("Инициализировать веб-драйвер")
     public void webDriverInitialization() throws MalformedURLException {
-        final var pathToWebDriver = this.getClass().getClassLoader().getResource("driver/chromedriver.exe");
+        URL pathToWebDriver;
+
+        if (System.getProperty("os.name").contains("windows")) pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chrome/chromedriver.exe");
+        else pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chrome/chromedriver");
+
         final var downloadDirectory = Paths.get("build/downloads/").toFile();
 
         if (pathToWebDriver == null) throw new RuntimeException("Веб-драйвера не существует.");
