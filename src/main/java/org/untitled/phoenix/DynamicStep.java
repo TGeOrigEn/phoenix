@@ -25,7 +25,7 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            Report.addStep(new Report.ComponentScreenshot(aStepName, component));
+            //Report.addStep(new Report.ComponentScreenshot(aStepName, component));
              runnable.run();
 
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
@@ -46,7 +46,7 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            Report.addStep(new Report.ComponentScreenshot(aStepName, component));
+            //Report.addStep(new Report.ComponentScreenshot(aStepName, component));
             final var value = runnable.get();
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
             return value;
