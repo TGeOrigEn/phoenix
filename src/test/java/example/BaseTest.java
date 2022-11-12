@@ -19,7 +19,7 @@ import java.time.Duration;
 
 public abstract class BaseTest {
 
-    private final static @Nullable String REMOTE_ADDRESS = "http://10.5.1.167:4444/wd/hub";
+    private final static @Nullable String REMOTE_ADDRESS = null;
 
     protected @NotNull Duration getTimeout() {
         return Duration.ofSeconds(120);

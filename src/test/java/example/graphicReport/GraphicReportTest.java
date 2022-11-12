@@ -45,11 +45,6 @@ public class GraphicReportTest extends BaseTest {
     @Tag("all")
     @Step("Графический отчёт с выделенной геометрией (PDF)")
     public void graphicReportWithGeometry_PDF() {
-
-        Component.find(Map::new).toAction().click();
-
-        Component.should(Component.find(Map::new).findInside(Map.Polygon::new), Requirement.byAvailable(true), Duration.ofSeconds(60));
-
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Выберите шаблон:")).setValue("А4, Альбомный (PDF)");
         Component.find(Button::new, Button.Requirements.Equals.byText("Далее")).click();
@@ -60,7 +55,7 @@ public class GraphicReportTest extends BaseTest {
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Выберите шаблон:")).setValue("А4, Альбомный (PDF)");
         Component.find(Button::new, Button.Requirements.Equals.byText("Далее")).click();
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Карта:")).setValue("~1:210000");
-        Component.find(Button::new, Button.Requirements.Equals.byText("Сформировать")).download(Duration.ofSeconds(60), 2);
+        Component.find(Button::new, Button.Requirements.Equals.byText("Сформировать")).download(Duration.ofSeconds(15), 2);
     }
 
     @Test
