@@ -44,6 +44,7 @@ public final class Allure {
 
         final var graphics = screenshot.createGraphics();
         graphics.setColor(Color.RED);
+        graphics.setStroke(new BasicStroke(5));
         graphics.drawRect(location.x, location.y, size.width, size.height);
         graphics.dispose();
 
