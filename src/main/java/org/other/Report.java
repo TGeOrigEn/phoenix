@@ -50,7 +50,7 @@ public final class Report {
         public ErrorScreenshot(@NotNull String name, @NotNull Component component) {
             final var element = component.toWebElement();
 
-            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BASE64)).getBytes();
+            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
             this.size = element.getSize();
@@ -58,7 +58,7 @@ public final class Report {
         }
 
         public ErrorScreenshot(@NotNull String name) {
-            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BASE64)).getBytes();
+            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = null;
             this.size = null;
@@ -81,7 +81,7 @@ public final class Report {
         public ComponentScreenshot(@NotNull String name, @NotNull Component component) {
             final var element = component.toWebElement();
 
-            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BASE64)).getBytes();
+            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
             this.size = element.getSize();
