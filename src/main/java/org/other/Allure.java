@@ -36,8 +36,8 @@ public final class Allure {
 
     @Attachment(value = "{screenshotName}", type = "image/png")
     public static byte @NotNull [] attachScreenshotComponent(@NotNull Component component, @NotNull String screenshotName) throws IOException {
-        final var screenshot = ImageIO.read(((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.FILE));
-        final var element = component.toWebElement();
+        return (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
+        /*final var element = component.toWebElement();
 
         final var location = element.getLocation();
         final var size = element.getSize();
@@ -50,7 +50,7 @@ public final class Allure {
         final var outputStream = new ByteArrayOutputStream();
         ImageIO.write(screenshot, "png", outputStream);
 
-        return outputStream.toByteArray();
+        return outputStream.toByteArray();*/
     }
 
     public static void attachFile(@NotNull File file, @NotNull String fileName) throws FileNotFoundException {
