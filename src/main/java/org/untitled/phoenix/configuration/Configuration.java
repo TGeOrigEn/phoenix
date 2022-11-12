@@ -47,17 +47,25 @@ public final class Configuration {
         Configuration.downloadDirectory = String.format("%s\\%s", downloadDirectory, UUID.randomUUID());
 
         final var prefs = new HashMap<String, Object>();
-        prefs.put("download.default_directory", Configuration.downloadDirectory);
+
         prefs.put("download.prompt_for_download", false);
         prefs.put("download.directory_upgrade", true);
-        prefs.put("profile.default_content_setting_values.automatic_downloads", 2);
-        options.setExperimentalOption("prefs", prefs);
+        //prefs.put("profile.default_content_setting_values.automatic_downloads", 2);
+
+        prefs.put("profile.default_content_settings.popups", 0);
+        prefs.put("profile.default_content_setting_values.automatic_downloads",1);
+
+
+
 
         if (remoteAddress == null) {
+            prefs.put("download.default_directory", Configuration.downloadDirectory);
+            options.setExperimentalOption("prefs", prefs);
             Configuration.webDriver = new ChromeDriver(options);
             Configuration.remoteAddress = null;
         } else {
             final var address = new URL(remoteAddress);
+            options.setExperimentalOption("prefs", prefs);
             final var remote = new RemoteWebDriver(address, options);
             remote.setFileDetector(new LocalFileDetector());
             Configuration.remoteAddress = address;
