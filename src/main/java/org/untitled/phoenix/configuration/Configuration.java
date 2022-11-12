@@ -48,6 +48,7 @@ public final class Configuration {
 
         final var prefs = new HashMap<String, Object>();
         prefs.put("download.default_directory", Configuration.downloadDirectory);
+        prefs.put("download.prompt_for_download", false);
         prefs.put("profile.content_settings.exceptions.automatic_downloads.*.setting", 1 );
         options.setExperimentalOption("prefs", prefs);
 
