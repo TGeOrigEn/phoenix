@@ -1,6 +1,9 @@
 package example;
 
 import example.drivers.Chrome;
+import io.qameta.allure.Allure;
+import io.qameta.allure.model.Status;
+import io.qameta.allure.model.StepResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
@@ -16,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.UUID;
 
 public abstract class BaseTest {
 
@@ -62,5 +66,11 @@ public abstract class BaseTest {
     public void closeWebDriver() throws IOException {
         Report.perform();
         Configuration.getWebDriver().quit();
+        if (Report.isFailed()) {
+            final var uuid = UUID.randomUUID().toString();
+            final var result = new StepResult();
+            Allure.getLifecycle().startStep(uuid, result);
+            Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.FAILED));
+        }
     }
 }

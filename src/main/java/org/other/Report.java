@@ -123,6 +123,10 @@ public final class Report {
         Report.milliseconds = milliseconds;
     }
 
+    public static boolean isFailed() {
+       return !errors.isEmpty();
+    }
+
     public static void clear() {
         components.clear();
         errors.clear();
