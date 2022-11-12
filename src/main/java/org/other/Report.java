@@ -19,12 +19,18 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public final class Report {
@@ -228,8 +234,10 @@ public final class Report {
         return String.format("[%s] ---------- %s", time, name);
     }
 
-    private static @NotNull File getVideo() throws URISyntaxException {
-        return new File(new URI(getVideoAddress()));
+    private static @NotNull File getVideo() throws URISyntaxException, IOException {
+        InputStream in = new URL(getVideoAddress()).openStream();
+        Files.copy(in, Paths.get(UUID.randomUUID() + ".mp4"), StandardCopyOption.REPLACE_EXISTING);
+        return new File(new URL(getVideoAddress()).toURI());
     }
 
     private static byte @NotNull [] getScreenshot(@NotNull File video, long milliseconds) throws JCodecException, IOException {
