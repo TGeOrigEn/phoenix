@@ -76,6 +76,8 @@ public class NavigationPanel extends Component {
 
         public void expand() {
             expandButton.toAction().click();
+            if (find(QuickTip::new).isAvailable())
+                find(QuickTip::new).toAction().click();
         }
 
         public void open(@NotNull Option option) {

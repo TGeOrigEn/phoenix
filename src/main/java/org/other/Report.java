@@ -129,6 +129,7 @@ public final class Report {
 
     public static void clear() {
         components.clear();
+        downloads.clear();
         errors.clear();
     }
 
