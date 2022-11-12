@@ -51,7 +51,6 @@ public final class Configuration {
         prefs.put("download.prompt_for_download", false);
         prefs.put("download.directory_upgrade", true);
         prefs.put("profile.default_content_setting_values.automatic_downloads", 2);
-        prefs.put("profile.content_settings.exceptions.automatic_downloads.*.setting", 1 );
         options.setExperimentalOption("prefs", prefs);
 
         if (remoteAddress == null) {
