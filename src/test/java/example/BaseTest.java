@@ -34,7 +34,7 @@ public abstract class BaseTest {
     @BeforeEach
     @DisplayName("Инициализировать веб-драйвер")
     public void webDriverInitialization() throws MalformedURLException {
-        final var pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chromedriver.exe");
+        final var pathToWebDriver = this.getClass().getClassLoader().getResource("driver/chromedriver.exe");
         final var downloadDirectory = Paths.get("build/downloads/").toFile();
 
         if (pathToWebDriver == null) throw new RuntimeException("Веб-драйвера не существует.");
