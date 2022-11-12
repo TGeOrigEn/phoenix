@@ -46,7 +46,6 @@ public final class Allure {
         graphics.setColor(Color.RED);
         graphics.setStroke(new BasicStroke(5));
         graphics.drawRect(location.x, location.y, size.width, size.height);
-        graphics.dispose();
 
         final var outputStream = new ByteArrayOutputStream();
         ImageIO.write(screenshot, "png", outputStream);
