@@ -6,11 +6,12 @@ import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.configuration.Configuration;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.*;
 import java.util.regex.Pattern;
 
 public final class Allure {
@@ -31,6 +32,33 @@ public final class Allure {
     @Attachment(value = "{screenshotName}", type = "image/png")
     public static byte @NotNull [] attachScreenshot(@NotNull String screenshotName) {
         return ((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+    }
+
+    @Attachment(value = "{screenshotName}", type = "image/png")
+    public static byte @NotNull [] attachScreenshotComponent(@NotNull Component component, @NotNull String screenshotName) throws IOException {
+
+        boolean enabled = true;
+
+        if (component.getCondition() != null && component.getCondition().isEnabled())
+                component.getCondition().setEnabled(enabled = false);
+
+        final var screenshot = ImageIO.read(((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.FILE));
+        final var element = component.toWebElement();
+
+        if (!enabled) component.getCondition().setEnabled(true);
+
+        final var location = element.getLocation();
+        final var size = element.getSize();
+
+        final var graphics = screenshot.createGraphics();
+        graphics.setColor(Color.RED);
+        graphics.drawRect(location.x, location.y, size.width, size.height);
+        graphics.dispose();
+
+        final var outputStream = new ByteArrayOutputStream();
+        ImageIO.write(screenshot, "png", outputStream);
+
+        return outputStream.toByteArray();
     }
 
     public static void attachFile(@NotNull File file, @NotNull String fileName) throws FileNotFoundException {
