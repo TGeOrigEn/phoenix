@@ -67,6 +67,6 @@ public abstract class BaseTest {
     public void closeWebDriver() throws IOException {
         Report.perform();
         Configuration.getWebDriver().quit();
-        if (Report.isFailed()) Assertions.fail("123");
+        if (Report.isFailed()) Assertions.fail("Зафиксированы ошибки");
     }
 }
