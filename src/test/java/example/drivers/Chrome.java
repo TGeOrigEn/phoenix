@@ -11,17 +11,17 @@ public final class Chrome {
     public static @NotNull ChromeOptions getDefaultOptions(@NotNull Duration timeout) {
         final var chromeOptions = new ChromeOptions();
 
+        chromeOptions.setCapability("browser.download.folderList", 1);
         chromeOptions.setCapability("browser.download.manager.showWhenStarting", false);
-        chromeOptions.setCapability("browser.helperApps.neverAsk.openFile",
-                "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
-        chromeOptions.setCapability("browser.helperApps.neverAsk.saveToDisk",
-                "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
+        chromeOptions.setCapability("browser.download.manager.focusWhenStarting", false);
+        chromeOptions.setCapability("browser.download.useDownloadDir", true);
         chromeOptions.setCapability("browser.helperApps.alwaysAsk.force", false);
         chromeOptions.setCapability("browser.download.manager.alertOnEXEOpen", false);
-        chromeOptions.setCapability("browser.download.manager.focusWhenStarting", false);
-        chromeOptions.setCapability("browser.download.manager.useWindow", false);
+        chromeOptions.setCapability("browser.download.manager.closeWhenDone", true);
         chromeOptions.setCapability("browser.download.manager.showAlertOnComplete", false);
-        chromeOptions.setCapability("browser.download.manager.closeWhenDone", false);
+        chromeOptions.setCapability("browser.download.manager.useWindow", false);
+        // You will need to find the content-type of your app and set it here.
+        chromeOptions.setCapability("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream");
 
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
@@ -39,17 +39,17 @@ public final class Chrome {
 
         chromeOptions.addExtensions(new File("/opt/cades_plugin.crx"));
 
+        chromeOptions.setCapability("browser.download.folderList", 1);
         chromeOptions.setCapability("browser.download.manager.showWhenStarting", false);
-        chromeOptions.setCapability("browser.helperApps.neverAsk.openFile",
-                "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
-        chromeOptions.setCapability("browser.helperApps.neverAsk.saveToDisk",
-                "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
+        chromeOptions.setCapability("browser.download.manager.focusWhenStarting", false);
+        chromeOptions.setCapability("browser.download.useDownloadDir", true);
         chromeOptions.setCapability("browser.helperApps.alwaysAsk.force", false);
         chromeOptions.setCapability("browser.download.manager.alertOnEXEOpen", false);
-        chromeOptions.setCapability("browser.download.manager.focusWhenStarting", false);
-        chromeOptions.setCapability("browser.download.manager.useWindow", false);
+        chromeOptions.setCapability("browser.download.manager.closeWhenDone", true);
         chromeOptions.setCapability("browser.download.manager.showAlertOnComplete", false);
-        chromeOptions.setCapability("browser.download.manager.closeWhenDone", false);
+        chromeOptions.setCapability("browser.download.manager.useWindow", false);
+        // You will need to find the content-type of your app and set it here.
+        chromeOptions.setCapability("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream");
 
         chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
         chromeOptions.setCapability("screenResolution", "1920x1080x24");
