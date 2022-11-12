@@ -143,35 +143,25 @@ public final class Report {
 
     @Step("Ошибки")
     private static void computeErrors() throws IOException {
-        errors.parallelStream().forEach((error) -> {
-            try {
-                attachErrorScreenshot(error, getName(error.name, error.milliseconds));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        for (var error : errors)
+            attachErrorScreenshot(error, getName(error.name, error.milliseconds));
     }
 
     @Step("Шаги")
     private static void computeComponents() throws IOException {
-        components.parallelStream().forEach((component) -> {
-            try {
-                attachComponentScreenshot(component, getName(component.name, component.milliseconds));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        for (var component : components)
+            attachComponentScreenshot(component, getName(component.name, component.milliseconds));
     }
 
     @Step("Загруженные файлы")
     private static void computedDownloads() {
-        downloads.parallelStream().forEach((downloadedFile) -> {
+        for (var downloadedFile : downloads) {
             try {
                 io.qameta.allure.Allure.attachment(getName(downloadedFile.file.getName(), downloadedFile.milliseconds), new FileInputStream(downloadedFile.file));
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-        });
+        }
     }
 
     @Attachment(value = "{name}", type = "image/png")
