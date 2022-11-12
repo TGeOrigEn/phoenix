@@ -20,6 +20,10 @@ dependencies {
     implementation 'io.qameta.allure:allure-rest-assured:2.20.0'
     implementation 'io.qameta.allure:allure-java-commons:2.20.0'
 
+    implementation 'org.jcodec:jcodec:0.1.5'
+//Thanks for using https://jar-download.com
+
+
     runtimeOnly 'org.aspectj:aspectjweaver:1.9.9.1'
 
     implementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'

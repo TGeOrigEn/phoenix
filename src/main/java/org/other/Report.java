@@ -2,6 +2,7 @@ package org.other;
 
 import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
+import org.jcodec.api.JCodecException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.Dimension;
@@ -12,9 +13,14 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.configuration.Configuration;
 
+
+import org.jcodec.api.FrameGrab;
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -41,16 +47,12 @@ public final class Report {
 
         private final @Nullable Dimension size;
 
-        private final byte @NotNull [] bytes;
-
         private final @NotNull String name;
 
         private final long milliseconds;
 
         public ErrorScreenshot(@NotNull String name, @NotNull Component component) {
             final var element = component.toWebElement();
-
-            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
             this.size = element.getSize();
@@ -58,7 +60,6 @@ public final class Report {
         }
 
         public ErrorScreenshot(@NotNull String name) {
-            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = null;
             this.size = null;
@@ -72,8 +73,6 @@ public final class Report {
 
         private final @NotNull Dimension size;
 
-        private final byte @NotNull [] bytes;
-
         private final @NotNull String name;
 
         private final long milliseconds;
@@ -81,7 +80,6 @@ public final class Report {
         public ComponentScreenshot(@NotNull String name, @NotNull Component component) {
             final var element = component.toWebElement();
 
-            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
             this.size = element.getSize();
@@ -134,23 +132,24 @@ public final class Report {
     }
 
     @Step("Отчёт")
-    public static void perform() throws IOException {
-        if (!errors.isEmpty()) computeErrors();
-        if (!components.isEmpty()) computeComponents();
+    public static void perform() throws IOException, URISyntaxException, JCodecException {
+        final var video = getVideo();
+        if (!errors.isEmpty()) computeErrors(video);
+        if (!components.isEmpty()) computeComponents(video);
         if (!downloads.isEmpty()) computedDownloads();
         if (Configuration.isRemote()) attachVideo();
     }
 
     @Step("Ошибки")
-    private static void computeErrors() throws IOException {
+    private static void computeErrors(@NotNull File video) throws IOException, JCodecException {
         for (var error : errors)
-            attachErrorScreenshot(error, getName(error.name, error.milliseconds));
+            attachErrorScreenshot(video, error, getName(error.name, error.milliseconds));
     }
 
     @Step("Шаги")
-    private static void computeComponents() throws IOException {
+    private static void computeComponents(@NotNull File video) throws IOException, JCodecException {
         for (var component : components)
-            attachComponentScreenshot(component, getName(component.name, component.milliseconds));
+            attachComponentScreenshot(video, component, getName(component.name, component.milliseconds));
     }
 
     @Step("Загруженные файлы")
@@ -165,9 +164,9 @@ public final class Report {
     }
 
     @Attachment(value = "{name}", type = "image/png")
-    private static byte @NotNull [] attachErrorScreenshot(@NotNull ErrorScreenshot error, @NotNull String name) throws IOException {
+    private static byte @NotNull [] attachErrorScreenshot(@NotNull File video, @NotNull ErrorScreenshot error, @NotNull String name) throws IOException, JCodecException {
         if (error.location != null && error.size != null) {
-            final var screenshot = ImageIO.read(new ByteArrayInputStream(error.bytes));
+            final var screenshot = ImageIO.read(new ByteArrayInputStream(getScreenshot(video, error.milliseconds - milliseconds)));
             final var graphics = screenshot.createGraphics();
 
             graphics.setColor(Color.RED);
@@ -179,13 +178,13 @@ public final class Report {
 
             return outputStream.toByteArray();
         } else {
-            return error.bytes;
+            return getScreenshot(video, error.milliseconds - milliseconds);
         }
     }
 
     @Attachment(value = "{name}", type = "image/png")
-    private static byte @NotNull [] attachComponentScreenshot(@NotNull ComponentScreenshot component, @NotNull String name) throws IOException {
-        final var screenshot = ImageIO.read(new ByteArrayInputStream(component.bytes));
+    private static byte @NotNull [] attachComponentScreenshot(@NotNull File video, @NotNull ComponentScreenshot component, @NotNull String name) throws IOException, JCodecException {
+        final var screenshot = ImageIO.read(new ByteArrayInputStream(getScreenshot(video, component.milliseconds - milliseconds)));
         final var graphics = screenshot.createGraphics();
 
         graphics.setColor(Color.RED);
@@ -227,5 +226,15 @@ public final class Report {
     private static @NotNull String getName(@NotNull String name, long milliseconds) {
         final var time = new SimpleDateFormat("HH:mm:ss.SSSS").format(milliseconds - Report.milliseconds);
         return String.format("[%s] ---------- %s", time, name);
+    }
+
+    private static @NotNull File getVideo() throws URISyntaxException {
+        return new File(new URI(getVideoAddress()));
+    }
+
+    private static byte @NotNull [] getScreenshot(@NotNull File video, long milliseconds) throws JCodecException, IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(FrameGrab.getFrame(video, milliseconds / 1000f / 60f ), "png", outputStream);
+        return outputStream.toByteArray();
     }
 }
