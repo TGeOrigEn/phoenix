@@ -6,6 +6,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.http.netty.NettyClient;
 import org.other.Report;
 import org.other.DynamicStep;
 import org.untitled.phoenix.exception.UnavailableComponentException;
@@ -29,6 +30,49 @@ import java.util.regex.Pattern;
 import static java.lang.System.currentTimeMillis;
 
 public class Action {
+
+    public static class Factory {
+
+        private final @NotNull Actions actions;
+
+        public Factory() {
+            actions = new Actions(Configuration.getWebDriver());
+        }
+
+        public Factory keyDown(@NotNull CharSequence key) {
+            actions.keyDown(key);
+            return this;
+        }
+
+        public Factory click() {
+            actions.click();
+            return this;
+        }
+
+        public Factory moveByOffset(int xOffset, int yOffset) {
+            actions.moveByOffset(xOffset, yOffset);
+            return this;
+        }
+
+        public Factory moveToComponent(@NotNull Component component, int xOffset, int yOffset) {
+            actions.moveToElement(component.toWebElement(), xOffset, yOffset);
+            return this;
+        }
+
+        public Factory click(@NotNull Component component) {
+            actions.click(component.toWebElement());
+            return this;
+        }
+
+        public Factory build() {
+            actions.build();
+            return this;
+        }
+
+        public void perform() {
+            actions.perform();
+        }
+    }
 
     private final static @NotNull String REGEX_HTTP = "http://.*:\\d*/";
 
