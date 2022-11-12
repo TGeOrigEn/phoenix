@@ -178,6 +178,6 @@ public final class Report {
         final var duration = Duration.ofMillis(System.currentTimeMillis() - milliseconds);
         final long seconds = duration.getSeconds();
 
-        return String.format("%d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+        return String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
     }
 }
