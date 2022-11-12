@@ -25,7 +25,7 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            Report.addStep(aStepName, component);
+            //Report.addStep(aStepName, component);
 
             if (component.getCondition() != null && component.getCondition().isEnabled()) {
                 component.getCondition().setEnabled(false);
@@ -53,7 +53,7 @@ public class DynamicStep {
         try {
             T value;
 
-            Report.addStep(aStepName, component);
+            //Report.addStep(aStepName, component);
 
             if (component.getCondition() != null && component.getCondition().isEnabled()) {
                 component.getCondition().setEnabled(false);
