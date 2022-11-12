@@ -7,6 +7,7 @@ import io.qameta.allure.model.StepResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.MutableCapabilities;
@@ -66,12 +67,6 @@ public abstract class BaseTest {
     public void closeWebDriver() throws IOException {
         Report.perform();
         Configuration.getWebDriver().quit();
-        if (Report.isFailed()) {
-            final var uuid = UUID.randomUUID().toString();
-            final var result = new StepResult().setName("");
-            Allure.getLifecycle().startStep(uuid, result);
-            Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.FAILED));
-            Allure.getLifecycle().stopStep(uuid);
-        }
+        if (Report.isFailed()) Assertions.fail();
     }
 }
