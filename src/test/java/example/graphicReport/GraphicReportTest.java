@@ -29,7 +29,6 @@ public class GraphicReportTest extends BaseTest {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
         Component.find(Button::new, Button.Requirements.Equals.byTip("Подложки")).click();
         Component.find(Substrates::new).findInside(Substrates.Item::new, Substrates.Item.Requirements.Equals.byName("Нет")).select();
-        Component.find(Button::new, Button.Requirements.Equals.byTip("Подложки")).click();
     }
 
     @Test
