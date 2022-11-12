@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public final class Report {
 
-    public static class DownloadedFile {
+    private static class DownloadedFile {
 
         private final long milliseconds;
 
@@ -35,7 +35,7 @@ public final class Report {
         }
     }
 
-    public static class ErrorScreenshot {
+    private static class ErrorScreenshot {
 
         private final @Nullable Point location;
 
@@ -66,7 +66,7 @@ public final class Report {
         }
     }
 
-    public static class ComponentScreenshot {
+    private static class ComponentScreenshot {
 
         private final @NotNull Point location;
 
@@ -97,12 +97,16 @@ public final class Report {
 
     private static long milliseconds;
 
-    public static void addStep(@NotNull ComponentScreenshot screenshot) {
-        components.add(screenshot);
+    public static void addStep(@NotNull String name, @NotNull Component component) {
+        components.add(new ComponentScreenshot(name, component));
     }
 
-    public static void addError(@NotNull ErrorScreenshot screenshot) {
-        errors.add(screenshot);
+    public static void addError(@NotNull String name) {
+        errors.add(new ErrorScreenshot(name));
+    }
+
+    public static void addError(@NotNull String name, @NotNull Component component) {
+        errors.add(new ErrorScreenshot(name, component));
     }
 
     public static void addFile(@NotNull File file) {

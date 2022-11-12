@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.other.Report;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
@@ -45,6 +46,12 @@ public class GraphicReportTest extends BaseTest {
     @Tag("all")
     @Step("Графический отчёт с выделенной геометрией (PDF)")
     public void graphicReportWithGeometry_PDF() {
+        final var button = Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет"));
+
+        Report.addError("Кнопки появляется раньше, чем интерфейс", button);
+
+        button.click();
+
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Выберите шаблон:")).setValue("А4, Альбомный (PDF)");
         Component.find(Button::new, Button.Requirements.Equals.byText("Далее")).click();
