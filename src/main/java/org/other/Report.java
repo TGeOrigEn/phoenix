@@ -15,7 +15,6 @@ import org.untitled.phoenix.configuration.Configuration;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public final class Report {
         public ErrorScreenshot(@NotNull String name, @NotNull Component component) {
             final var element = component.toWebElement();
 
-            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
+            this.bytes = component.getContext().getTrace().get(0).toWebElement().getScreenshotAs(OutputType.BYTES);
             milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
             this.size = element.getSize();
@@ -59,11 +58,7 @@ public final class Report {
         }
 
         public ErrorScreenshot(@NotNull String name) {
-            try {
-                this.bytes = Files.readAllBytes((((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.FILE)).toPath());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = null;
             this.size = null;
@@ -86,11 +81,7 @@ public final class Report {
         public ComponentScreenshot(@NotNull String name, @NotNull Component component) {
             final var element = component.toWebElement();
 
-            try {
-                this.bytes = Files.readAllBytes((((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.FILE)).toPath());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.bytes = component.getContext().getTrace().get(0).toWebElement().getScreenshotAs(OutputType.BYTES);
             milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
             this.size = element.getSize();
