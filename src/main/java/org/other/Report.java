@@ -14,16 +14,26 @@ import org.untitled.phoenix.configuration.Configuration;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public final class Report {
+
+    public static class DownloadedFile {
+
+        private final long milliseconds;
+
+        private final @NotNull File file;
+
+        public DownloadedFile(@NotNull File file) {
+            milliseconds = System.currentTimeMillis();
+            this.file = file;
+        }
+    }
 
     public static class ErrorScreenshot {
 
@@ -81,6 +91,8 @@ public final class Report {
 
     private static final @NotNull List<ComponentScreenshot> components = new ArrayList<>();
 
+    private static final @NotNull List<DownloadedFile> downloads = new ArrayList<>();
+
     private static final @NotNull List<ErrorScreenshot> errors = new ArrayList<>();
 
     private static long milliseconds;
@@ -91,6 +103,16 @@ public final class Report {
 
     public static void addError(@NotNull ErrorScreenshot screenshot) {
         errors.add(screenshot);
+    }
+
+    public static void addFile(@NotNull File file) {
+        final var downloadedFile = new DownloadedFile(file);
+        try {
+            io.qameta.allure.Allure.attachment(downloadedFile.file.getName(), new FileInputStream(downloadedFile.file));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        downloads.add(downloadedFile);
     }
 
     public static void setStartTime(long milliseconds) {
@@ -106,6 +128,7 @@ public final class Report {
     public static void perform() throws IOException {
         if (!errors.isEmpty()) computeErrors();
         if (!components.isEmpty()) computeComponents();
+        if (!downloads.isEmpty()) computedDownloads();
         if (Configuration.isRemote()) attachVideo();
     }
 
@@ -119,6 +142,17 @@ public final class Report {
     private static void computeComponents() throws IOException {
         for (var component : components)
             attachComponentScreenshot(component, String.format("[%s] %s", getTime(component.milliseconds), component.name));
+    }
+
+    @Step("Загруженные файлы")
+    private static void computedDownloads() {
+        for (var downloadedFile : downloads) {
+            try {
+                io.qameta.allure.Allure.attachment(downloadedFile.file.getName(), new FileInputStream(downloadedFile.file));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Attachment(value = "{name}", type = "image/png")

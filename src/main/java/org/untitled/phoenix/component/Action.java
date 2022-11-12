@@ -6,13 +6,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.other.Allure;
+import org.other.Report;
 import org.untitled.phoenix.DynamicStep;
 import org.untitled.phoenix.exception.UnavailableComponentException;
 import org.untitled.phoenix.exception.ComponentActionException;
 import org.untitled.phoenix.configuration.Configuration;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -109,11 +108,7 @@ public class Action {
             } else files = localDownload(timeout, countFiles, true);
 
             for (var file : files) {
-                try {
-                    Allure.attachFile(file, file.getName());
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                Report.addFile(file);
             }
 
             return files;
