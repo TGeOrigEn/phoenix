@@ -182,7 +182,7 @@ public final class Report {
     }
 
     public static @NotNull String getTime(long milliseconds) {
-        final long seconds = System.currentTimeMillis() - milliseconds - Report.milliseconds;
+        final long seconds = milliseconds - Report.milliseconds;
         return String.format("%d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
     }
 }
