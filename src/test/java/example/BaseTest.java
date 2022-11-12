@@ -52,6 +52,7 @@ public abstract class BaseTest {
     @BeforeEach
     public void openAddress() {
         Configuration.getWebDriver().get(getAddress());
+        Report.setStartTime(System.currentTimeMillis());
     }
 
     @BeforeEach
@@ -60,13 +61,8 @@ public abstract class BaseTest {
     }
 
     @AfterEach
-    public void reportFinalization() throws IOException {
+    public void closeWebDriver() throws IOException {
         Report.perform();
-    }
-
-    @AfterEach
-    public void closeWebDriver() {
-        Allure.attachScreenshot("Последний снимок");
         Configuration.getWebDriver().quit();
     }
 }
