@@ -67,6 +67,6 @@ public abstract class BaseTest {
     public void closeWebDriver() throws IOException {
         Report.perform();
         Configuration.getWebDriver().quit();
-        if (Report.isFailed()) Assertions.fail();
+        if (Report.isFailed()) Assertions.fail("123");
     }
 }
