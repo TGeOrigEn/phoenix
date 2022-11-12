@@ -50,7 +50,7 @@ public abstract class BaseTest {
         else System.setProperty("webdriver.chrome.driver", pathToWebDriver.getPath());
 
         Configuration.setChromeDriver(REMOTE_ADDRESS, downloadDirectory.getAbsolutePath(), (ChromeOptions) getCapabilities());
-        Configuration.getWebDriver().manage().window().setSize(new Dimension(1280, 720));
+        Configuration.getWebDriver().manage().window().setSize(new Dimension(1920, 1080));
     }
 
     @BeforeEach
