@@ -24,8 +24,9 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-             runnable.run();
             org.other.Allure.attachScreenshotComponent(component, aStepName);
+             runnable.run();
+
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
         } catch (Exception e) {
             Allure.getLifecycle().updateStep(uuid, s -> s
@@ -48,8 +49,8 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            final var value = runnable.get();
             org.other.Allure.attachScreenshotComponent(component, aStepName);
+            final var value = runnable.get();
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
             return value;
         } catch (Throwable e) {

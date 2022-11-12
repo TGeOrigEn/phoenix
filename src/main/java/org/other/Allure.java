@@ -36,16 +36,8 @@ public final class Allure {
 
     @Attachment(value = "{screenshotName}", type = "image/png")
     public static byte @NotNull [] attachScreenshotComponent(@NotNull Component component, @NotNull String screenshotName) throws IOException {
-
-        boolean enabled = true;
-
-        if (component.getCondition() != null && component.getCondition().isEnabled())
-                component.getCondition().setEnabled(enabled = false);
-
         final var screenshot = ImageIO.read(((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.FILE));
         final var element = component.toWebElement();
-
-        if (!enabled) component.getCondition().setEnabled(true);
 
         final var location = element.getLocation();
         final var size = element.getSize();

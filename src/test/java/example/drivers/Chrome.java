@@ -18,7 +18,6 @@ public final class Chrome {
         chromeOptions.setCapability("enableVNC", true);
         chromeOptions.setCapability("version", "98.0");
 
-
         return chromeOptions;
     }
 
