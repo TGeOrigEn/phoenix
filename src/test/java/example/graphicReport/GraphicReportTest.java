@@ -8,6 +8,7 @@ import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
@@ -31,6 +32,7 @@ public class GraphicReportTest extends BaseTest {
     }
 
     @Test
+    @Tag("all")
     @Step("Графический отчёт (PDF)")
     public void graphicReport_PDF() {
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
@@ -41,6 +43,7 @@ public class GraphicReportTest extends BaseTest {
     }
 
     @Test
+    @Tag("all")
     @Step("Графический отчёт с выделенной геометрией (PDF)")
     public void graphicReportWithGeometry_PDF() {
 
