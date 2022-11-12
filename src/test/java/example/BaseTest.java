@@ -71,6 +71,7 @@ public abstract class BaseTest {
             final var result = new StepResult().setName("");
             Allure.getLifecycle().startStep(uuid, result);
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.FAILED));
+            Allure.getLifecycle().stopStep(uuid);
         }
     }
 }
