@@ -65,7 +65,13 @@ public class GraphicReportTest extends BaseTest {
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Выберите шаблон:")).setValue("А4, Альбомный (ODG)");
         Component.find(Button::new, Button.Requirements.Equals.byText("Далее")).click();
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Карта:")).setValue("~1:210000");
-        Component.find(Button::new, Button.Requirements.Equals.byText("Сформировать")).download(Duration.ofSeconds(10), 1);
+        Component.find(Button::new, Button.Requirements.Equals.byText("Сформировать")).click();
+
+        Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
+        Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Выберите шаблон:")).setValue("А4, Альбомный (ODG)");
+        Component.find(Button::new, Button.Requirements.Equals.byText("Далее")).click();
+        Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Карта:")).setValue("~1:210000");
+        Component.find(Button::new, Button.Requirements.Equals.byText("Сформировать")).download(Duration.ofSeconds(15), 2);
     }
 
     @Test
