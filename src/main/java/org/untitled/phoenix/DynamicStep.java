@@ -25,8 +25,13 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            //Report.addStep(new Report.ComponentScreenshot(aStepName, component));
-             runnable.run();
+            Report.addStep(new Report.ComponentScreenshot(aStepName, component));
+
+            if (component.getCondition() != null && component.getCondition().isEnabled()) {
+                component.getCondition().setEnabled(false);
+                runnable.run();
+                component.getCondition().setEnabled(true);
+            } else runnable.run();
 
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
         } catch (Exception e) {
@@ -46,8 +51,16 @@ public class DynamicStep {
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            //Report.addStep(new Report.ComponentScreenshot(aStepName, component));
-            final var value = runnable.get();
+            T value;
+
+            Report.addStep(new Report.ComponentScreenshot(aStepName, component));
+
+            if (component.getCondition() != null && component.getCondition().isEnabled()) {
+                component.getCondition().setEnabled(false);
+                value = runnable.get();
+                component.getCondition().setEnabled(true);
+            } else value = runnable.get();
+
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
             return value;
         } catch (Throwable e) {

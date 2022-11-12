@@ -32,6 +32,8 @@ public abstract class Component {
 
     private @NotNull Context context;
 
+    private boolean initialized;
+
     private @NotNull Duration timeout = Duration.ofSeconds(60);
 
     private int index = 0;
@@ -193,6 +195,10 @@ public abstract class Component {
         return context;
     }
 
+    public boolean isInitialized() {
+        return initialized;
+    }
+
     public @NotNull Action toAction() {
         return action;
     }
@@ -214,8 +220,10 @@ public abstract class Component {
             for (int index = trace.size() - 1; index >= 0; index--) {
                 var element = toWebElement(trace.get(index));
                 if (element != null) {
-                    if (trace.get(index) == this)
+                    if (trace.get(index) == this) {
+                        initialized = true;
                         return element;
+                    }
                     break;
                 } else unavailable = trace.get(index);
             }
