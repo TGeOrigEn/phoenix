@@ -221,6 +221,6 @@ public final class Report {
     }
 
     public static @NotNull String getTime(long milliseconds) {
-        return new SimpleDateFormat("HH:mm:ss.S").format(milliseconds - Report.milliseconds);
+        return new SimpleDateFormat("HH:mm:ss").format(milliseconds - Report.milliseconds);
     }
 }
