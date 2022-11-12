@@ -235,8 +235,8 @@ public final class Report {
     }
 
     private static @NotNull File getVideo() throws URISyntaxException, IOException {
-        InputStream in = new URL(getVideoAddress()).openStream();
-        Files.copy(in, Paths.get(UUID.randomUUID() + ".mp4"), StandardCopyOption.REPLACE_EXISTING);
+       /* InputStream in = new URL(getVideoAddress()).openStream();
+        Files.copy(in, Paths.get(UUID.randomUUID() + ".mp4"), StandardCopyOption.REPLACE_EXISTING);*/
         return new File(new URL(getVideoAddress()).toURI());
     }
 
