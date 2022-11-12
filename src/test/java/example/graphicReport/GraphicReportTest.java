@@ -27,9 +27,7 @@ public class GraphicReportTest extends BaseTest {
     @DisplayName("Подготовка тестовых данных")
     public void beforeEach() {
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
-        final var button = Component.find(Button::new, Button.Requirements.Equals.byTip("Подложки"));
-        Report.addError("Кнопки появляется раньше, чем интерфейс", button);
-        button.click();
+        Component.find(Button::new, Button.Requirements.Equals.byTip("Подложки")).click();
         Component.find(Substrates::new).findInside(Substrates.Item::new, Substrates.Item.Requirements.Equals.byName("Нет")).select();
     }
 
