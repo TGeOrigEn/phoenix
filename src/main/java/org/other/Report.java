@@ -235,9 +235,10 @@ public final class Report {
     }
 
     private static @NotNull File getVideo() throws URISyntaxException, IOException {
-       /* InputStream in = new URL(getVideoAddress()).openStream();
-        Files.copy(in, Paths.get(UUID.randomUUID() + ".mp4"), StandardCopyOption.REPLACE_EXISTING);*/
-        return new File(new URL(getVideoAddress()).toURI());
+        InputStream in = new URL(getVideoAddress()).openStream();
+        final var uuid = UUID.randomUUID().toString();
+        Files.copy(in, Paths.get(uuid + ".mp4"), StandardCopyOption.REPLACE_EXISTING);
+        return new File(uuid);
     }
 
     private static byte @NotNull [] getScreenshot(@NotNull File video, long milliseconds) throws JCodecException, IOException {
