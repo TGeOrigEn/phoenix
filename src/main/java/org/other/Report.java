@@ -17,6 +17,7 @@ import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -182,7 +183,6 @@ public final class Report {
     }
 
     public static @NotNull String getTime(long milliseconds) {
-        final long seconds = milliseconds - Report.milliseconds;
-        return String.format("%d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+        return new SimpleDateFormat("HH:mm:ss").format(milliseconds - Report.milliseconds);
     }
 }
