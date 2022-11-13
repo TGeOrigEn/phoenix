@@ -25,7 +25,7 @@ import java.util.UUID;
 
 public abstract class BaseTest {
 
-    private final static @Nullable String REMOTE_ADDRESS = "http://10.5.1.167:4444/wd/hub";
+    private final static @Nullable String REMOTE_ADDRESS = null;
 
     protected @NotNull Duration getTimeout() {
         return Duration.ofSeconds(120);
@@ -39,10 +39,7 @@ public abstract class BaseTest {
 
     @BeforeEach
     public void webDriverInitialization() throws MalformedURLException {
-        URL pathToWebDriver;
-
-        if (System.getProperty("os.name").contains("windows")) pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chrome/chromedriver.exe");
-        else pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chrome/chromedriver");
+        URL pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chrome/chromedriver.exe");
 
         final var downloadDirectory = Paths.get("build/downloads/").toFile();
 

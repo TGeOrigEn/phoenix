@@ -4,9 +4,10 @@ import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.configuration.Configuration;
@@ -46,7 +47,9 @@ public final class Report {
 
         private final long milliseconds;
 
-        public ErrorScreenshot(@NotNull String name, @NotNull WebElement element) {
+        public ErrorScreenshot(@NotNull String name, @NotNull Component component) {
+            final var element = component.toWebElement();
+
             this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
@@ -75,7 +78,9 @@ public final class Report {
 
         private final long milliseconds;
 
-        public ComponentScreenshot(@NotNull String name, @NotNull WebElement element) {
+        public ComponentScreenshot(@NotNull String name, @NotNull Component component) {
+            final var element = component.toWebElement();
+
             this.bytes = (((TakesScreenshot) Configuration.getWebDriver()).getScreenshotAs(OutputType.BYTES));
             milliseconds = System.currentTimeMillis();
             this.location = element.getLocation();
@@ -92,16 +97,16 @@ public final class Report {
 
     private static long milliseconds;
 
-    public static void addStep(@NotNull String name, @NotNull WebElement element) {
-        components.add(new ComponentScreenshot(name, element));
+    public static void addStep(@NotNull String name, @NotNull Component component) {
+        components.add(new ComponentScreenshot(name, component));
     }
 
     public static void addError(@NotNull String name) {
         errors.add(new ErrorScreenshot(name));
     }
 
-    public static void addError(@NotNull String name, @NotNull WebElement element) {
-        errors.add(new ErrorScreenshot(name, element));
+    public static void addError(@NotNull String name, @NotNull Component component) {
+        errors.add(new ErrorScreenshot(name, component));
     }
 
     public static void addFile(@NotNull File file) {
