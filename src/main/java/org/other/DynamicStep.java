@@ -7,6 +7,7 @@ import io.qameta.allure.util.ResultsUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebElement;
 import org.other.Report;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.configuration.Configuration;
@@ -18,22 +19,15 @@ import java.util.function.Supplier;
 
 public class DynamicStep {
 
-    public static void invokeStep(@NotNull Component component, String actionName, Runnable runnable) {
+    public static void invokeStep(@NotNull WebElement webElement, @NotNull Component component, String actionName, Runnable runnable) {
         var aStepName = String.format("%s :: %s", actionName, component.getContext());
 
         var uuid = UUID.randomUUID().toString();
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            Report.addStep(aStepName, component);
-            //runnable.run();
-
-            if (component.getCondition() != null && component.getCondition().isEnabled()) {
-                component.getCondition().setEnabled(false);
-                runnable.run();
-                component.getCondition().setEnabled(true);
-            } else runnable.run();
-
+            Report.addStep(aStepName, webElement);
+            runnable.run();
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
         } catch (Exception e) {
             Allure.getLifecycle().updateStep(uuid, s -> s
@@ -45,23 +39,15 @@ public class DynamicStep {
         }
     }
 
-    public static <T> T invokeStep(@NotNull Component component, String actionName, Supplier<T> runnable) {
+    public static <T> T invokeStep(@NotNull WebElement webElement, @NotNull Component component, String actionName, Supplier<T> runnable) {
         var aStepName = String.format("%s :: %s", actionName, component.getContext());
 
         var uuid = UUID.randomUUID().toString();
         StepResult result = new StepResult().setName(aStepName);
         Allure.getLifecycle().startStep(uuid, result);
         try {
-            T value; //= runnable.get();
-
-            Report.addStep(aStepName, component);
-
-            if (component.getCondition() != null && component.getCondition().isEnabled()) {
-                component.getCondition().setEnabled(false);
-                value = runnable.get();
-                component.getCondition().setEnabled(true);
-            } else value = runnable.get();
-
+            Report.addStep(aStepName, webElement);
+            T value = runnable.get();
             Allure.getLifecycle().updateStep(uuid, s -> s.setStatus(Status.PASSED));
             return value;
         } catch (Throwable e) {

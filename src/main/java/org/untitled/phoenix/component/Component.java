@@ -28,8 +28,6 @@ public abstract class Component {
 
     private @NotNull Description description;
 
-    private final @NotNull Action action;
-
     private @NotNull Context context;
 
     private boolean initialized;
@@ -38,20 +36,12 @@ public abstract class Component {
 
     private int index = 0;
 
-    protected Component(@NotNull Description description, @NotNull Action action) {
-        this.action = action;
-        this.description = description;
-        this.context = new Context(this, null);
-    }
-
     protected Component(@NotNull Description description) {
-        this.action = new Action(this);
         this.description = description;
         this.context = new Context(this, null);
     }
 
     protected Component() {
-        this.action = new Action(this);
         this.description = initialize();
         this.context = new Context(this, null);
     }
@@ -200,7 +190,7 @@ public abstract class Component {
     }
 
     public @NotNull Action toAction() {
-        return action;
+        return new Action(this);
     }
 
     public int getIndex() {

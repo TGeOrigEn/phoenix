@@ -80,7 +80,10 @@ public class Action {
 
     private final @NotNull Component component;
 
+    private final @NotNull WebElement element;
+
     public Action(@NotNull Component component) {
+        element = component.toWebElement();
         this.component = component;
     }
 
@@ -105,32 +108,32 @@ public class Action {
     }
 
     public void sendKeys(@NotNull CharSequence... keys) {
-        DynamicStep.invokeStep(component, String.format("Отправить клавиши '%s'", Arrays.toString(keys)), () -> invoke((Consumer<WebElement>) webElement -> webElement.sendKeys(keys), String.format("Не удалось отправить нажатие клавиш '%s' компоненту", Arrays.toString(keys)), component.getTimeout()));
+        DynamicStep.invokeStep(element, component, String.format("Отправить клавиши '%s'", Arrays.toString(keys)), () -> invoke((Consumer<WebElement>) webElement -> webElement.sendKeys(keys), String.format("Не удалось отправить нажатие клавиш '%s' компоненту", Arrays.toString(keys)), component.getTimeout()));
     }
 
     public void setValue(@NotNull String value) {
-        DynamicStep.invokeStep(component, String.format("Установить значение '%s'", value), () -> invoke(webElement -> { webElement.clear(); webElement.sendKeys(value); }, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout()));
+        DynamicStep.invokeStep(element, component, String.format("Установить значение '%s'", value), () -> invoke(webElement -> { webElement.clear(); webElement.sendKeys(value); }, String.format("Не удалось задать значение '%s' компоненту", value), component.getTimeout()));
     }
 
     /**
      * <p>Наводится мышкой на компонент, если это возможно.</p>
      */
     public void hover() {
-        DynamicStep.invokeStep(component, "Навести курсор мыши", () -> invoke((Consumer<WebElement>) webElement -> new Actions(Configuration.getWebDriver()).moveToElement(component.toWebElement()).build().perform(), "Не удалось навести курсор мыши на компонент", component.getTimeout()));
+        DynamicStep.invokeStep(element, component, "Навести курсор мыши", () -> invoke((Consumer<WebElement>) webElement -> new Actions(Configuration.getWebDriver()).moveToElement(component.toWebElement()).build().perform(), "Не удалось навести курсор мыши на компонент", component.getTimeout()));
     }
 
     /**
      * <p>Нажимает левой кнопкой мыши на компонент, если это возможно.</p>
      */
     public void click() {
-        DynamicStep.invokeStep(component, "Нажать", () -> invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout()));
+        DynamicStep.invokeStep(element, component, "Нажать", () -> invoke(WebElement::click, "Не удалось нажать левой кнопкой мыши на компонент", component.getTimeout()));
     }
 
     /**
      * Если компонент является элементом ввода, то этот метод отчистит его значение.
      */
     public void clear() {
-        DynamicStep.invokeStep(component, "Отчистить", () -> invoke(WebElement::clear, "Не удалось очистить компонент", component.getTimeout()));
+        DynamicStep.invokeStep(element, component, "Отчистить", () -> invoke(WebElement::clear, "Не удалось очистить компонент", component.getTimeout()));
     }
 
     /**
@@ -141,7 +144,7 @@ public class Action {
      * @return список загруженных файлов
      */
     public @NotNull @Unmodifiable List<File> download(@NotNull Duration timeout, int countFiles) {
-        return DynamicStep.invokeStep(component, "Скачать файлы", () -> {
+        return DynamicStep.invokeStep(element, component, "Скачать файлы", () -> {
             List<File> files;
             if (Configuration.isRemote()) {
                 try {
@@ -205,7 +208,7 @@ public class Action {
 
         while (true) {
             try {
-                action.accept(component.toWebElement());
+                action.accept(element);
                 return;
             } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
                 if (currentTimeMillis() - startTime >= timeout.toMillis())
@@ -222,7 +225,7 @@ public class Action {
 
         while (true) {
             try {
-                return action.apply(component.toWebElement());
+                return action.apply(element);
             } catch (InvalidElementStateException | StaleElementReferenceException ignore) {
                 if (currentTimeMillis() - startTime >= timeout.toMillis())
                     throw new ComponentActionException(component, message, timeout);
