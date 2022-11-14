@@ -28,7 +28,7 @@ public abstract class BaseTest {
     protected abstract @NotNull URL addressInitialization() throws MalformedURLException;
 
     protected @Nullable URL remoteAddressInitialization() throws MalformedURLException {
-        return new URL("http://10.5.1.167:4444/wd/hub");
+        return null;
     }
 
     protected @NotNull Duration timeoutInitialization() {
@@ -54,7 +54,6 @@ public abstract class BaseTest {
                 else Chrome.setDefault(PATH_TO_DOWNLOADS, remoteAddress, timeout);
             }
         }
-
         Configuration.getWebDriver().navigate().to(addressInitialization());
         Report.setStartTime(System.currentTimeMillis());
         Report.clear();

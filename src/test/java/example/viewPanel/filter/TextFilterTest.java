@@ -39,8 +39,6 @@ public class TextFilterTest extends BaseTest {
     @BeforeEach
     @DisplayName("Подготовка тестовых данных")
     public void beforeEach() {
-        Configuration.getWebDriver().navigate().to("https://autotests.gemsdev.ru/");
-
         Component.find(AuthorizationForm::new).logIn("gemsAdmin", "gemsAdmin123$");
 
         Component.find(NavigationPanel.Item::new, NavigationPanel.Item.Requirements.Equals.byName("Приморский край")).expand();
