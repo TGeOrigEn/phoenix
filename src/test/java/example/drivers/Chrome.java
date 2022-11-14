@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
 
 public final class Chrome {
 
@@ -45,15 +46,17 @@ public final class Chrome {
     }
 
     private static @NotNull ChromeOptions getOptionsDefault(@NotNull Duration timeout) {
-        final var options = new ChromeOptions();
+        final var selenoidOptions = new HashMap<String, Object>();
+        final var chromeOptions = new ChromeOptions();
 
-        options.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
-        options.addArguments("--window-size=1920,1080");
-        options.setCapability("browserName", "chrome");
-        options.setCapability("enableVideo", true);
-        options.setCapability("version", "106.0");
-        options.setCapability("enableVNC", true);
+        selenoidOptions.put("sessionTimeout", String.format("%dms", timeout.toMillis()));
+        selenoidOptions.put("enableVideo", true);
+        selenoidOptions.put("version", "106.0");
+        selenoidOptions.put("enableVNC", true);
 
-        return options;
+        chromeOptions.setCapability("selenoid:options", selenoidOptions);
+        chromeOptions.addArguments("--window-size=1920,1080");
+
+        return chromeOptions;
     }
 }

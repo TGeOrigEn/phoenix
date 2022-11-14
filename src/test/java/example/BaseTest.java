@@ -21,12 +21,16 @@ import java.time.Duration;
 public abstract class BaseTest {
 
     protected static final class Selenoid {
+
         public static final @NotNull String SERGEY = "http://10.5.1.167:4444/wd/hub";
+
         public static final @NotNull String ARTEM = "http://10.5.1.170:4444/wd/hub";
+
         public static final @Nullable String NONE = null;
     }
 
     protected static final class Application {
+
         public static final @NotNull String GEOMETA = "https://autotests.gemsdev.ru";
         public static final @NotNull String GEOMETA_CONFIGURATOR = "https://autotests.gemsdev.ru/system";
 
