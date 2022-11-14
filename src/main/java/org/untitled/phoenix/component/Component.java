@@ -30,9 +30,7 @@ public abstract class Component {
 
     private @NotNull Context context;
 
-    private boolean initialized;
-
-    private @NotNull Duration timeout = Duration.ofSeconds(60);
+    private @NotNull Duration timeout = Duration.ofSeconds(10);
 
     private int index = 0;
 
@@ -185,10 +183,6 @@ public abstract class Component {
         return context;
     }
 
-    public boolean isInitialized() {
-        return initialized;
-    }
-
     public @NotNull Action toAction() {
         return new Action(this);
     }
@@ -207,13 +201,12 @@ public abstract class Component {
 
         while (true) {
             Component unavailable = this;
+
             for (int index = trace.size() - 1; index >= 0; index--) {
                 var element = toWebElement(trace.get(index));
                 if (element != null) {
-                    if (trace.get(index) == this) {
-                        initialized = true;
+                    if (trace.get(index) == this)
                         return element;
-                    }
                     break;
                 } else unavailable = trace.get(index);
             }
@@ -255,40 +248,41 @@ public abstract class Component {
         return component;
     }
 
-    private static @Nullable WebElement findWebElement(@NotNull By by, @Nullable SearchContext searchContext, int index) {
-        final var elements = searchContext == null
-                ? Configuration.getWebDriver().findElements(by)
-                : searchContext.findElements(by);
-
-        if (elements.size() > index)
-            return elements.get(index);
-
+    private static @Nullable WebElement findWebElement(@NotNull By by, @Nullable SearchContext parent, int index) {
+        final var elements = parent == null ? Configuration.getWebDriver().findElements(by) : parent.findElements(by);
+        if (elements.size() > index) return elements.get(index);
         return null;
     }
 
-    private static @NotNull List<WebElement> findWebElements(@NotNull By by, @Nullable SearchContext searchContext) {
-        return searchContext == null
-                ? Configuration.getWebDriver().findElements(by)
-                : searchContext.findElements(by);
+    private static @NotNull List<WebElement> findWebElements(@NotNull By by, @Nullable SearchContext parent) {
+        return parent == null ? Configuration.getWebDriver().findElements(by) : parent.findElements(by);
     }
 
     private static @Nullable WebElement toWebElement(@NotNull Component component) {
         try {
+            final var description = component.getDescription();
+
             final var parent = component.getContext().getParent() != null
                     ? toWebElement(component.getContext().getParent())
                     : null;
 
-            if (component.getContext().getParent() != null && parent == null)
+            if (component.getContext().getParent() != null && parent == null) {
+                component.index = 0;
                 return null;
+            }
 
-            final var element = component.getCondition() == null || component.getCondition().isEnabled()
-                    ? findWebElement(component.getDescription().getBy(), parent, component.getDescription().getIndex())
-                    : findWebElement(component.getDescription().getBy(), parent, component.getIndex());
+            if (component.getCondition() == null || !component.getCondition().isEnabled()) {
+                final var element = component.getCondition() == null
+                        ? findWebElement(description.getBy(), parent, description.getIndex())
+                        : findWebElement(description.getBy(), parent, component.getIndex());
 
-            if (component.getCondition() == null) return element;
-            else if (!component.getCondition().isEnabled()) return element;
+                if (element == null)
+                    component.index = 0;
 
-            final var elements = findWebElements(component.getDescription().getBy(), parent);
+                return element;
+            }
+
+            final var elements = findWebElements(description.getBy(), parent);
             component.getCondition().setEnabled(false);
 
             component.index = 0;
@@ -302,8 +296,10 @@ public abstract class Component {
             }
 
             component.getCondition().setEnabled(true);
+            component.index = 0;
             return null;
         } catch (Exception e) {
+            component.index = 0;
             return null;
         }
     }
