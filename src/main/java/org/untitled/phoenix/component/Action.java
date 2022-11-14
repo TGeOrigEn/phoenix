@@ -276,8 +276,8 @@ public class Action {
 
             for (var name : namesDownloadedFiles) {
                 InputStream in = new URL(String.format("%s/%s", getDownloadUrl(), name)).openStream();
-                Files.copy(in, Paths.get(Configuration.getDownloadDirectory(), name), StandardCopyOption.REPLACE_EXISTING);
-                downloadedFiles.add(Paths.get(Configuration.getDownloadDirectory(), name).toFile());
+                Files.copy(in, Paths.get(Configuration.getPathToDownload().toString(), name), StandardCopyOption.REPLACE_EXISTING);
+                downloadedFiles.add(Paths.get(Configuration.getPathToDownload().toString(), name).toFile());
             }
 
             for (var name : namesDownloadedFiles) {
@@ -305,7 +305,7 @@ public class Action {
     }
 
     private static File @NotNull [] getCurrentFiles() {
-        final var files = new File(Configuration.getDownloadDirectory()).listFiles();
+        final var files = new File(Configuration.getPathToDownload().toString()).listFiles();
         return files == null ? new File[0] : files;
     }
 

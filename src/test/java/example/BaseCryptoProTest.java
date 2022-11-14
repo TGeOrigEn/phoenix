@@ -1,13 +1,14 @@
 package example;
 
-import example.drivers.Chrome;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
-import org.openqa.selenium.MutableCapabilities;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public abstract class BaseCryptoProTest extends BaseTest {
 
@@ -18,13 +19,13 @@ public abstract class BaseCryptoProTest extends BaseTest {
     private static final @NotNull Description SAVE_BUTTON_DESCRIPTION = new Description(By.cssSelector("button[name='save']"), "Кнопка 'Сохранить'");
 
     @Override
-    protected @NotNull MutableCapabilities getCapabilities() {
-        return Chrome.getOptionsWithCryptography(getTimeout());
+    protected @NotNull Driver driverInitialization() {
+        return Driver.CHROME_CRYPTOGRAPHY;
     }
 
     @Override
-    protected @NotNull String getAddress() {
-        return "file:///etc/opt/cprocsp/trusted_sites.html";
+    protected @NotNull URL addressInitialization() throws MalformedURLException {
+        return new URL("file:///etc/opt/cprocsp/trusted_sites.html");
     }
 
     protected abstract @NotNull String[] getAcceptedAddresses();

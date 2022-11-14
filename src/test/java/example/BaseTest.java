@@ -1,70 +1,69 @@
 package example;
 
-import example.drivers.Chrome;
-import io.qameta.allure.Allure;
-import io.qameta.allure.model.Status;
-import io.qameta.allure.model.StepResult;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.other.Report;
 import org.untitled.phoenix.configuration.Configuration;
+import example.drivers.Chrome;
+import org.other.Report;
+
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+
+import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.time.Duration;
-import java.util.UUID;
+import java.net.URL;
 
 public abstract class BaseTest {
 
-    private final static @Nullable String REMOTE_ADDRESS = null;
+    public enum Driver {CHROME_DEFAULT, CHROME_CRYPTOGRAPHY}
 
-    protected @NotNull Duration getTimeout() {
+    private static final @NotNull Path PATH_TO_DOWNLOADS = Paths.get("build/downloads/").toAbsolutePath();
+
+    protected abstract @NotNull URL addressInitialization() throws MalformedURLException;
+
+    protected @Nullable URL remoteAddressInitialization() throws MalformedURLException {
+        return new URL("http://10.5.1.167:4444/wd/hub");
+    }
+
+    protected @NotNull Duration timeoutInitialization() {
         return Duration.ofSeconds(120);
     }
 
-    protected abstract @NotNull String getAddress();
-
-    protected @NotNull MutableCapabilities getCapabilities() {
-        return Chrome.getDefaultOptions(getTimeout());
+    protected @NotNull Driver driverInitialization() {
+        return Driver.CHROME_DEFAULT;
     }
 
     @BeforeEach
-    public void webDriverInitialization() throws MalformedURLException {
-        URL pathToWebDriver = this.getClass().getClassLoader().getResource("drivers/chrome/chromedriver.exe");
+    public final void testInitialization() throws MalformedURLException {
+        final var remoteAddress = remoteAddressInitialization();
+        final var timeout = timeoutInitialization();
 
-        final var downloadDirectory = Paths.get("build/downloads/").toFile();
+        switch (driverInitialization()) {
+            case CHROME_CRYPTOGRAPHY: {
+                if (remoteAddress == null) Chrome.setWithCryptography(PATH_TO_DOWNLOADS, timeout);
+                else Chrome.setWithCryptography(PATH_TO_DOWNLOADS, remoteAddress, timeout);
+            }
+            case CHROME_DEFAULT: {
+                if (remoteAddress == null) Chrome.setDefault(PATH_TO_DOWNLOADS, timeout);
+                else Chrome.setDefault(PATH_TO_DOWNLOADS, remoteAddress, timeout);
+            }
+        }
 
-        if (pathToWebDriver == null) throw new RuntimeException("Веб-драйвера не существует.");
-        else System.setProperty("webdriver.chrome.driver", pathToWebDriver.getPath());
-
-        Configuration.setChromeDriver(REMOTE_ADDRESS, downloadDirectory.getAbsolutePath(), (ChromeOptions) getCapabilities());
-        Configuration.getWebDriver().manage().window().setSize(new Dimension(1920, 1080));
-    }
-
-    @BeforeEach
-    public void openAddress() {
-        Configuration.getWebDriver().get(getAddress());
+        Configuration.getWebDriver().navigate().to(addressInitialization());
         Report.setStartTime(System.currentTimeMillis());
-    }
-
-    @BeforeEach
-    public void reportInitialization() {
         Report.clear();
     }
 
     @AfterEach
-    public void closeWebDriver() throws IOException {
+    public final void testFinalization() throws IOException {
         Report.perform();
         Configuration.getWebDriver().quit();
-        if (Report.isFailed()) Assertions.fail("Зафиксированы ошибки");
+        if (Report.isFailed()) Assertions.fail("Зафиксированы ошибки! Пожалуйста, проверьте отчёт.");
     }
 }

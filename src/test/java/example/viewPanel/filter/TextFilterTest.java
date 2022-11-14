@@ -20,6 +20,8 @@ import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 @DisplayName("Фильтрация по текстовому полю")
@@ -30,8 +32,8 @@ public class TextFilterTest extends BaseTest {
     private static final Alert alert = Component.find(Alert::new);
 
     @Override
-    protected @NotNull String getAddress() {
-        return "https://autotests.gemsdev.ru/";
+    protected @NotNull URL addressInitialization() throws MalformedURLException {
+        return new URL("https://autotests.gemsdev.ru/");
     }
 
     @BeforeEach

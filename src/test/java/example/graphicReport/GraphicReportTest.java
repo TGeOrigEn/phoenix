@@ -14,13 +14,15 @@ import org.other.Report;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 public class GraphicReportTest extends BaseTest {
 
     @Override
-    protected @NotNull String getAddress() {
-        return "https://autotests.gemsdev.ru/";
+    protected @NotNull URL addressInitialization() throws MalformedURLException {
+        return new URL("https://autotests.gemsdev.ru/");
     }
 
     @BeforeEach
