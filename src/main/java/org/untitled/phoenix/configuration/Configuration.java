@@ -15,10 +15,10 @@ public final class Configuration {
 
     private static @Nullable WebDriver webDriver;
 
-    private static @Nullable URL remoteAddress;
+    private static @Nullable String remoteAddress;
 
 
-    public static void configure(@NotNull RemoteWebDriver webDriver, @NotNull Path pathToDownload, @NotNull URL remoteAddress) {
+    public static void configure(@NotNull RemoteWebDriver webDriver, @NotNull Path pathToDownload, @NotNull String remoteAddress) {
         Configuration.pathToDownload = pathToDownload;
         Configuration.remoteAddress = remoteAddress;
         Configuration.webDriver = webDriver;
@@ -40,7 +40,7 @@ public final class Configuration {
         return pathToDownload;
     }
 
-    public static @NotNull URL getRemoteAddress() {
+    public static @NotNull String getRemoteAddress() {
         if (remoteAddress == null)
             throw new NullPointerException("Путь не был инициализирован.");
 

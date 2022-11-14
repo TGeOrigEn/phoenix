@@ -7,10 +7,7 @@ import org.openqa.selenium.By;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-public abstract class BaseCryptoProTest extends BaseTest {
+public abstract class BaseCryptographyTest extends BaseTest {
 
     private static final @NotNull Description INPUT_DESCRIPTION = new Description(By.cssSelector("input[placeholder='Добавить новый']"), "Ввод 'Добавить новый'");
 
@@ -19,13 +16,13 @@ public abstract class BaseCryptoProTest extends BaseTest {
     private static final @NotNull Description SAVE_BUTTON_DESCRIPTION = new Description(By.cssSelector("button[name='save']"), "Кнопка 'Сохранить'");
 
     @Override
-    protected @NotNull Driver driverInitialization() {
+    protected @NotNull Driver getDriver() {
         return Driver.CHROME_CRYPTOGRAPHY;
     }
 
     @Override
-    protected @NotNull URL addressInitialization() throws MalformedURLException {
-        return new URL("file:///etc/opt/cprocsp/trusted_sites.html");
+    protected @NotNull String getAddress() {
+        return "file:///etc/opt/cprocsp/trusted_sites.html";
     }
 
     protected abstract @NotNull String[] getAcceptedAddresses();

@@ -29,8 +29,8 @@ public class NumberFilterTest extends BaseTest {
     private static final Alert alert = Component.find(Alert::new);
 
     @Override
-    protected @NotNull URL addressInitialization() throws MalformedURLException {
-        return new URL("https://autotests.gemsdev.ru/");
+    protected @NotNull String getAddress()  {
+        return "https://autotests.gemsdev.ru/";
     }
 
     @BeforeEach

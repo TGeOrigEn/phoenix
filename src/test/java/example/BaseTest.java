@@ -17,7 +17,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.net.URL;
 
 public abstract class BaseTest {
 
@@ -25,42 +24,42 @@ public abstract class BaseTest {
 
     private static final @NotNull Path PATH_TO_DOWNLOADS = Paths.get("build/downloads/").toAbsolutePath();
 
-    protected abstract @NotNull URL addressInitialization() throws MalformedURLException;
+    protected abstract @NotNull String getAddress();
 
-    protected @Nullable URL remoteAddressInitialization() throws MalformedURLException {
-        return null;
-    }
-
-    protected @NotNull Duration timeoutInitialization() {
+    protected @NotNull Duration getTimeout() {
         return Duration.ofSeconds(120);
     }
 
-    protected @NotNull Driver driverInitialization() {
+    protected @NotNull Driver getDriver() {
         return Driver.CHROME_DEFAULT;
     }
 
-    @BeforeEach
-    public final void testInitialization() throws MalformedURLException {
-        final var remoteAddress = remoteAddressInitialization();
-        final var timeout = timeoutInitialization();
+    protected @Nullable String getRemoteAddress() {
+        return null;
+    }
 
-        switch (driverInitialization()) {
+    @BeforeEach
+    public final void initialization() throws MalformedURLException {
+        final var remoteAddress = getRemoteAddress();
+
+        switch (getDriver()) {
             case CHROME_CRYPTOGRAPHY: {
-                if (remoteAddress == null) Chrome.setWithCryptography(PATH_TO_DOWNLOADS, timeout);
-                else Chrome.setWithCryptography(PATH_TO_DOWNLOADS, remoteAddress, timeout);
+                if (remoteAddress == null) Chrome.setWithCryptography(PATH_TO_DOWNLOADS, getTimeout());
+                else Chrome.setWithCryptography(PATH_TO_DOWNLOADS, remoteAddress, getTimeout());
             }
             case CHROME_DEFAULT: {
-                if (remoteAddress == null) Chrome.setDefault(PATH_TO_DOWNLOADS, timeout);
-                else Chrome.setDefault(PATH_TO_DOWNLOADS, remoteAddress, timeout);
+                if (remoteAddress == null) Chrome.setDefault(PATH_TO_DOWNLOADS, getTimeout());
+                else Chrome.setDefault(PATH_TO_DOWNLOADS, remoteAddress, getTimeout());
             }
         }
-        Configuration.getWebDriver().navigate().to(addressInitialization());
+
+        Configuration.getWebDriver().navigate().to(getAddress());
         Report.setStartTime(System.currentTimeMillis());
         Report.clear();
     }
 
     @AfterEach
-    public final void testFinalization() throws IOException {
+    public final void finalization() throws IOException {
         Report.perform();
         Configuration.getWebDriver().quit();
         if (Report.isFailed()) Assertions.fail("Зафиксированы ошибки! Пожалуйста, проверьте отчёт.");

@@ -21,8 +21,8 @@ import java.time.Duration;
 public class GraphicReportTest extends BaseTest {
 
     @Override
-    protected @NotNull URL addressInitialization() throws MalformedURLException {
-        return new URL("https://autotests.gemsdev.ru/");
+    protected @NotNull String getAddress()  {
+        return "https://autotests.gemsdev.ru/";
     }
 
     @BeforeEach
