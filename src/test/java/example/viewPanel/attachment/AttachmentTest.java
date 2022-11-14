@@ -14,9 +14,7 @@ import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.time.Duration;
 
 @DisplayName("Вложения")
@@ -27,7 +25,7 @@ public class AttachmentTest extends BaseTest {
     private static final Alert alert = Component.find(Alert::new);
 
     @Override
-    protected @NotNull String getAddress() {
+    protected @NotNull String initializeApplication() {
         return "https://autotests.gemsdev.ru/";
     }
 

@@ -8,20 +8,17 @@ import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.other.Report;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+
 import java.time.Duration;
 
 public class GraphicReportTest extends BaseTest {
 
     @Override
-    protected @NotNull String getAddress()  {
+    protected @NotNull String initializeApplication()  {
         return "https://autotests.gemsdev.ru/";
     }
 

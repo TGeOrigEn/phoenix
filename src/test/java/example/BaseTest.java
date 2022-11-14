@@ -12,48 +12,65 @@ import org.junit.jupiter.api.AfterEach;
 
 import org.junit.jupiter.api.Assertions;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.time.Duration;
 
 public abstract class BaseTest {
 
-    public enum Driver {CHROME_DEFAULT, CHROME_CRYPTOGRAPHY}
+    protected static final class Selenoid {
+        public static final @NotNull String SERGEY = "http://10.5.1.167:4444/wd/hub";
+        public static final @NotNull String ARTEM = "http://10.5.1.170:4444/wd/hub";
+    }
+
+    protected static final class Application {
+        public static final @NotNull String GEOMETA = "https://autotests.gemsdev.ru";
+        public static final @NotNull String GEOMETA_CONFIGURATOR = "https://autotests.gemsdev.ru/system";
+
+        public static final @NotNull String AGATE = "https://agate-autotests.gemsdev.ru";
+        public static final @NotNull String AGATE_CONFIGURATOR = "https://agate-conf-autotests.gemsdev.ru";
+
+        public static final @NotNull String WEB_IMPORTER = "https://importer-autotests.gemsdev.ru";
+
+        public static final @NotNull String DIAMOND = "https://gisogd-autotests.gemsdev.ru";
+    }
+
+    protected enum Driver {CHROME_DEFAULT, CHROME_CRYPTOGRAPHY}
 
     private static final @NotNull Path PATH_TO_DOWNLOADS = Paths.get("build/downloads/").toAbsolutePath();
 
-    protected abstract @NotNull String getAddress();
+    protected abstract @NotNull String initializeApplication();
 
-    protected @NotNull Duration getTimeout() {
+    protected @NotNull Duration initializeTimeout() {
         return Duration.ofSeconds(120);
     }
 
-    protected @NotNull Driver getDriver() {
+    protected @NotNull Driver initializeDriver() {
         return Driver.CHROME_DEFAULT;
     }
 
-    protected @Nullable String getRemoteAddress() {
-        return null;
+    protected @Nullable String initializeSelenoid() {
+        return Selenoid.SERGEY;
     }
 
     @BeforeEach
     public final void initialization() throws MalformedURLException {
-        final var remoteAddress = getRemoteAddress();
+        final var selenoid = initializeSelenoid();
 
-        switch (getDriver()) {
+        switch (initializeDriver()) {
             case CHROME_CRYPTOGRAPHY: {
-                if (remoteAddress == null) Chrome.setWithCryptography(PATH_TO_DOWNLOADS, getTimeout());
-                else Chrome.setWithCryptography(PATH_TO_DOWNLOADS, remoteAddress, getTimeout());
+                if (selenoid == null) Chrome.setWithCryptography(PATH_TO_DOWNLOADS, initializeTimeout());
+                else Chrome.setWithCryptography(PATH_TO_DOWNLOADS, selenoid, initializeTimeout());
             }
             case CHROME_DEFAULT: {
-                if (remoteAddress == null) Chrome.setDefault(PATH_TO_DOWNLOADS, getTimeout());
-                else Chrome.setDefault(PATH_TO_DOWNLOADS, remoteAddress, getTimeout());
+                if (selenoid == null) Chrome.setDefault(PATH_TO_DOWNLOADS, initializeTimeout());
+                else Chrome.setDefault(PATH_TO_DOWNLOADS, selenoid, initializeTimeout());
             }
         }
 
-        Configuration.getWebDriver().navigate().to(getAddress());
+        Configuration.getWebDriver().navigate().to(initializeApplication());
         Report.setStartTime(System.currentTimeMillis());
         Report.clear();
     }

@@ -28,7 +28,7 @@ public class TextFilterTest extends BaseTest {
     private static final Alert alert = Component.find(Alert::new);
 
     @Override
-    protected @NotNull String getAddress() {
+    protected @NotNull String initializeApplication() {
         return "https://autotests.gemsdev.ru/";
     }
 

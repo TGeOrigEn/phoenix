@@ -208,10 +208,7 @@ public final class Report {
         final var remoteAddress = Configuration.getRemoteAddress();
         final var pattern = Pattern.compile("http://.*:\\d*/");
 
-        if (remoteAddress == null)
-            throw new RuntimeException();
-
-        final var matcher = pattern.matcher(remoteAddress.toString());
+        final var matcher = pattern.matcher(remoteAddress);
 
         if (!matcher.find())
             throw new RuntimeException();
