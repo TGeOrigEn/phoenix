@@ -76,7 +76,7 @@ public class NavigationPanel extends Component {
 
         public void expand() {
             expandButton.toAction().click();
-            if (Component.has(find(QuickTip::new), Requirement.byAvailable(true), Duration.ofSeconds(5)))
+            if (Component.has(find(QuickTip::new), Requirement.byAvailable(true), Duration.ZERO))
                 find(QuickTip::new).toAction().hover();
         }
 

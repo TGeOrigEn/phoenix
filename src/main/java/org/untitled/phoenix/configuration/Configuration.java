@@ -7,16 +7,14 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.WebDriver;
 
 import java.nio.file.Path;
-import java.net.URL;
 
 public final class Configuration {
+
+    private static @Nullable String remoteAddress;
 
     private static @Nullable Path pathToDownload;
 
     private static @Nullable WebDriver webDriver;
-
-    private static @Nullable String remoteAddress;
-
 
     public static void configure(@NotNull RemoteWebDriver webDriver, @NotNull Path pathToDownload, @NotNull String remoteAddress) {
         Configuration.pathToDownload = pathToDownload;
@@ -27,10 +25,11 @@ public final class Configuration {
     public static void configure(@NotNull WebDriver webDriver, @NotNull Path pathToDownload) {
         Configuration.pathToDownload = pathToDownload;
         Configuration.webDriver = webDriver;
+        Configuration.remoteAddress = null;
     }
 
     public static boolean isRemote() {
-        return RemoteWebDriver.class.isAssignableFrom(getWebDriver().getClass());
+        return getWebDriver().getClass().equals(RemoteWebDriver.class);
     }
 
     public static @NotNull Path getPathToDownload() {

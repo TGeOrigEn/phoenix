@@ -23,6 +23,7 @@ public abstract class BaseTest {
     protected static final class Selenoid {
         public static final @NotNull String SERGEY = "http://10.5.1.167:4444/wd/hub";
         public static final @NotNull String ARTEM = "http://10.5.1.170:4444/wd/hub";
+        public static final @Nullable String NONE = null;
     }
 
     protected static final class Application {
@@ -44,7 +45,7 @@ public abstract class BaseTest {
     protected abstract @NotNull String initializeApplication();
 
     protected @NotNull Duration initializeTimeout() {
-        return Duration.ofSeconds(120);
+        return Duration.ofSeconds(30);
     }
 
     protected @NotNull Driver initializeDriver() {
