@@ -190,7 +190,7 @@ public class ViewPanel extends Component {
 
         public @NotNull String getValue(@NotNull String columnName) {
             final var column = find(ViewPanel::new).findInside(Header::new, Header.Requirements.Equals.byName(columnName));
-            Component.should(column, Requirement.byAvailable(true), column.getTimeout());
+            Component.should(column, Requirement.isAvailable(true), column.getTimeout());
             return findInside(() -> new WebComponent(VALUE_DESCRIPTION.copy(column.getIndex() - 1))).toAction().getText();
         }
 

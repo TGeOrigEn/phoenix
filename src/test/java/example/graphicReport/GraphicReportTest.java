@@ -46,7 +46,7 @@ public class GraphicReportTest extends BaseTest {
 
         Component.find(Map::new).toAction().click();
 
-        Component.should(Component.find(Map::new).findInside(Map.Polygon::new), Requirement.byAvailable(true), Duration.ofSeconds(60));
+        Component.should(Component.find(Map::new).findInside(Map.Polygon::new), Requirement.isAvailable(true), Duration.ofSeconds(60));
 
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Выберите шаблон:")).setValue("А4, Альбомный (PDF)");
@@ -71,7 +71,7 @@ public class GraphicReportTest extends BaseTest {
 
         Component.find(Map::new).toAction().click();
 
-        Component.should(Component.find(Map::new).findInside(Map.Polygon::new), Requirement.byAvailable(true), Duration.ofSeconds(60));
+        Component.should(Component.find(Map::new).findInside(Map.Polygon::new), Requirement.isAvailable(true), Duration.ofSeconds(60));
 
         Component.find(Button::new, Button.Requirements.Equals.byTip("Графический отчет")).click();
         Component.find(DropdownField::new, Field.Requirements.Equals.byTitle("Выберите шаблон:")).setValue("А4, Альбомный (ODG)");

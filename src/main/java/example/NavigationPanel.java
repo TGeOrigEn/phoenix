@@ -76,7 +76,7 @@ public class NavigationPanel extends Component {
 
         public void expand() {
             expandButton.toAction().click();
-            if (Component.has(find(QuickTip::new), Requirement.byAvailable(true), Duration.ZERO))
+            if (Component.has(find(QuickTip::new), Requirement.isAvailable(true), Duration.ZERO))
                 find(QuickTip::new).toAction().hover();
         }
 
@@ -117,10 +117,58 @@ public class NavigationPanel extends Component {
         }
     }
 
+    public static class Tab extends Button {
+
+        private static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("a[class*='x-tab']"), "Вкладка");
+
+        @Override
+        protected @NotNull Description initialize() {
+            return DEFAULT_DESCRIPTION;
+        }
+    }
+
     public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id='navExtPanelId']"), "Панель навигации");
+
+    private final @NotNull Button searchDocuments;
+
+    private final @NotNull Button importOrExport;
+
+    private final @NotNull Button directories;
+
+    private final @NotNull Button directory;
+
+    private final @NotNull Button search;
+
+    public NavigationPanel() {
+        searchDocuments = findInside(Tab::new, Button.Requirements.Contains.byTip("Поиск сведений"));
+        importOrExport = findInside(Tab::new, Button.Requirements.Equals.byTip("Импорт/экспорт"));
+        directories = findInside(Tab::new, Button.Requirements.Equals.byTip("Все каталоги"));
+        directory = findInside(Tab::new, Button.Requirements.Equals.byTip("Справочники"));
+        search = findInside(Tab::new, Button.Requirements.Equals.byTip("Поиск"));
+    }
 
     @Override
     protected @NotNull Description initialize() {
         return DEFAULT_DESCRIPTION;
+    }
+
+    public void openSearchDocuments() {
+        searchDocuments.click();
+    }
+
+    public void openImportOrExport() {
+        importOrExport.click();
+    }
+
+    public void openDirectories() {
+        directories.click();
+    }
+
+    public void openDirectory() {
+        directory.click();
+    }
+
+    public void openSearch() {
+        search.click();
     }
 }

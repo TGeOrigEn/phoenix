@@ -4,9 +4,7 @@ import org.untitled.phoenix.component.Component;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class BaseRequirement<TComponent extends Component> {
 
@@ -24,19 +22,19 @@ public abstract class BaseRequirement<TComponent extends Component> {
         this.isNegative = isNegative;
     }
 
-    protected BaseRequirement(@NotNull BaseRequirement<TComponent> requirementA, @NotNull Operator operation, @NotNull BaseRequirement<TComponent> requirementB) {
+    protected BaseRequirement(@NotNull BaseRequirement<TComponent> requirementA, @NotNull Operation.Operator operation, @NotNull BaseRequirement<TComponent> requirementB) {
         final var requirements = new ArrayList<Operation<TComponent>>();
 
         if (!requirementA.operations.isEmpty() && !requirementB.operations.isEmpty()) {
             if (!requirementA.operations.get(0).getRequirement().operations.isEmpty())
                 requirements.addAll(requirementA.operations);
-            else requirements.add(new Operation<>(Operator.AND, requirementA));
+            else requirements.add(new Operation<>(Operation.Operator.AND, requirementA));
 
             requirements.add(new Operation<>(operation, requirementB));
         }
 
         if (requirementA.operations.isEmpty() && requirementB.operations.isEmpty()) {
-            requirements.add(new Operation<>(Operator.AND, requirementA));
+            requirements.add(new Operation<>(Operation.Operator.AND, requirementA));
             requirements.add(new Operation<>(operation, requirementB));
         }
 

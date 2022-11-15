@@ -1,17 +1,15 @@
 package org.untitled.phoenix.component.requirement.generic;
 
 import org.untitled.phoenix.component.requirement.BaseRequirement;
-import org.untitled.phoenix.component.requirement.Operator;
 import org.untitled.phoenix.component.Component;
+
+import org.untitled.phoenix.component.requirement.Operation;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.function.*;
+import java.util.*;
 
 public final class Requirement<TComponent extends Component, TValue> extends BaseRequirement<TComponent> {
 
@@ -22,7 +20,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssClass(@Nullable String value) {
-            return new Requirement<>(component -> component.toAction().getAttribute("class"), value, "Содержит значение класса", String::contains);
+            return new Requirement<>(component -> component.toAction().getCssClass(), value, "Содержит значение класса", String::contains);
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byValue(@Nullable String value) {
@@ -45,7 +43,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byCssClass(@Nullable String value) {
-            return new Requirement<>(component -> component.toAction().getAttribute("class"), value, "Имеет значение класса");
+            return new Requirement<>(component -> component.toAction().getCssClass(), value, "Имеет значение класса");
         }
 
         public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byValue(@Nullable String value) {
@@ -61,19 +59,19 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         }
     }
 
-    private final @Nullable BiPredicate<@Nullable TValue, @Nullable TValue> condition;
+    private final @Nullable Function<@NotNull TComponent, TValue> function;
 
-    private final @Nullable Function<@NotNull TComponent, @Nullable TValue> function;
+    private final @Nullable BiPredicate<TValue, TValue> condition;
 
     private final @Nullable String description;
 
     private final @Nullable TValue value;
 
-    public Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description) {
+    public Requirement(@NotNull Function<@NotNull TComponent, TValue> function, @Nullable TValue value, @NotNull String description) {
         this(function, value, description, Objects::equals);
     }
 
-    public Requirement(@NotNull Function<@NotNull TComponent, @Nullable TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<@Nullable TValue, @Nullable TValue> condition) {
+    public Requirement(@NotNull Function<@NotNull TComponent, TValue> function, @Nullable TValue value, @NotNull String description, @NotNull BiPredicate<TValue, TValue> condition) {
         super(false);
         this.description = description;
         this.condition = condition;
@@ -89,7 +87,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         this.value = requirement.value;
     }
 
-    private Requirement(@NotNull Requirement<TComponent, TValue> requirement, @NotNull Operator operation, @NotNull BaseRequirement<TComponent> baseRequirement) {
+    private Requirement(@NotNull Requirement<TComponent, TValue> requirement, @NotNull Operation.Operator operation, @NotNull BaseRequirement<TComponent> baseRequirement) {
         super(requirement, operation, baseRequirement);
         this.description = null;
         this.condition = null;
@@ -97,24 +95,24 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
         this.value = null;
     }
 
-    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byAvailable(boolean isAvailable) {
-        return new Requirement<>(TComponent::isAvailable, isAvailable, "Доступен");
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> isAvailable(boolean isAvailable) {
+        return new Requirement<>(TComponent::isAvailable, isAvailable, "Является доступным");
     }
 
-    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byDisplayed(boolean isDisplayed) {
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> isDisplayed(boolean isDisplayed) {
         return new Requirement<>(component -> component.toAction().isDisplayed(), isDisplayed, "Отображается");
     }
 
-    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byReadonly(boolean isReadonly) {
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> isReadonly(boolean isReadonly) {
         return new Requirement<>(component -> component.toAction().isReadonly(), isReadonly, "Только для чтения");
     }
 
-    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> bySelected(boolean isSelected) {
-        return new Requirement<>(component -> component.toAction().isSelected(), isSelected, "Выделен");
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> isSelected(boolean isSelected) {
+        return new Requirement<>(component -> component.toAction().isSelected(), isSelected, "Является выделенным");
     }
 
-    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> byEnabled(boolean isEnabled) {
-        return new Requirement<>(component -> component.toAction().isEnabled(), isEnabled, "Включён");
+    public static <TComponent extends Component> @NotNull BaseRequirement<TComponent> isEnabled(boolean isEnabled) {
+        return new Requirement<>(component -> component.toAction().isEnabled(), isEnabled, "Является включённым");
     }
 
     @Override
@@ -148,12 +146,12 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
 
     @Override
     public @NotNull BaseRequirement<TComponent> and(@NotNull BaseRequirement<TComponent> requirement) {
-        return new Requirement<>(this, Operator.AND, requirement);
+        return new Requirement<>(this, Operation.Operator.AND, requirement);
     }
 
     @Override
     public @NotNull BaseRequirement<TComponent> or(@NotNull BaseRequirement<TComponent> requirement) {
-        return new Requirement<>(this, Operator.OR, requirement);
+        return new Requirement<>(this, Operation.Operator.OR, requirement);
     }
 
     @Override
@@ -163,7 +161,7 @@ public final class Requirement<TComponent extends Component, TValue> extends Bas
             else return String.format("'%s => %s'", description, value);
         else {
             final var descriptions = new ArrayList<>(List.of(getOperations().stream().skip(1).map(requirement -> {
-                if (requirement.getOperator() == Operator.OR)
+                if (requirement.getOperator() == Operation.Operator.OR)
                     return String.format("ИЛИ %s", requirement.getRequirement());
                 else return String.format("И %s", requirement.getRequirement());
             }).toArray(String[]::new)));

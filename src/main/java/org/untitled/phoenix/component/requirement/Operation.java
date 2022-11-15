@@ -1,9 +1,12 @@
 package org.untitled.phoenix.component.requirement;
 
-import org.jetbrains.annotations.NotNull;
 import org.untitled.phoenix.component.Component;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class Operation<TComponent extends Component> {
+
+    public enum Operator { AND, OR }
 
     private final @NotNull Operator operator;
 
@@ -27,7 +30,7 @@ public final class Operation<TComponent extends Component> {
         switch (operator) {
             case AND: return String.format("И %S", requirement);
             case OR: return String.format("ИЛИ %S", requirement);
-            default: throw new RuntimeException();
+            default: throw new RuntimeException("Некорректный оператор.");
         }
     }
 }

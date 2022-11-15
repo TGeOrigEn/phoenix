@@ -24,19 +24,19 @@ import java.util.List;
 
 public abstract class Component {
 
+    private @NotNull Duration timeout = Duration.ofSeconds(10);
+
     private @Nullable BaseCondition condition;
 
     private @NotNull Description description;
 
     private @NotNull Context context;
 
-    private @NotNull Duration timeout = Duration.ofSeconds(10);
-
     private int index = 0;
 
     protected Component(@NotNull Description description) {
-        this.description = description;
         this.context = new Context(this, null);
+        this.description = description;
     }
 
     protected Component() {
@@ -163,6 +163,10 @@ public abstract class Component {
         return findComponents(constructor, description, null, this, Duration.ZERO);
     }
 
+    public void setTimeout(@NotNull Duration timeout) {
+        this.timeout = timeout;
+    }
+
     public @NotNull Description getDescription() {
         return description;
     }
@@ -175,16 +179,8 @@ public abstract class Component {
         return timeout;
     }
 
-    public void setTimeout(@NotNull Duration timeout) {
-        this.timeout = timeout;
-    }
-
     public @NotNull Context getContext() {
         return context;
-    }
-
-    public @NotNull Action toAction() {
-        return new Action(this);
     }
 
     public int getIndex() {
@@ -193,6 +189,10 @@ public abstract class Component {
 
     public boolean isAvailable() {
         return toWebElement(this) != null;
+    }
+
+    public @NotNull Action toAction() {
+        return new Action(this);
     }
 
     public @NotNull WebElement toWebElement() {
@@ -228,7 +228,7 @@ public abstract class Component {
         for (int index = 0; index < Integer.MAX_VALUE; index++) {
             final var component = findComponent(constructor, description, requirement, parent);
             ((Component) component).description = component.getDescription().copy(index);
-            if (!has(component, Requirement.byAvailable(true), timeout)) break;
+            if (!has(component, Requirement.isAvailable(true), timeout)) break;
             components.add(component);
         }
 
@@ -242,65 +242,77 @@ public abstract class Component {
                 : null;
 
         if (description != null) ((Component) component).description = description;
-        ((Component) component).condition = condition;
         ((Component) component).context = new Context(component, parent);
+        ((Component) component).condition = condition;
 
         return component;
     }
 
-    private static @Nullable WebElement findWebElement(@NotNull By by, @Nullable SearchContext parent, int index) {
-        final var elements = parent == null ? Configuration.getWebDriver().findElements(by) : parent.findElements(by);
-        if (elements.size() > index) return elements.get(index);
+    private static @Nullable WebElement findWebElement(@NotNull By by, @Nullable SearchContext searchContext, int index) {
+        final var webElements = searchContext == null
+                ? Configuration.getWebDriver().findElements(by)
+                : searchContext.findElements(by);
+
+        if (webElements.size() > index)
+            return webElements.get(index);
+
         return null;
     }
 
-    private static @NotNull List<WebElement> findWebElements(@NotNull By by, @Nullable SearchContext parent) {
-        return parent == null ? Configuration.getWebDriver().findElements(by) : parent.findElements(by);
+    private static @NotNull List<WebElement> findWebElements(@NotNull By by, @Nullable SearchContext searchContext) {
+        return searchContext == null
+                ? Configuration.getWebDriver().findElements(by)
+                : searchContext.findElements(by);
     }
 
     private static @Nullable WebElement toWebElement(@NotNull Component component) {
+
+        var conditionStatus = -1;
+
         try {
             final var description = component.getDescription();
 
-            final var parent = component.getContext().getParent() != null
+            final var searchContext = component.getContext().getParent() != null
                     ? toWebElement(component.getContext().getParent())
                     : null;
 
-            if (component.getContext().getParent() != null && parent == null) {
-                component.index = 0;
+            if (component.getContext().getParent() != null && searchContext == null)
                 return null;
-            }
 
             if (component.getCondition() == null || !component.getCondition().isEnabled()) {
-                final var element = component.getCondition() == null
-                        ? findWebElement(description.getBy(), parent, description.getIndex())
-                        : findWebElement(description.getBy(), parent, component.getIndex());
+                final WebElement webElement;
 
-                if (element == null)
+                if (component.getCondition() == null)
+                    webElement = findWebElement(description.getBy(), searchContext, description.getIndex());
+                else {
+                    webElement = findWebElement(description.getBy(), searchContext, component.getIndex());
+                    conditionStatus = 0;
+                }
+
+                if (webElement == null)
                     component.index = 0;
 
-                return element;
-            }
+                return webElement;
+            } else conditionStatus = 1;
 
-            final var elements = findWebElements(description.getBy(), parent);
+            final var webElements = findWebElements(description.getBy(), searchContext);
             component.getCondition().setEnabled(false);
 
             component.index = 0;
             var matches = 0;
 
-            for (var index = 0; index < elements.size(); component.index = ++index) {
-                if (component.getCondition().isTrue() && component.getDescription().getIndex() == matches++) {
-                    component.getCondition().setEnabled(true);
-                    return elements.get(index);
-                }
-            }
+            for (var index = 0; index < webElements.size(); component.index = ++index)
+                if (component.getCondition().isTrue() && component.getDescription().getIndex() == matches++)
+                    return webElements.get(index);
 
-            component.getCondition().setEnabled(true);
             component.index = 0;
             return null;
         } catch (Exception e) {
             component.index = 0;
             return null;
+        } finally {
+            if (conditionStatus == 1) component.getCondition().setEnabled(true);
+            else if (conditionStatus == 0) component.getCondition().setEnabled(false);
         }
     }
 }

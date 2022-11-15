@@ -16,6 +16,10 @@ public final class Configuration {
 
     private static @Nullable WebDriver webDriver;
 
+    public static boolean isRemote() {
+        return getWebDriver().getClass().equals(RemoteWebDriver.class);
+    }
+
     public static void configure(@NotNull RemoteWebDriver webDriver, @NotNull Path pathToDownload, @NotNull String remoteAddress) {
         Configuration.pathToDownload = pathToDownload;
         Configuration.remoteAddress = remoteAddress;
@@ -28,8 +32,11 @@ public final class Configuration {
         Configuration.remoteAddress = null;
     }
 
-    public static boolean isRemote() {
-        return getWebDriver().getClass().equals(RemoteWebDriver.class);
+    public static @NotNull String getRemoteAddress() {
+        if (remoteAddress == null)
+            throw new NullPointerException("Путь не был инициализирован.");
+
+        return remoteAddress;
     }
 
     public static @NotNull Path getPathToDownload() {
@@ -37,13 +44,6 @@ public final class Configuration {
             throw new NullPointerException("Путь не был инициализирован.");
 
         return pathToDownload;
-    }
-
-    public static @NotNull String getRemoteAddress() {
-        if (remoteAddress == null)
-            throw new NullPointerException("Путь не был инициализирован.");
-
-        return remoteAddress;
     }
 
     public static @NotNull WebDriver getWebDriver() {

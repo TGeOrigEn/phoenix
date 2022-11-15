@@ -16,6 +16,8 @@ import java.util.List;
 
 public class Button extends Component {
 
+    // div[class^='x-component']:not([style*='display']) a[style*="cursor: pointer"]
+
     public static class Requirements {
 
         public static class Equals {
@@ -38,10 +40,6 @@ public class Button extends Component {
             public static @NotNull BaseRequirement<Button> byTip(@NotNull String tip) {
                 return new Requirement<>(Button::getTip, tip, "Содержит подсказку", String::contains);
             }
-        }
-
-        public static @NotNull BaseRequirement<Button> isDropdown(boolean isDropdown) {
-            return new Requirement<>(Button::isDropdown, isDropdown, "Является выпадающим списком");
         }
 
         public static @NotNull BaseRequirement<Button> isEnabled(boolean isEnabled) {
@@ -81,10 +79,6 @@ public class Button extends Component {
         return toAction().getCssClass().contains("disabled");
     }
 
-    public boolean isDropdown() {
-        return arrow.isAvailable();
-    }
-
     public void click() {
         toAction().click();
     }
@@ -93,7 +87,7 @@ public class Button extends Component {
         return toAction().download(timeout, countFiles);
     }
 
-    public @NotNull Menu showMenu() {
+    public @NotNull Menu clickOnArrow() {
         arrow.toAction().click();
         return find(Menu::new);
     }

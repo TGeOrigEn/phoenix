@@ -342,13 +342,10 @@ public class Action {
     private static @NotNull String getDownloadUrl() {
 
         if (Configuration.isRemote()) {
-            final var patter = Pattern.compile(REGEX_HTTP);
+            final var pattern = Pattern.compile(REGEX_HTTP);
             final var remoteAddress = Configuration.getRemoteAddress();
 
-            if (remoteAddress == null)
-                throw new RuntimeException();
-
-            final var matcher = patter.matcher(remoteAddress.toString());
+            final var matcher = pattern.matcher(remoteAddress);
 
             if (!matcher.find())
                 throw new RuntimeException();

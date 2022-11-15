@@ -52,7 +52,7 @@ public class AttachmentTest extends BaseTest {
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Земельный участок", "Земельный участок №25:36:030101:1")), Requirement.byAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Земельный участок", "Земельный участок №25:36:030101:1")), Requirement.isAvailable(true), Duration.ofSeconds(60));
     }
 
     @Test
@@ -79,10 +79,10 @@ public class AttachmentTest extends BaseTest {
     private static void removeAllItem() {
         final var item = viewPanel.findInside(ViewPanel.Item::new);
 
-        while (Component.has(item,  Requirement.byAvailable(true), Duration.ofSeconds(1))) {
+        while (Component.has(item,  Requirement.isAvailable(true), Duration.ofSeconds(1))) {
             item.show(ViewPanel.Item.Option.CARD);
 
-            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).showMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
+            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickOnArrow().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
             alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
 
             refreshTable();
