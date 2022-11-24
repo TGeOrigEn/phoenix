@@ -24,25 +24,37 @@ public final class Chrome {
     }
 
     public static void setDefault(@NotNull Path pathToDownload, @NotNull Duration timeout) {
-        Configuration.configure(new ChromeDriver(getOptionsDefault(timeout)), pathToDownload);
+        Configuration.configure(new ChromeDriver(getOptionsDefault(timeout, pathToDownload)), pathToDownload);
     }
 
-    public static void setDefault(@NotNull Path pathToDownload, @NotNull String remoteAddress, @NotNull Duration timeout) throws MalformedURLException {
-        Configuration.configure(new RemoteWebDriver(new URL(remoteAddress), getOptionsDefault(timeout)), pathToDownload, remoteAddress);
+    public static void setDefault(@NotNull String remoteAddress, @NotNull Duration timeout) throws MalformedURLException {
+        Configuration.configure(new RemoteWebDriver(new URL(remoteAddress), getOptionsDefault(timeout)), remoteAddress);
     }
 
     public static void setWithCryptography(@NotNull Path pathToDownload, @NotNull Duration timeout) {
-        Configuration.configure(new ChromeDriver(getOptionsWithCryptography(timeout)), pathToDownload);
+        Configuration.configure(new ChromeDriver(getOptionsWithCryptography(timeout, pathToDownload)), pathToDownload);
     }
 
-    public static void setWithCryptography(@NotNull Path pathToDownload, @NotNull String remoteAddress, @NotNull Duration timeout) throws MalformedURLException {
-        Configuration.configure(new RemoteWebDriver(new URL(remoteAddress), getOptionsWithCryptography(timeout)), pathToDownload, remoteAddress);
+    public static void setWithCryptography(@NotNull String remoteAddress, @NotNull Duration timeout) throws MalformedURLException {
+        Configuration.configure(new RemoteWebDriver(new URL(remoteAddress), getOptionsWithCryptography(timeout)), remoteAddress);
     }
 
     private static @NotNull ChromeOptions getOptionsWithCryptography(@NotNull Duration timeout) {
         final var options = getOptionsDefault(timeout);
         options.addExtensions(new File("/opt/cades_plugin.crx"));
         return options;
+    }
+
+    private static @NotNull ChromeOptions getOptionsWithCryptography(@NotNull Duration timeout, @NotNull Path pathToDownload) {
+        final var chromePrefs = new HashMap<String, Object>();
+        final var chromeOptions = getOptionsWithCryptography(timeout);
+
+        chromePrefs.put("download.default_directory", pathToDownload.toAbsolutePath().toString());
+        chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("download.directory_upgrade", true);
+        chromeOptions.setExperimentalOption("prefs", chromePrefs);
+
+        return chromeOptions;
     }
 
     private static @NotNull ChromeOptions getOptionsDefault(@NotNull Duration timeout) {
@@ -56,6 +68,18 @@ public final class Chrome {
 
         chromeOptions.setCapability("selenoid:options", selenoidOptions);
         chromeOptions.addArguments("--window-size=1920,1080");
+
+        return chromeOptions;
+    }
+
+    private static @NotNull ChromeOptions getOptionsDefault(@NotNull Duration timeout, @NotNull Path pathToDownload) {
+        final var chromePrefs = new HashMap<String, Object>();
+        final var chromeOptions = getOptionsDefault(timeout);
+
+        chromePrefs.put("download.default_directory", pathToDownload.toAbsolutePath().toString());
+        chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("download.directory_upgrade", true);
+        chromeOptions.setExperimentalOption("prefs", chromePrefs);
 
         return chromeOptions;
     }

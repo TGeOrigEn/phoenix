@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
 import java.nio.file.Path;
 
 public final class Configuration {
@@ -20,10 +21,10 @@ public final class Configuration {
         return getWebDriver().getClass().equals(RemoteWebDriver.class);
     }
 
-    public static void configure(@NotNull RemoteWebDriver webDriver, @NotNull Path pathToDownload, @NotNull String remoteAddress) {
-        Configuration.pathToDownload = pathToDownload;
+    public static void configure(@NotNull RemoteWebDriver webDriver, @NotNull String remoteAddress) {
         Configuration.remoteAddress = remoteAddress;
         Configuration.webDriver = webDriver;
+        Configuration.pathToDownload = null;
     }
 
     public static void configure(@NotNull WebDriver webDriver, @NotNull Path pathToDownload) {

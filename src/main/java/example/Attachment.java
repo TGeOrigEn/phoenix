@@ -70,10 +70,12 @@ public class Attachment extends Component {
         }
 
         public void recovery() {
+            toAction().hover();
             recoveryButton.toAction().click();
         }
 
         public void delete() {
+            toAction().hover();
             deleteButton.toAction().click();
         }
 

@@ -15,7 +15,7 @@ import org.untitled.phoenix.component.requirement.generic.Requirement;
 import java.time.Duration;
 import java.util.UUID;
 
-@DisplayName("Тест базовых возможностей карточки")
+@DisplayName("Тест базовых возможностей карточки объекта")
 public class BasicObjectCardTest extends BaseObjectCardTest {
 
     @Override
@@ -93,7 +93,7 @@ public class BasicObjectCardTest extends BaseObjectCardTest {
     }
 
     @Test
-    @DisplayName("Закрыть карточку через кнопку [X] - затем сохранить")
+    @DisplayName("Закрыть карточку объекта через кнопку [X] - затем сохранить")
     public void closeObjectCardBySave() {
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Номер:")).setValue(randomUUID);
         card.close();
@@ -119,7 +119,7 @@ public class BasicObjectCardTest extends BaseObjectCardTest {
     }
 
     @Test
-    @DisplayName("Закрыть карточку через кнопку [X] - затем не сохранить")
+    @DisplayName("Закрыть карточку объекта через кнопку [X] - затем не сохранить")
     public void closeObjectCardByDoNotSave() {
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Номер:")).setValue(randomUUID);
         card.close();
@@ -137,7 +137,7 @@ public class BasicObjectCardTest extends BaseObjectCardTest {
     }
 
     @Test
-    @DisplayName("Отмена закрытия карточки")
+    @DisplayName("Отмена закрытия карточки объекта")
     public void cancelClosingObjectCard() {
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Номер:")).setValue(randomUUID);
         card.close();
@@ -148,7 +148,7 @@ public class BasicObjectCardTest extends BaseObjectCardTest {
     }
 
     @Test
-    @DisplayName("Некорректное значение поля карточки")
+    @DisplayName("Некорректное значение поля карточки объекта")
     public void incorrectFieldValue() {
         final var filed =  card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Дата:"));
         filed.setValue("00.00.0000");
@@ -159,7 +159,7 @@ public class BasicObjectCardTest extends BaseObjectCardTest {
     }
 
     @Test
-    @DisplayName("Сохранение карточки невозможно")
+    @DisplayName("Сохранение карточки объекта невозможно")
     public void objectCardCanNotBeSaved() {
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Дата:")).setValue("00.00.0000");
         card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();

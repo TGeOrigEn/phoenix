@@ -71,7 +71,7 @@ public abstract class BaseTest {
 
     protected final @NotNull String randomUUID = UUID.randomUUID().toString();
 
-    private static final @NotNull Path PATH_TO_DOWNLOADS = Paths.get("build/downloads/").toAbsolutePath();
+    private final @NotNull Path PATH_TO_DOWNLOADS = Paths.get(String.format("build/downloads/%s", randomUUID)).toAbsolutePath();
 
     protected abstract @NotNull String initializeApplication();
 
@@ -94,11 +94,11 @@ public abstract class BaseTest {
         switch (initializeDriver()) {
             case CHROME_CRYPTOGRAPHY: {
                 if (selenoid == null) Chrome.setWithCryptography(PATH_TO_DOWNLOADS, initializeTimeout());
-                else Chrome.setWithCryptography(PATH_TO_DOWNLOADS, selenoid, initializeTimeout());
+                else Chrome.setWithCryptography(selenoid, initializeTimeout());
             }
             case CHROME_DEFAULT: {
                 if (selenoid == null) Chrome.setDefault(PATH_TO_DOWNLOADS, initializeTimeout());
-                else Chrome.setDefault(PATH_TO_DOWNLOADS, selenoid, initializeTimeout());
+                else Chrome.setDefault(selenoid, initializeTimeout());
             }
         }
 
