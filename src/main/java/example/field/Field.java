@@ -49,19 +49,28 @@ public abstract class Field extends Component {
         public static @NotNull BaseRequirement<Field> isRequired(boolean isRequired) {
             return new Requirement<>(Field::isRequired, isRequired, "Является обязательным");
         }
+
+        public static @NotNull BaseRequirement<Field> isCorrect(boolean isCorrect) {
+            return new Requirement<>(example.field.Field::isRequired, isCorrect, "Является правильным");
+        }
     }
 
     public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*=x-field]"), "Поле");
 
-    private static final @NotNull Description LABEL_DESCRIPTION = new Description(By.cssSelector("span[class*='x-form-item-label-inner']"), "Лейбл");
+    private static final @NotNull Description LABEL_DESCRIPTION = new Description(By.cssSelector("span[class*='x-form-item-label-inner']"), "Название");
 
     private static final @NotNull Description REQUIRED_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-required-field']"), "Обязательность");
+
+    private static final @NotNull Description INCORRECT_DESCRIPTION = new Description(By.cssSelector("div[role='alert']"), "Неправильность");
+
+    protected final @NotNull Component incorrect;
 
     protected final @NotNull Component required;
 
     protected final @NotNull Component label;
 
     public Field() {
+        incorrect = findInside(() -> new WebComponent(INCORRECT_DESCRIPTION));
         required = findInside(() -> new WebComponent(REQUIRED_DESCRIPTION));
         label = findInside(() -> new WebComponent(LABEL_DESCRIPTION));
     }
@@ -95,5 +104,9 @@ public abstract class Field extends Component {
 
     public boolean isReadonly() {
         return getInput().toAction().isReadonly();
+    }
+
+    public boolean isCorrect() {
+        return !incorrect.isAvailable();
     }
 }

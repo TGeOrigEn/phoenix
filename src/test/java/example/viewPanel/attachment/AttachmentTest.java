@@ -1,9 +1,11 @@
 package example.viewPanel.attachment;
 
+import common.BaseTest;
 import example.*;
 import example.button.Button;
 import example.field.Field;
 import example.field.nested.DropdownField;
+import example.table.ViewPanel;
 import example.window.Alert;
 import example.window.Card;
 import example.window.Window;

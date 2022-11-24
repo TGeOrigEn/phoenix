@@ -3,12 +3,15 @@ plugins {
     id 'io.qameta.allure' version '2.11.2'
 }
 
+compileJava.options.encoding = 'UTF-8'
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
+
 
 dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.6.0'
@@ -46,9 +49,9 @@ allure {
 }
 
 test {
-    useJUnitPlatform()
+    systemProperty "file.encoding", "utf-8"
     compileJava.options.encoding = 'UTF-8'
-
+    useJUnitPlatform()
 }
 
 task all(type: Test) {

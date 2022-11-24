@@ -1,9 +1,12 @@
 package example.viewPanel.filter;
 
+import common.BaseTest;
 import example.*;
 import example.button.Button;
 import example.field.Field;
 import example.field.nested.TextField;
+import example.table.Header;
+import example.table.ViewPanel;
 import example.window.Alert;
 import example.window.Card;
 import example.window.Window;
@@ -67,7 +70,7 @@ public class NumberFilterTest extends BaseTest {
     @Test
     @Step("Фильтровать по числовому полю (Равно)")
     public void numberFilterByLess() {
-        var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
+        var sort = viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
         sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(0), Field.Requirements.Equals.byPlaceholder("Введите число ...")).toAction().click();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(0), Field.Requirements.Equals.byPlaceholder("Введите число ...")).setValue("10");
@@ -83,7 +86,7 @@ public class NumberFilterTest extends BaseTest {
     @Test
     @Step("Фильтровать по числовому полю (Больше)")
     public void numberFilterByMore() {
-        var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
+        var sort = viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
         sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(1), Field.Requirements.Equals.byPlaceholder("Введите число ...")).toAction().click();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(1), Field.Requirements.Equals.byPlaceholder("Введите число ...")).setValue("0");
@@ -99,7 +102,7 @@ public class NumberFilterTest extends BaseTest {
     @Test
     @Step("Фильтровать по числовому полю (Равно)")
     public void numberFilterByEquals() {
-        var sort = viewPanel.findInside(ViewPanel.Header::new, ViewPanel.Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
+        var sort = viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Радиус поиска объектов торговли, м.")).openSort();
         sort.findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Фильтр")).hover();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(2), Field.Requirements.Equals.byPlaceholder("Введите число ...")).toAction().click();
         sort.findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy(2), Field.Requirements.Equals.byPlaceholder("Введите число ...")).setValue("0");

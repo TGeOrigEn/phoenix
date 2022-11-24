@@ -1,7 +1,7 @@
-package example;
+package common;
 
 import org.untitled.phoenix.configuration.Configuration;
-import example.drivers.Chrome;
+import common.drivers.*;
 import org.other.Report;
 
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.UUID;
 
 public abstract class BaseTest {
 
@@ -42,7 +43,33 @@ public abstract class BaseTest {
         public static final @NotNull String DIAMOND = "https://gisogd-autotests.gemsdev.ru";
     }
 
+    protected static final class User {
+
+        public static final @NotNull User GEOMETA_ADMIN = new User("gemsAdmin", "gemsAdmin123$");
+
+        public static final @NotNull User GEOMETA_USER = new User("autotests1", "autotests1Admin123$");
+
+        private final @NotNull String login;
+
+        private final @NotNull String password;
+
+        public User(@NotNull String login, @NotNull String password) {
+            this.password = password;
+            this.login = login;
+        }
+
+        public @NotNull String getLogin() {
+            return login;
+        }
+
+        public @NotNull String getPassword() {
+            return password;
+        }
+    }
+
     protected enum Driver {CHROME_DEFAULT, CHROME_CRYPTOGRAPHY}
+
+    protected final @NotNull String randomUUID = UUID.randomUUID().toString();
 
     private static final @NotNull Path PATH_TO_DOWNLOADS = Paths.get("build/downloads/").toAbsolutePath();
 

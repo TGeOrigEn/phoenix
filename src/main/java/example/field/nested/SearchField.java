@@ -9,9 +9,9 @@ import org.untitled.phoenix.component.Description;
 
 public class SearchField extends Field {
 
-    private static final @NotNull Description CLEAR_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-clear-trigger']"), "Кнопка 'Отчистить'");
+    private static final @NotNull Description CLEAR_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-clear-trigger']:not([style*='display'])"), "Кнопка 'Отчистить'");
 
-    private static final @NotNull Description SEARCH_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-search-trigger']"), "Кнопка 'Поиск'");
+    private static final @NotNull Description SEARCH_BUTTON_DESCRIPTION = new Description(By.cssSelector("div[class*='x-form-search-trigger']:not([style*='display'])"), "Кнопка 'Поиск'");
 
     public static final @NotNull Description INPUT_DESCRIPTION = new Description(By.tagName("input"), "Ввод");
 

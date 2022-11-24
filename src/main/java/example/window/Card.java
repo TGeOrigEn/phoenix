@@ -46,7 +46,7 @@ public class Card extends Window {
         }
     }
 
-    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^=window].grad-test-wincard"), "Карточка");
+    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^=window].grad-test-wincard:not([style*='display'])"), "Карточка");
 
     private static final @NotNull Description UPLOAD_INPUT_DESCRIPTION = new Description(By.cssSelector("input[type='file']"), "Ввод для вложений");
 

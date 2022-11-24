@@ -1,5 +1,6 @@
 package example.graphicReport;
 
+import common.BaseTest;
 import example.*;
 import example.button.Button;
 import example.field.Field;

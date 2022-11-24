@@ -1,4 +1,4 @@
-package example.drivers;
+package common.drivers;
 
 import org.untitled.phoenix.configuration.Configuration;
 

@@ -18,7 +18,7 @@ public class Spinner extends Component {
     }
 
     public void wait(@NotNull Duration timeout) {
-        if (Component.has(this, Requirement.isAvailable(true), Duration.ofSeconds(1)))
+        if (Component.has(this, Requirement.isAvailable(true), Duration.ofSeconds(2)))
             Component.should(this, Requirement.isAvailable(false), timeout);
     }
 }

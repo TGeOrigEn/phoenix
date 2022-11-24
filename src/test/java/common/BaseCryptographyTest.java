@@ -1,4 +1,4 @@
-package example;
+package common;
 
 import org.gems.WebComponent;
 import org.untitled.phoenix.component.Component;

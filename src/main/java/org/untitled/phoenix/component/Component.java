@@ -67,6 +67,30 @@ public abstract class Component {
         }
     }
 
+    public static <TComponent extends Component> TComponent should(@NotNull TComponent component, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout, int deviations) {
+        final var condition = new Condition<>(component, requirement);
+        final var startTime = System.currentTimeMillis();
+        var count = -1;
+
+        while (true) {
+            if (!condition.isTrue()) count++;
+            if (count >= deviations) throw new ComponentConditionException(component, condition, timeout);
+            if (System.currentTimeMillis() - startTime >= timeout.toMillis()) return component;
+        }
+    }
+
+    public static <TComponent extends Component> boolean has(@NotNull TComponent component, @NotNull BaseRequirement<TComponent> requirement, @NotNull Duration timeout , int deviations) {
+        final var condition = new Condition<>(component, requirement);
+        final var startTime = System.currentTimeMillis();
+        var count = -1;
+
+        while (true) {
+            if (!condition.isTrue()) count++;
+            if (count >= deviations)  return false;
+            if (System.currentTimeMillis() - startTime >= timeout.toMillis()) return true;
+        }
+    }
+
     public static <TComponent extends Component> @NotNull TComponent find(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull BaseRequirement<TComponent> requirement) {
         return findComponent(constructor, description, requirement, null);
     }
