@@ -31,7 +31,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
 
     static {
         final var pathToAttachmentA = BaseTest.class.getClassLoader().getResource("geometa/objectCard/attachmentA.txt");
-        final var pathToAttachmentB = BaseTest.class.getClassLoader().getResource("geometa/objectCard/attachmentB.txt.txt");
+        final var pathToAttachmentB = BaseTest.class.getClassLoader().getResource("geometa/objectCard/attachmentB.txt");
 
         if (pathToAttachmentA == null) throw new NullPointerException("Вложения 'AttachmentA' не существует.");
         if (pathToAttachmentB == null) throw new NullPointerException("Вложения 'AttachmentB' не существует.");
@@ -92,7 +92,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         card.upload(attachmentB);
 
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
-        Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
+        Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
         card.save();
         card.close();
@@ -106,7 +106,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         item.show(ViewPanel.Item.Option.ATTACHMENT);
 
         Component.should(attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
-        Component.should(attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
+        Component.should(attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
         attachment.close();
 
@@ -143,7 +143,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         attachmentSection.expand();
 
         final var actualAttachmentA = attachmentSection.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")).download(Duration.ofSeconds(2));
-        final var actualAttachmentB = attachmentSection.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt.txt")).download(Duration.ofSeconds(2));
+        final var actualAttachmentB = attachmentSection.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")).download(Duration.ofSeconds(2));
 
         if (!new BufferedReader(new FileReader(actualAttachmentA)).readLine().equals("attachmentA"))
             throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentA'.");
@@ -167,7 +167,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         card.upload(attachmentB);
 
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
-        Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
+        Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
         card.save();
         card.close();
@@ -183,7 +183,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         attachmentSection.expand();
 
         final var attachmentA = attachmentSection.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt"));
-        final var attachmentB = attachmentSection.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt.txt"));
+        final var attachmentB = attachmentSection.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt"));
 
         attachmentA.delete();
 

@@ -74,7 +74,7 @@ public class ViewPanelAttachmentsTest extends BaseGeometaTest {
         final var actualAttachmentA = attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")).download(Duration.ofSeconds(2));
 
         item.show(ViewPanel.Item.Option.ATTACHMENT);
-        final var actualAttachmentB = attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt.txt")).download(Duration.ofSeconds(2));
+        final var actualAttachmentB = attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")).download(Duration.ofSeconds(2));
 
         if (!new BufferedReader(new FileReader(actualAttachmentA)).readLine().equals("attachmentA"))
             throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentA'.");
