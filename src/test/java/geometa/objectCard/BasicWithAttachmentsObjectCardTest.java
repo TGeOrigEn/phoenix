@@ -126,7 +126,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         card.upload(attachmentB);
 
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
-        Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
+        Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
         card.save();
         card.close();
