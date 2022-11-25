@@ -1,5 +1,13 @@
 package example.table;
 
+import example.Menu;
+import example.Spinner;
+import example.button.Button;
+import example.field.Field;
+import example.field.nested.SearchField;
+import example.window.Alert;
+import example.window.Card;
+import example.window.Window;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -7,6 +15,8 @@ import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 import org.untitled.phoenix.component.requirement.BaseRequirement;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
+
+import java.time.Duration;
 
 public class ViewPanel extends Component {
 
@@ -144,9 +154,9 @@ public class ViewPanel extends Component {
 
         public void show(@NotNull Option option) {
             switch (option){
-                case MAP: showOnMapButton.toAction().click();
-                case ATTACHMENT: attachmentButton.toAction().click();
-                case CARD: openCardButton.toAction().click();
+                case MAP: showOnMapButton.toAction().click(); break;
+                case ATTACHMENT: attachmentButton.toAction().click(); break;
+                case CARD: openCardButton.toAction().click(); break;
             }
         }
 
@@ -157,8 +167,41 @@ public class ViewPanel extends Component {
 
     public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^='pptab'][class='x-panel x-tabpanel-child x-panel-default x-closable x-panel-closable x-panel-default-closable']:not([style*=display])"), "Панель представления");
 
+    private static final @NotNull Spinner spinner = Component.find(Spinner::new);
+
+    private static final @NotNull Alert alert = ((Alert) Component.find(Alert::new, Window.Requirements.isActive(true)));
+
     @Override
     protected @NotNull Description initialize() {
         return DEFAULT_DESCRIPTION;
+    }
+
+    public void deleteSelectedObjects() {
+        findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickAsDropdown().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
+        alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
+        spinner.wait(Duration.ofSeconds(60));
+    }
+
+    public void refresh() {
+        findInside(Button::new, Button.Requirements.Equals.byTip("Обновить таблицу")).click();
+        spinner.wait(Duration.ofSeconds(60));
+    }
+
+    public Card createNewObject() {
+        findInside(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).click();
+        return ((Card) Component.find(Card::new, Window.Requirements.isActive(true)));
+    }
+
+    public SearchField getSearchField() {
+        return ((SearchField) findInside(SearchField::new, Field.Requirements.Equals.byPlaceholder("Поиск в таблице")));
+    }
+
+    public Item getItemBy(BaseRequirement<Item> requirement) {
+        return findInside(ViewPanel.Item::new, requirement);
+    }
+
+    public Card createNewObjectBy(@NotNull BaseRequirement<Menu.Item> requirement) {
+        findInside(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).clickAsDropdown().findInside(Menu.Item::new, requirement);
+        return ((Card) Component.find(Card::new, Window.Requirements.isActive(true)));
     }
 }

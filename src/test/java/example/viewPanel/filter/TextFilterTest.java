@@ -48,28 +48,28 @@ public class TextFilterTest extends BaseTest {
 
         removeAllItem();
 
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).click();
+        viewPanel.createNewObject();
 
         card.findInside(DropdownField::new, Field.Requirements.Equals.byTitle("Вид объекта:")).setValue("Бугор");
         card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue("Бугор");
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Примечание:")).setValue("Не пусто");
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.save();
         card.close();
 
         viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Обновить таблицу")).click();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Наименование", "Бугор")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Наименование", "Бугор")), Requirement.isAvailable(true), Duration.ofSeconds(60));
 
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).click();
+        viewPanel.createNewObject();
 
         card.findInside(DropdownField::new, Field.Requirements.Equals.byTitle("Вид объекта:")).setValue("Яма");
         card.findInside(TextAreaField::new, Field.Requirements.Equals.byTitle("Наименование:")).setValue("Яма");
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.save();
         card.close();
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Наименование", "Яма")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Наименование", "Яма")), Requirement.isAvailable(true), Duration.ofSeconds(60));
     }
 
     @Test
@@ -81,8 +81,8 @@ public class TextFilterTest extends BaseTest {
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(true), Duration.ofSeconds(60));
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(false), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(false), Duration.ofSeconds(60));
 
         checkItems();
     }
@@ -96,8 +96,8 @@ public class TextFilterTest extends BaseTest {
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(false), Duration.ofSeconds(60));
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(false), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(true), Duration.ofSeconds(60));
 
         checkItems();
     }
@@ -112,8 +112,8 @@ public class TextFilterTest extends BaseTest {
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(false), Duration.ofSeconds(60));
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(false), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(true), Duration.ofSeconds(60));
 
         checkItems();
     }
@@ -128,8 +128,8 @@ public class TextFilterTest extends BaseTest {
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(true), Duration.ofSeconds(60));
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(false), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(false), Duration.ofSeconds(60));
 
         checkItems();
     }
@@ -144,8 +144,8 @@ public class TextFilterTest extends BaseTest {
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(false), Duration.ofSeconds(60));
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(false), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(true), Duration.ofSeconds(60));
 
         checkItems();
     }
@@ -160,8 +160,8 @@ public class TextFilterTest extends BaseTest {
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(true), Duration.ofSeconds(60));
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(false), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(false), Duration.ofSeconds(60));
 
         checkItems();
     }
@@ -178,12 +178,12 @@ public class TextFilterTest extends BaseTest {
     }
 
     private static void checkItems() {
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Фильтры")).clickOnArrow().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сбросить все фильтры")).click();
+        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Фильтры")).clickAsDropdown().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сбросить все фильтры")).click();
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(true), Duration.ofSeconds(60));
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", "Не пусто")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Примечание", " ")), Requirement.isAvailable(true), Duration.ofSeconds(60));
     }
 
     private static void removeAllItem() {
@@ -192,7 +192,7 @@ public class TextFilterTest extends BaseTest {
         while (Component.has(item,  Requirement.isAvailable(true), Duration.ofSeconds(1))) {
             item.show(ViewPanel.Item.Option.CARD);
 
-            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickOnArrow().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
+            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickAsDropdown().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
             alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
 
             refreshTable();

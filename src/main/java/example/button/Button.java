@@ -49,16 +49,11 @@ public class Button extends Component {
 
     public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("a[class*='x-btn']:not([style*='display: none'])"), "Кнопка");
 
-    private static final @NotNull Description ARROW_DESCRIPTION = new Description(By.cssSelector("[class*='x-btn-arrow-right']"), "Стрелка");
-
     private static final @NotNull Description TEXT_DESCRIPTION = new Description(By.cssSelector("span[class*='x-btn-inner']"), "Текст");
-
-    private final @NotNull Component arrow;
 
     private final @NotNull Component text;
 
     public Button() {
-        arrow = findInside(() -> new WebComponent(ARROW_DESCRIPTION));
         text = findInside(() -> new WebComponent(TEXT_DESCRIPTION));
     }
 
@@ -87,8 +82,8 @@ public class Button extends Component {
         return toAction().download(timeout, countFiles);
     }
 
-    public @NotNull Menu clickOnArrow() {
-        arrow.toAction().click();
+    public @NotNull Menu clickAsDropdown() {
+        toAction().click();
         return find(Menu::new);
     }
 }

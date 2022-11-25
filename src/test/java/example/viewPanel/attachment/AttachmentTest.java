@@ -44,23 +44,23 @@ public class AttachmentTest extends BaseTest {
 
         removeAllItem();
 
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).click();
+        viewPanel.createNewObject();
 
         card.findInside(DropdownField::new, Field.Requirements.Equals.byTitle("Земельный участок:")).setValue("Земельный участок №25:36:030101:1");
 
         card.upload(new File(getClass().getClassLoader().getResource("TextDocument.txt").toURI()));
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.save();
         card.close();
 
         refreshTable();
 
-        Component.should(viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Земельный участок", "Земельный участок №25:36:030101:1")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Земельный участок", "Земельный участок №25:36:030101:1")), Requirement.isAvailable(true), Duration.ofSeconds(60));
     }
 
     @Test
     @Step("Скачать вложенный файл")
     public void downloadAttachment() throws IOException {
-        viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Земельный участок", "Земельный участок №25:36:030101:1")).show(ViewPanel.Item.Option.ATTACHMENT);
+        viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Земельный участок", "Земельный участок №25:36:030101:1")).show(ViewPanel.Item.Option.ATTACHMENT);
         final var file = Component.find(Attachment::new).findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("TextDocument.txt")).download(Duration.ofSeconds(2));
 
         if (new BufferedReader(new FileReader(file)).readLine().equals(""))
@@ -84,7 +84,7 @@ public class AttachmentTest extends BaseTest {
         while (Component.has(item,  Requirement.isAvailable(true), Duration.ofSeconds(1))) {
             item.show(ViewPanel.Item.Option.CARD);
 
-            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickOnArrow().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
+            card.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickAsDropdown().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
             alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
 
             refreshTable();

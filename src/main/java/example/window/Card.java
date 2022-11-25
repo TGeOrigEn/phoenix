@@ -1,11 +1,13 @@
 package example.window;
 
+import example.Map;
+import example.Menu;
+import example.Spinner;
+import example.button.Button;
 import org.gems.WebComponent;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.Description;
 import org.untitled.phoenix.component.requirement.BaseRequirement;
@@ -13,7 +15,7 @@ import org.untitled.phoenix.component.requirement.generic.Requirement;
 import org.untitled.phoenix.configuration.Configuration;
 
 import java.io.File;
-import java.security.Key;
+import java.time.Duration;
 import java.util.Comparator;
 
 public class Card extends Window {
@@ -86,9 +88,35 @@ public class Card extends Window {
 
     private final @NotNull Component uploadInput;
 
+    private final @NotNull Button saveButton;
+
+    private final @NotNull Button moreButton;
+
     public Card() {
+        moreButton = findInside(Button::new, Button.Requirements.Equals.byText("Еще"));
+        saveButton = findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить"));
         propertyButton = findInside(() -> new WebComponent(BUTTON_PROPERTY_DESCRIPTION));
         uploadInput = findInside(() -> new WebComponent(UPLOAD_INPUT_DESCRIPTION));
+    }
+
+    public void save() {
+        saveButton.click();
+    }
+
+    public MapWindow createGeometry() {
+        moreButton.clickAsDropdown().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Создать геометрию")).click();
+        return find(MapWindow::new);
+    }
+
+    public MapWindow setGeometry() {
+        moreButton.clickAsDropdown().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Задать геометрию")).click();
+        return find(MapWindow::new);
+    }
+
+    public void delete() {
+        moreButton.clickAsDropdown().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
+        Component.find(Alert::new, Window.Requirements.isActive(true)).findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
+        Component.find(Spinner::new).wait(Duration.ofSeconds(30));
     }
 
     @Override

@@ -168,7 +168,7 @@ public abstract class Component {
     }
 
     public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Duration timeout) {
-        return findComponents(constructor, description, null, this, timeout);
+        return findComponents(constructor, null, null, this, timeout);
     }
 
     public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor, @NotNull Description description, @NotNull BaseRequirement<TComponent> requirement) {
@@ -184,7 +184,7 @@ public abstract class Component {
     }
 
     public <TComponent extends Component> @NotNull List<TComponent> findInsideEveryone(@NotNull Supplier<@NotNull TComponent> constructor) {
-        return findComponents(constructor, description, null, this, Duration.ZERO);
+        return findComponents(constructor, null, null, this, Duration.ZERO);
     }
 
     public void setTimeout(@NotNull Duration timeout) {

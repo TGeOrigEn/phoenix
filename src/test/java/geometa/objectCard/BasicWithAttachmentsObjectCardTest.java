@@ -1,16 +1,17 @@
 package geometa.objectCard;
 
 import common.BaseTest;
+import common.nested.TAG;
 import example.Attachment;
 import example.Menu;
 import example.button.Button;
 import example.field.Field;
-import example.field.nested.SearchField;
 import example.field.nested.TextField;
 import example.table.ViewPanel;
 import example.window.Card;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
@@ -18,6 +19,7 @@ import org.untitled.phoenix.component.requirement.generic.Requirement;
 import java.io.*;
 import java.time.Duration;
 
+@Tag(TAG.GEOMETA.OBJECT_CARD)
 @DisplayName("Тест вложений карточки объекта")
 public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
 
@@ -59,18 +61,16 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
 
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.save();
         card.close();
 
-        viewPanel.findInside(SearchField::new, Field.Requirements.Equals.byPlaceholder("Поиск в таблице")).setValue(randomUUID);
+        viewPanel.getSearchField().setValue(randomUUID);
 
         spinner.wait(Duration.ofSeconds(60));
 
-        final var item = viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Номер", randomUUID));
+        final var item = viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Номер", randomUUID));
 
         item.show(ViewPanel.Item.Option.ATTACHMENT);
-
-        card.close(); //TODO здесь баг, который руками не воспроизводится
 
         Component.should(attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
@@ -78,11 +78,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
 
         item.select();
 
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickOnArrow().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
-
-        alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
-
-        spinner.wait(Duration.ofSeconds(60));
+        viewPanel.deleteSelectedObjects();
     }
 
     @Test
@@ -98,18 +94,16 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.save();
         card.close();
 
-        viewPanel.findInside(SearchField::new, Field.Requirements.Equals.byPlaceholder("Поиск в таблице")).setValue(randomUUID);
+        viewPanel.getSearchField().setValue(randomUUID);
 
         spinner.wait(Duration.ofSeconds(60));
 
-        final var item = viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Номер", randomUUID));
+        final var item = viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Номер", randomUUID));
 
         item.show(ViewPanel.Item.Option.ATTACHMENT);
-
-        card.close(); //TODO здесь баг, который руками не воспроизводится
 
         Component.should(attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
         Component.should(attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
@@ -118,11 +112,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
 
         item.select();
 
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickOnArrow().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
-
-        alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
-
-        spinner.wait(Duration.ofSeconds(60));
+        viewPanel.deleteSelectedObjects();
     }
 
     @Test
@@ -138,14 +128,14 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.save();
         card.close();
 
-        viewPanel.findInside(SearchField::new, Field.Requirements.Equals.byPlaceholder("Поиск в таблице")).setValue(randomUUID);
+        viewPanel.getSearchField().setValue(randomUUID);
 
         spinner.wait(Duration.ofSeconds(60));
 
-        final var item = viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Номер", randomUUID));
+        final var item = viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Номер", randomUUID));
 
         item.show(ViewPanel.Item.Option.CARD);
 
@@ -163,11 +153,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
 
         card.close();
 
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickOnArrow().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
-
-        alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
-
-        spinner.wait(Duration.ofSeconds(60));
+        viewPanel.deleteSelectedObjects();
     }
 
     @Test
@@ -183,14 +169,14 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
         Component.should(card.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")), Requirement.isAvailable(true), Duration.ofSeconds(5));
 
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.save();
         card.close();
 
-        viewPanel.findInside(SearchField::new, Field.Requirements.Equals.byPlaceholder("Поиск в таблице")).setValue(randomUUID);
+        viewPanel.getSearchField().setValue(randomUUID);
 
         spinner.wait(Duration.ofSeconds(60));
 
-        final var item = viewPanel.findInside(ViewPanel.Item::new, ViewPanel.Item.Requirements.Equals.byValue("Номер", randomUUID));
+        final var item = viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Номер", randomUUID));
 
         item.show(ViewPanel.Item.Option.CARD);
 
@@ -201,7 +187,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
 
         attachmentA.delete();
 
-        card.findInside(Button::new, Button.Requirements.Equals.byTip("Сохранить")).click();
+        card.save();
         card.close();
 
         item.show(ViewPanel.Item.Option.CARD);
@@ -213,11 +199,7 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
 
         card.close();
 
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byText("Еще")).clickOnArrow().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Удалить объект")).click();
-
-        alert.findInside(Button::new, Button.Requirements.Equals.byText("Удалить")).click();
-
-        spinner.wait(Duration.ofSeconds(60));
+        viewPanel.deleteSelectedObjects();
     }
 
 }

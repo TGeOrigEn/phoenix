@@ -54,8 +54,10 @@ test {
     useJUnitPlatform()
 }
 
-task all(type: Test) {
+task cardObject(type: Test) {
     useJUnitPlatform {
-        includeTags 'all'
+        includeTags 'objectCard'
     }
 }
+
+

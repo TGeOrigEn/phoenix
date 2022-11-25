@@ -1,7 +1,6 @@
 package geometa.objectCard;
 
 import example.NavigationPanel;
-import example.button.Button;
 
 import geometa.BaseGeometaTest;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +14,6 @@ public abstract class BaseObjectCardTest extends BaseGeometaTest {
     @BeforeEach
     public void createNewObjectFromViewPanel() {
         Component.find(NavigationPanel.Item::new, NavigationPanel.Item.Requirements.Equals.byName(initializeTable())).open(NavigationPanel.Item.Option.TABLE);
-        viewPanel.findInside(Button::new, Button.Requirements.Equals.byTip("Создать новый объект")).click();
+        viewPanel.createNewObject();
     }
 }
