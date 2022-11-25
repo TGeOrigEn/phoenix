@@ -3,10 +3,10 @@ package org.untitled.phoenix.configuration;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.WebDriver;
 
-import java.io.File;
 import java.nio.file.Path;
 
 public final class Configuration {
@@ -25,6 +25,8 @@ public final class Configuration {
         Configuration.remoteAddress = remoteAddress;
         Configuration.webDriver = webDriver;
         Configuration.pathToDownload = null;
+
+        webDriver.setFileDetector(new LocalFileDetector());
     }
 
     public static void configure(@NotNull WebDriver webDriver, @NotNull Path pathToDownload) {

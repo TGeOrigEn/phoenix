@@ -63,10 +63,17 @@ public final class Chrome {
 
         selenoidOptions.put("sessionTimeout", String.format("%dms", timeout.toMillis()));
         selenoidOptions.put("enableVideo", true);
-        selenoidOptions.put("version", "106.0");
+        selenoidOptions.put("version", "98.0");
         selenoidOptions.put("enableVNC", true);
 
         chromeOptions.setCapability("selenoid:options", selenoidOptions);
+
+//        chromeOptions.setCapability("sessionTimeout", String.format("%dms", timeout.toMillis()));
+//        chromeOptions.setCapability("screenResolution", "1920x1080x24");
+//        chromeOptions.setCapability("browserName", "chrome");
+//        chromeOptions.setCapability("version", "98.0");
+//        chromeOptions.setCapability("enableVNC", true);
+//
         chromeOptions.addArguments("--window-size=1920,1080");
 
         return chromeOptions;
