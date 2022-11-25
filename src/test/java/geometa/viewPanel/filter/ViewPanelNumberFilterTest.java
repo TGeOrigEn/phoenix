@@ -1,5 +1,6 @@
 package geometa.viewPanel.filter;
 
+import common.nested.TAG;
 import example.*;
 
 import example.field.Field;
@@ -10,15 +11,13 @@ import example.table.ViewPanel;
 
 import geometa.BaseGeometaTest;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.time.Duration;
 
+@Tag(TAG.GEOMETA.VIEW_PANEL)
 @DisplayName("Фильтрация по числовому полю")
 public class ViewPanelNumberFilterTest extends BaseGeometaTest {
 

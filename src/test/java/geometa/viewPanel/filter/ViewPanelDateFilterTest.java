@@ -1,5 +1,6 @@
 package geometa.viewPanel.filter;
 
+import common.nested.TAG;
 import example.Menu;
 import example.NavigationPanel;
 import example.button.Button;
@@ -10,16 +11,14 @@ import example.table.Header;
 import example.table.ViewPanel;
 import geometa.BaseGeometaTest;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+@Tag(TAG.GEOMETA.VIEW_PANEL)
 @DisplayName("Фильтрация по полю даты")
 public class ViewPanelDateFilterTest extends BaseGeometaTest {
 

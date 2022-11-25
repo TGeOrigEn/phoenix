@@ -1,5 +1,6 @@
 package geometa.viewPanel.filter;
 
+import common.nested.TAG;
 import example.Menu;
 import example.NavigationPanel;
 import example.field.Field;
@@ -11,12 +12,14 @@ import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.time.Duration;
 
+@Tag(TAG.GEOMETA.VIEW_PANEL)
 public class ViewPanelLinkFilterTest extends BaseGeometaTest {
     @Override
     protected @NotNull String[] initializeItems() {

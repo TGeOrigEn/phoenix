@@ -1,6 +1,7 @@
 package geometa.viewPanel.attachment;
 
 import common.BaseTest;
+import common.nested.TAG;
 import example.*;
 import example.field.Field;
 import example.field.nested.DropdownField;
@@ -16,6 +17,7 @@ import org.untitled.phoenix.component.requirement.generic.Requirement;
 import java.io.*;
 import java.time.Duration;
 
+@Tag(TAG.GEOMETA.VIEW_PANEL)
 @DisplayName("Вложения")
 public class ViewPanelAttachmentsTest extends BaseGeometaTest {
 

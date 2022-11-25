@@ -54,9 +54,15 @@ test {
     useJUnitPlatform()
 }
 
-task cardObject(type: Test) {
+task geometaObjectCard(type: Test) {
     useJUnitPlatform {
-        includeTags 'objectCard'
+        includeTags 'geometaObjectCard'
+    }
+}
+
+task geometaViewPanel(type: Test) {
+    useJUnitPlatform {
+        includeTags 'geometaViewPanel'
     }
 }
 
