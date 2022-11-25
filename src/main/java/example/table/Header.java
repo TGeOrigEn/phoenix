@@ -52,7 +52,7 @@ public class Header extends Component {
         return text.toAction().getText();
     }
 
-    public @NotNull Menu openSort() {
+    public @NotNull Menu openMenu() {
         toAction().hover();
         arrowButton.toAction().click();
         return Component.find(Menu::new, Menu.Requirements.isActive(true));

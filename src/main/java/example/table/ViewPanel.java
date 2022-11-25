@@ -182,8 +182,13 @@ public class ViewPanel extends Component {
         spinner.wait(Duration.ofSeconds(60));
     }
 
-    public void refresh() {
+    public void refreshTable() {
         findInside(Button::new, Button.Requirements.Equals.byTip("Обновить таблицу")).click();
+        spinner.wait(Duration.ofSeconds(60));
+    }
+
+    public void resetAllFilters() {
+        findInside(Button::new, Button.Requirements.Equals.byTip("Фильтры")).clickAsDropdown().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сбросить все фильтры")).click();
         spinner.wait(Duration.ofSeconds(60));
     }
 

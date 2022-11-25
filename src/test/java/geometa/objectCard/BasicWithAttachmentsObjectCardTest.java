@@ -146,10 +146,10 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
         final var actualAttachmentB = attachmentSection.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")).download(Duration.ofSeconds(2));
 
         if (!new BufferedReader(new FileReader(actualAttachmentA)).readLine().equals("attachmentA"))
-            throw new RuntimeException("Неправильный текст в скаченном файле");
+            throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentA'.");
 
         if (!new BufferedReader(new FileReader(actualAttachmentB)).readLine().equals("attachmentB"))
-            throw new RuntimeException("Неправильный текст в скаченном файле");
+            throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentB'.");
 
         card.close();
 

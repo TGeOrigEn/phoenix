@@ -17,9 +17,29 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public abstract class BaseTest {
+
+    protected static final class Date {
+
+        private static final @NotNull DateTimeFormatter MM_DD_YYYY_SLASH = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        private static final @NotNull DateTimeFormatter YYYY_MM_DD_SLASH = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        private static final @NotNull DateTimeFormatter DD_MM_YYYY_DOT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        public enum Format { MM_DD_YYYY_SLASH, YYYY_MM_DD_SLASH, DD_MM_YYYY_DOT }
+
+        public static @NotNull String getDate(@NotNull LocalDateTime dateTime, @NotNull Format format) {
+            switch (format){
+                case DD_MM_YYYY_DOT: return dateTime.format(DD_MM_YYYY_DOT);
+                case MM_DD_YYYY_SLASH: return dateTime.format(MM_DD_YYYY_SLASH);
+                case YYYY_MM_DD_SLASH: return dateTime.format(YYYY_MM_DD_SLASH);
+                default: throw new RuntimeException();
+            }
+        }
+    }
 
     protected static final class Selenoid {
 

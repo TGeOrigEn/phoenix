@@ -14,13 +14,13 @@ import org.untitled.phoenix.component.Component;
 
 public abstract class BaseGeometaTest extends BaseTest {
 
-    protected final @NotNull Alert alert = (Alert) Component.find(Alert::new, Window.Requirements.isActive(true));
+    protected static final @NotNull Alert alert = (Alert) Component.find(Alert::new, Window.Requirements.isActive(true));
 
-    protected final @NotNull Card card = (Card) Component.find(Card::new, Window.Requirements.isActive(true));
+    protected static final @NotNull Card card = (Card) Component.find(Card::new, Window.Requirements.isActive(true));
 
-    protected final @NotNull ViewPanel viewPanel = Component.find(ViewPanel::new);
+    protected static final @NotNull ViewPanel viewPanel = Component.find(ViewPanel::new);
 
-    protected final @NotNull Spinner spinner = Component.find(Spinner::new);
+    protected static final @NotNull Spinner spinner = Component.find(Spinner::new);
 
     @Override
     protected @NotNull String initializeApplication() {

@@ -69,7 +69,7 @@ public class DropdownField extends Field {
             }
         }
 
-        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^='boundlist'][class='x-boundlist x-boundlist-floating x-layer x-boundlist-default x-border-box']:not([style*=display])"), "Список вариантов");
+        public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[id^='boundlist'][class*='x-boundlist x-boundlist-floating']:not([style*=display])"), "Список вариантов");
 
         @Override
         protected @NotNull Description initialize() {
