@@ -7,6 +7,7 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
 import java.nio.file.Path;
 
 public final class Configuration {
@@ -27,12 +28,16 @@ public final class Configuration {
         Configuration.webDriver = webDriver;
 
         webDriver.setFileDetector(new LocalFileDetector());
+
+        createDownloadFolder(pathToDownload.toFile());
     }
 
     public static void configure(@NotNull WebDriver webDriver, @NotNull Path pathToDownload) {
         Configuration.pathToDownload = pathToDownload;
         Configuration.webDriver = webDriver;
         Configuration.remoteAddress = null;
+
+        createDownloadFolder(pathToDownload.toFile());
     }
 
     public static @NotNull String getRemoteAddress() {
@@ -54,5 +59,10 @@ public final class Configuration {
             throw new NullPointerException("Веб-драйвер не был инициализирован.");
 
         return webDriver;
+    }
+
+    private static void createDownloadFolder(@NotNull File folder) {
+        if (folder.isFile()) throw new RuntimeException("Папка загрузок не может являться файлом.");
+        if (!folder.exists() && !folder.mkdirs()) throw new RuntimeException("Не удалось создать папку для загрузок.");
     }
 }
