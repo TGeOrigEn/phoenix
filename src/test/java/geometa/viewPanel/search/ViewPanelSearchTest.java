@@ -1,5 +1,6 @@
 package geometa.viewPanel.search;
 
+import common.nested.TAG;
 import example.NavigationPanel;
 import example.field.Field;
 
@@ -9,12 +10,14 @@ import geometa.BaseGeometaTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.time.Duration;
 
+@Tag(TAG.GEOMETA.VIEW_PANEL)
 public class ViewPanelSearchTest extends BaseGeometaTest {
     @Override
     protected @NotNull String[] initializeItems() {

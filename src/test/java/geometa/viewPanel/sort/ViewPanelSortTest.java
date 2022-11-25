@@ -1,5 +1,6 @@
 package geometa.viewPanel.sort;
 
+import common.nested.TAG;
 import example.Menu;
 import example.NavigationPanel;
 import example.button.Button;
@@ -12,6 +13,7 @@ import geometa.BaseGeometaTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
@@ -19,6 +21,7 @@ import org.untitled.phoenix.component.requirement.generic.Requirement;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+@Tag(TAG.GEOMETA.VIEW_PANEL)
 public class ViewPanelSortTest extends BaseGeometaTest {
 
     private static final @NotNull String DATE_BEFORE = Date.getDate(LocalDateTime.now().minusDays(1), Date.Format.DD_MM_YYYY_DOT);
