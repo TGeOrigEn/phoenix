@@ -145,7 +145,7 @@ public class ViewPanelTextFilterTest extends BaseGeometaTest {
 
         viewPanel.refreshTable();
 
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Наименование", value)), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Вид объекта", value)), Requirement.isAvailable(true), Duration.ofSeconds(60));
     }
 
     private static @NotNull Menu openSort() {
@@ -157,14 +157,15 @@ public class ViewPanelTextFilterTest extends BaseGeometaTest {
     private static void checkItems() {
         viewPanel.resetAllFilters();
 
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Наименование", "Яма")), Requirement.isAvailable(true), Duration.ofSeconds(60));
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Наименование", "Бугор")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Вид объекта", "Яма")), Requirement.isAvailable(true), Duration.ofSeconds(60));
+        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Вид объекта", "Бугор")), Requirement.isAvailable(true), Duration.ofSeconds(60));
     }
 
     private static void removeAllItem() {
         while (Component.has(viewPanel.findInside(ViewPanel.Item::new),  Requirement.isAvailable(true), Duration.ofSeconds(1))) {
             viewPanel.findInside(ViewPanel.Item::new).select();
             viewPanel.deleteSelectedObjects();
+            viewPanel.refreshTable();
         }
     }
 }

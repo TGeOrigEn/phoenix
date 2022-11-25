@@ -27,7 +27,7 @@ public class ViewPanelAttachmentsTest extends BaseGeometaTest {
 
     static {
         final var pathToAttachmentA = BaseTest.class.getClassLoader().getResource("geometa/objectCard/attachmentA.txt");
-        final var pathToAttachmentB = BaseTest.class.getClassLoader().getResource("geometa/objectCard/attachmentB.txt");
+        final var pathToAttachmentB = BaseTest.class.getClassLoader().getResource("geometa/objectCard/attachmentB.txt.txt");
 
         if (pathToAttachmentA == null) throw new NullPointerException("Вложения 'AttachmentA' не существует.");
         if (pathToAttachmentB == null) throw new NullPointerException("Вложения 'AttachmentB' не существует.");
@@ -74,13 +74,13 @@ public class ViewPanelAttachmentsTest extends BaseGeometaTest {
         final var actualAttachmentA = attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentA.txt")).download(Duration.ofSeconds(2));
 
         item.show(ViewPanel.Item.Option.ATTACHMENT);
-        final var actualAttachmentB = attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt")).download(Duration.ofSeconds(2));
+        final var actualAttachmentB = attachment.findInside(Attachment.Item::new, Attachment.Item.Requirements.Equals.byName("attachmentB.txt.txt")).download(Duration.ofSeconds(2));
 
         if (!new BufferedReader(new FileReader(actualAttachmentA)).readLine().equals("attachmentA"))
             throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentA'.");
 
-        if (!new BufferedReader(new FileReader(actualAttachmentB)).readLine().equals("attachmentB"))
-            throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentB'.");
+        if (!new BufferedReader(new FileReader(actualAttachmentB)).readLine().equals("attachmentB.txt"))
+            throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentB.txt'.");
     }
 
     @AfterEach
@@ -92,6 +92,7 @@ public class ViewPanelAttachmentsTest extends BaseGeometaTest {
         while (Component.has(viewPanel.findInside(ViewPanel.Item::new),  Requirement.isAvailable(true), Duration.ofSeconds(1))) {
             viewPanel.findInside(ViewPanel.Item::new).select();
             viewPanel.deleteSelectedObjects();
+            viewPanel.refreshTable();
         }
     }
 }

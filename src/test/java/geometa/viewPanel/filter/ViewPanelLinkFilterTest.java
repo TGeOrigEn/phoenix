@@ -97,6 +97,7 @@ public class ViewPanelLinkFilterTest extends BaseGeometaTest {
         while (Component.has(viewPanel.findInside(ViewPanel.Item::new),  Requirement.isAvailable(true), Duration.ofSeconds(1))) {
             viewPanel.findInside(ViewPanel.Item::new).select();
             viewPanel.deleteSelectedObjects();
+            viewPanel.refreshTable();
         }
     }
 }

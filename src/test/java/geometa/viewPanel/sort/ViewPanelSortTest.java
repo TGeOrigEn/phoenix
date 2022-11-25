@@ -52,19 +52,51 @@ public class ViewPanelSortTest extends BaseGeometaTest {
     }
 
     @Test
-    public void dateFilterByEquals() {
+    public void sortHeaderByMore() {
         viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Дата")).toAction().click();
 
         spinner.wait(Duration.ofSeconds(10));
 
         Component.should(item_0, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_BEFORE), Duration.ofSeconds(5));
+        Component.should(item_1, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_NOW), Duration.ofSeconds(5));
+        Component.should(item_2, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_AFTER), Duration.ofSeconds(5));
+    }
+
+    @Test
+    public void sortHeaderByLess() {
+        final var header = viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Дата"));
+
+        header.toAction().click();
+
+        spinner.wait(Duration.ofSeconds(10));
+
+        header.toAction().click();
+
+        spinner.wait(Duration.ofSeconds(10));
+
         Component.should(item_0, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_AFTER), Duration.ofSeconds(5));
+        Component.should(item_1, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_NOW), Duration.ofSeconds(5));
+        Component.should(item_2, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_BEFORE), Duration.ofSeconds(5));
+    }
 
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_NOW)), Requirement.isAvailable(true), Duration.ofSeconds(60));
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_AFTER)), Requirement.isAvailable(false), Duration.ofSeconds(60));
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_BEFORE)), Requirement.isAvailable(false), Duration.ofSeconds(60));
+    @Test
+    public void sortMenuByLess() {
+        viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Дата")).openMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сортировать по убыванию")).click();
 
-        checkItems();
+        spinner.wait(Duration.ofSeconds(10));
+
+        Component.should(item_0, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_AFTER), Duration.ofSeconds(5));
+        Component.should(item_1, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_NOW), Duration.ofSeconds(5));
+        Component.should(item_2, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_BEFORE), Duration.ofSeconds(5));
+    }
+
+    @Test
+    public void sortMenuByMore() {
+        viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Дата")).openMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сортировать по возрастанию")).click();
+
+        Component.should(item_0, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_BEFORE), Duration.ofSeconds(5));
+        Component.should(item_1, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_NOW), Duration.ofSeconds(5));
+        Component.should(item_2, ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_AFTER), Duration.ofSeconds(5));
     }
 
     private static void createObject(@NotNull String value) {
@@ -81,18 +113,11 @@ public class ViewPanelSortTest extends BaseGeometaTest {
         Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Дата", value)), Requirement.isAvailable(true), Duration.ofSeconds(60));
     }
 
-    private static void checkItems() {
-        viewPanel.resetAllFilters();
-
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_NOW)), Requirement.isAvailable(true), Duration.ofSeconds(60));
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_AFTER)), Requirement.isAvailable(true), Duration.ofSeconds(60));
-        Component.should(viewPanel.getItemBy(ViewPanel.Item.Requirements.Equals.byValue("Дата", DATE_BEFORE)), Requirement.isAvailable(true), Duration.ofSeconds(60));
-    }
-
     private static void removeAllItem() {
         while (Component.has(viewPanel.findInside(ViewPanel.Item::new),  Requirement.isAvailable(true), Duration.ofSeconds(1))) {
             viewPanel.findInside(ViewPanel.Item::new).select();
             viewPanel.deleteSelectedObjects();
+            viewPanel.refreshTable();
         }
     }
 }
