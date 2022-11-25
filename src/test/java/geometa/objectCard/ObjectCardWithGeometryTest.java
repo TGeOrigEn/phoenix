@@ -36,6 +36,7 @@ public class ObjectCardWithGeometryTest extends BaseObjectCardTest {
     }
 
     @Test
+    @DisplayName("Задать геометрию объекту")
     public void createObjectAndSetGeometry() {
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Идентификатор:")).setValue(randomUUID);
         card.save();
@@ -59,6 +60,7 @@ public class ObjectCardWithGeometryTest extends BaseObjectCardTest {
     }
 
     @Test
+    @DisplayName("Задать геометрию для объекта")
     public void createObjectAndCreateGeometry() {
         card.findInside(TextField::new, Field.Requirements.Equals.byTitle("Идентификатор:")).setValue(randomUUID);
         card.save();
