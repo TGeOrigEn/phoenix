@@ -84,7 +84,7 @@ public abstract class BaseTest {
     }
 
     protected @Nullable String initializeSelenoid() {
-        return Selenoid.NONE;
+        return Selenoid.ARTEM;
     }
 
     @BeforeEach
