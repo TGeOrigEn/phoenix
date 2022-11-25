@@ -114,11 +114,11 @@ public abstract class BaseTest {
         switch (initializeDriver()) {
             case CHROME_CRYPTOGRAPHY: {
                 if (selenoid == null) Chrome.setWithCryptography(PATH_TO_DOWNLOADS, initializeTimeout());
-                else Chrome.setWithCryptography(selenoid, initializeTimeout());
+                else Chrome.setWithCryptography(PATH_TO_DOWNLOADS, selenoid, initializeTimeout());
             }
             case CHROME_DEFAULT: {
                 if (selenoid == null) Chrome.setDefault(PATH_TO_DOWNLOADS, initializeTimeout());
-                else Chrome.setDefault(selenoid, initializeTimeout());
+                else Chrome.setDefault(PATH_TO_DOWNLOADS, selenoid, initializeTimeout());
             }
         }
 

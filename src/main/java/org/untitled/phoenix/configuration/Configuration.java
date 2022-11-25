@@ -21,10 +21,10 @@ public final class Configuration {
         return getWebDriver().getClass().equals(RemoteWebDriver.class);
     }
 
-    public static void configure(@NotNull RemoteWebDriver webDriver, @NotNull String remoteAddress) {
+    public static void configure(@NotNull RemoteWebDriver webDriver, @NotNull String remoteAddress, @NotNull Path pathToDownload) {
+        Configuration.pathToDownload = pathToDownload;
         Configuration.remoteAddress = remoteAddress;
         Configuration.webDriver = webDriver;
-        Configuration.pathToDownload = null;
 
         webDriver.setFileDetector(new LocalFileDetector());
     }

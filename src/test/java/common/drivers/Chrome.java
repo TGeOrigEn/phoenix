@@ -27,16 +27,16 @@ public final class Chrome {
         Configuration.configure(new ChromeDriver(getOptionsDefault(timeout, pathToDownload)), pathToDownload);
     }
 
-    public static void setDefault(@NotNull String remoteAddress, @NotNull Duration timeout) throws MalformedURLException {
-        Configuration.configure(new RemoteWebDriver(new URL(remoteAddress), getOptionsDefault(timeout)), remoteAddress);
+    public static void setDefault(@NotNull Path pathToDownload, @NotNull String remoteAddress, @NotNull Duration timeout) throws MalformedURLException {
+        Configuration.configure(new RemoteWebDriver(new URL(remoteAddress), getOptionsDefault(timeout)), remoteAddress, pathToDownload);
     }
 
     public static void setWithCryptography(@NotNull Path pathToDownload, @NotNull Duration timeout) {
         Configuration.configure(new ChromeDriver(getOptionsWithCryptography(timeout, pathToDownload)), pathToDownload);
     }
 
-    public static void setWithCryptography(@NotNull String remoteAddress, @NotNull Duration timeout) throws MalformedURLException {
-        Configuration.configure(new RemoteWebDriver(new URL(remoteAddress), getOptionsWithCryptography(timeout)), remoteAddress);
+    public static void setWithCryptography(@NotNull Path pathToDownload, @NotNull String remoteAddress, @NotNull Duration timeout) throws MalformedURLException {
+        Configuration.configure(new RemoteWebDriver(new URL(remoteAddress), getOptionsWithCryptography(timeout)), remoteAddress, pathToDownload);
     }
 
     private static @NotNull ChromeOptions getOptionsWithCryptography(@NotNull Duration timeout) {
