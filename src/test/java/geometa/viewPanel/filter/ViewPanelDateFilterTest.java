@@ -47,6 +47,7 @@ public class ViewPanelDateFilterTest extends BaseGeometaTest {
     }
 
     @Test
+    @DisplayName("Фильтровать по полю даты (НА ДАТУ)")
     public void dateFilterByEquals() {
         var sort = openSort();
 
@@ -64,6 +65,7 @@ public class ViewPanelDateFilterTest extends BaseGeometaTest {
     }
 
     @Test
+    @DisplayName("Фильтровать по полю даты (НЕ РАНЕЕ)")
     public void dateFilterByMore() {
         var sort = openSort();
 
@@ -80,6 +82,7 @@ public class ViewPanelDateFilterTest extends BaseGeometaTest {
     }
 
     @Test
+    @DisplayName("Фильтровать по полю даты (НЕ ПОЗДНЕЕ)")
     public void dateFilterByLess() {
         var sort = openSort();
 

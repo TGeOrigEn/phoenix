@@ -10,16 +10,14 @@ import example.table.ViewPanel;
 import geometa.BaseGeometaTest;
 import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
 import java.time.Duration;
 
 @Tag(TAG.GEOMETA.VIEW_PANEL)
+@DisplayName("Фильтрация по ссылочному полю")
 public class ViewPanelLinkFilterTest extends BaseGeometaTest {
     @Override
     protected @NotNull String[] initializeItems() {
@@ -36,7 +34,7 @@ public class ViewPanelLinkFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @Step("Фильтровать по текстовому полю (Не равно)")
+    @DisplayName("Фильтровать по ссылочному полю (НЕ РАВНО)")
     public void textFilterByNoEquals() {
         var sort = openSort();
 
@@ -51,7 +49,7 @@ public class ViewPanelLinkFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @Step("Фильтровать по текстовому полю (Равно)")
+    @DisplayName("Фильтровать по ссылочному полю (РАВНО)")
     public void textFilterByEquals() {
         var sort = openSort();
 

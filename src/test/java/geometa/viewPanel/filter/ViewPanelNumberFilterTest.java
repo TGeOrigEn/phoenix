@@ -36,7 +36,7 @@ public class ViewPanelNumberFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @DisplayName("Фильтровать по числовому полю (Равно)")
+    @DisplayName("Фильтровать по числовому полю (МЕНЬШЕ)")
     public void numberFilterByLess() {
         var sort = openSort();
 
@@ -52,7 +52,7 @@ public class ViewPanelNumberFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @DisplayName("Фильтровать по числовому полю (Больше)")
+    @DisplayName("Фильтровать по числовому полю (БОЛЬШЕ)")
     public void numberFilterByMore() {
         var sort = openSort();
 
@@ -68,7 +68,7 @@ public class ViewPanelNumberFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @DisplayName("Фильтровать по числовому полю (Равно)")
+    @DisplayName("Фильтровать по числовому полю (РАВНО)")
     public void numberFilterByEquals() {
         var sort = openSort();
 

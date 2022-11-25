@@ -11,10 +11,7 @@ import example.table.Header;
 import example.table.ViewPanel;
 import geometa.BaseGeometaTest;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.untitled.phoenix.component.Component;
 import org.untitled.phoenix.component.requirement.generic.Requirement;
 
@@ -22,6 +19,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Tag(TAG.GEOMETA.VIEW_PANEL)
+@DisplayName("Сортировать по полю даты")
 public class ViewPanelSortTest extends BaseGeometaTest {
 
     private static final @NotNull String DATE_BEFORE = Date.getDate(LocalDateTime.now().minusDays(1), Date.Format.DD_MM_YYYY_DOT);
@@ -55,6 +53,7 @@ public class ViewPanelSortTest extends BaseGeometaTest {
     }
 
     @Test
+    @DisplayName("Сортировать по полю даты, нажав на заголовок (БОЛЬШЕ)")
     public void sortHeaderByMore() {
         viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Дата")).toAction().click();
 
@@ -66,6 +65,7 @@ public class ViewPanelSortTest extends BaseGeometaTest {
     }
 
     @Test
+    @DisplayName("Сортировать по полю даты, нажав на заголовок (МЕНЬШЕ)")
     public void sortHeaderByLess() {
         final var header = viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Дата"));
 
@@ -83,6 +83,7 @@ public class ViewPanelSortTest extends BaseGeometaTest {
     }
 
     @Test
+    @DisplayName("Сортировать по полю даты, нажав в меню вариантов (МЕНЬШЕ)")
     public void sortMenuByLess() {
         viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Дата")).openMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сортировать по убыванию")).click();
 
@@ -94,6 +95,7 @@ public class ViewPanelSortTest extends BaseGeometaTest {
     }
 
     @Test
+    @DisplayName("Сортировать по полю даты, нажав в меню вариантов (БОЛЬШЕ)")
     public void sortMenuByMore() {
         viewPanel.findInside(Header::new, Header.Requirements.Equals.byName("Дата")).openMenu().findInside(Menu.Item::new, Menu.Item.Requirements.Equals.byText("Сортировать по возрастанию")).click();
 

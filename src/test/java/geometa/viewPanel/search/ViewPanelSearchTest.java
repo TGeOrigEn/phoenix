@@ -10,6 +10,7 @@ import geometa.BaseGeometaTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.untitled.phoenix.component.Component;
@@ -18,6 +19,7 @@ import org.untitled.phoenix.component.requirement.generic.Requirement;
 import java.time.Duration;
 
 @Tag(TAG.GEOMETA.VIEW_PANEL)
+@DisplayName("Поиск в панели представления")
 public class ViewPanelSearchTest extends BaseGeometaTest {
     @Override
     protected @NotNull String[] initializeItems() {
@@ -41,6 +43,7 @@ public class ViewPanelSearchTest extends BaseGeometaTest {
     }
 
     @Test
+    @DisplayName("Найти объект в панели представления")
     public void search() {
         viewPanel.getSearchField().setValue(randomUUID);
         spinner.wait(Duration.ofSeconds(60));

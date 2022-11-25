@@ -35,7 +35,7 @@ public class ViewPanelTextFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @Step("Фильтровать по текстовому полю (Не пусто)")
+    @Step("Фильтровать по текстовому полю (НЕ ПУСТО)")
     public void textFilterByNoEmpty() {
         var sort = openSort();
 
@@ -50,7 +50,7 @@ public class ViewPanelTextFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @Step("Фильтровать по текстовому полю (Пусто)")
+    @Step("Фильтровать по текстовому полю (ПУСТО)")
     public void textFilterByEmpty() {
         var sort = openSort();
 
@@ -65,7 +65,7 @@ public class ViewPanelTextFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @Step("Фильтровать по текстовому полю (Не содержит)")
+    @Step("Фильтровать по текстовому полю (НЕ СОДЕРЖИТ)")
     public void textFilterByNoContains() {
         var sort = openSort();
 
@@ -81,7 +81,7 @@ public class ViewPanelTextFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @Step("Фильтровать по текстовому полю (Содержит)")
+    @Step("Фильтровать по текстовому полю (СОДЕРЖИТ)")
     public void textFilterByContains() {
         var sort = openSort();
 
@@ -97,7 +97,7 @@ public class ViewPanelTextFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @Step("Фильтровать по текстовому полю (Не равно)")
+    @Step("Фильтровать по текстовому полю (НЕ РАВНО)")
     public void textFilterByNoEquals() {
         var sort = openSort();
 
@@ -113,7 +113,7 @@ public class ViewPanelTextFilterTest extends BaseGeometaTest {
     }
 
     @Test
-    @Step("Фильтровать по текстовому полю (Равно)")
+    @Step("Фильтровать по текстовому полю (РАВНО)")
     public void textFilterByEquals() {
         var sort = openSort();
 

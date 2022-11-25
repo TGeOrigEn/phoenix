@@ -18,7 +18,7 @@ import java.io.*;
 import java.time.Duration;
 
 @Tag(TAG.GEOMETA.VIEW_PANEL)
-@DisplayName("Вложения")
+@DisplayName("Окно с вложениями")
 public class ViewPanelAttachmentsTest extends BaseGeometaTest {
 
     private static final @NotNull File attachmentA;
