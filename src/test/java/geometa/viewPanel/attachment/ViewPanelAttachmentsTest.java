@@ -81,8 +81,8 @@ public class ViewPanelAttachmentsTest extends BaseGeometaTest {
         if (!new BufferedReader(new FileReader(actualAttachmentA)).readLine().equals("attachmentA"))
             throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentA'.");
 
-        if (!new BufferedReader(new FileReader(actualAttachmentB)).readLine().equals("attachmentB.txt"))
-            throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentB.txt'.");
+        if (!new BufferedReader(new FileReader(actualAttachmentB)).readLine().equals("attachmentB"))
+            throw new RuntimeException("Неправильный текст в скаченном файле 'attachmentB'.");
     }
 
     @AfterEach
