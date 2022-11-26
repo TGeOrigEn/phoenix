@@ -30,8 +30,8 @@ public class BasicWithAttachmentsObjectCardTest extends BaseObjectCardTest {
     private static final @NotNull Attachment attachment = Component.find(Attachment::new);
 
     static {
-        final var pathToAttachmentA = BaseTest.class.getClassLoader().getResource("geometa/objectCard/attachmentA.txt");
-        final var pathToAttachmentB = BaseTest.class.getClassLoader().getResource("geometa/objectCard/attachmentB.txt");
+        final var pathToAttachmentA = BaseTest.class.getClassLoader().getResource("geometa/object/card/attachmentA.txt");
+        final var pathToAttachmentB = BaseTest.class.getClassLoader().getResource("geometa/object/card/attachmentB.txt");
 
         if (pathToAttachmentA == null) throw new NullPointerException("Вложения 'AttachmentA' не существует.");
         if (pathToAttachmentB == null) throw new NullPointerException("Вложения 'AttachmentB' не существует.");

@@ -101,6 +101,10 @@ public class Menu extends Component {
         return Integer.parseInt(toAction().getCssValue("z-index"));
     }
 
+    public @NotNull Item getItemBy(BaseRequirement<Item> requirement) {
+        return findInside(Item::new, requirement);
+    }
+
     public boolean isActive() {
         final var cards = Component.findEveryone(Menu::new).stream().sorted(Comparator.comparing(Menu::getCssIndex).reversed()).toArray(Menu[]::new);
         if (cards.length == 0) throw new RuntimeException();

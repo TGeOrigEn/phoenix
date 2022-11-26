@@ -24,7 +24,7 @@ import java.util.List;
 
 public abstract class Component {
 
-    private @NotNull Duration timeout = Duration.ofSeconds(10);
+    private @NotNull Duration timeout = Duration.ofSeconds(20);
 
     private @Nullable BaseCondition condition;
 

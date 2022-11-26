@@ -66,4 +66,10 @@ task geometaViewPanel(type: Test) {
     }
 }
 
+task geometaObjectGeometry(type: Test) {
+    useJUnitPlatform {
+        includeTags 'geometaObjectGeometry'
+    }
+}
+
 

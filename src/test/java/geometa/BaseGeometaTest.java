@@ -2,6 +2,7 @@ package geometa;
 
 import common.BaseTest;
 import example.AuthorizationForm;
+import example.Map;
 import example.NavigationPanel;
 import example.Spinner;
 import example.table.ViewPanel;
@@ -21,6 +22,8 @@ public abstract class BaseGeometaTest extends BaseTest {
     protected static final @NotNull ViewPanel viewPanel = Component.find(ViewPanel::new);
 
     protected static final @NotNull Spinner spinner = Component.find(Spinner::new);
+
+    protected static final @NotNull Map map = Component.find(Map::new);
 
     @Override
     protected @NotNull String initializeApplication() {

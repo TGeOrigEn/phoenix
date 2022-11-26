@@ -55,7 +55,7 @@ public abstract class Field extends Component {
         }
     }
 
-    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*=x-field]"), "Поле");
+    public static final @NotNull Description DEFAULT_DESCRIPTION = new Description(By.cssSelector("div[class*=x-field]:not([style*='display'])"), "Поле");
 
     private static final @NotNull Description LABEL_DESCRIPTION = new Description(By.cssSelector("span[class*='x-form-item-label-inner']"), "Название");
 
@@ -97,6 +97,8 @@ public abstract class Field extends Component {
     public void setValue(@NotNull String value) {
         getInput().toAction().setValue(value);
     }
+
+    public void sendKeys(@NotNull String value) { getInput().toAction().sendKeys(value); }
 
     public @NotNull String getValue() {
         return getInput().toAction().getValue();
