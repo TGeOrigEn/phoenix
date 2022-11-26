@@ -85,6 +85,6 @@ public class Map extends Component {
 
     public void wait(Duration timeout) {
         if (Component.has(loading, Requirement.isAvailable(true), Duration.ofSeconds(1)))
-            Component.should(loading, Requirement.isAvailable(false), timeout);
+            Component.has(loading, Requirement.isAvailable(false), timeout);
     }
 }

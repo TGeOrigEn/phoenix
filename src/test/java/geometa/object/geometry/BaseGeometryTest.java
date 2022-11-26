@@ -21,6 +21,6 @@ public abstract class BaseGeometryTest extends BaseGeometaTest {
         Component.find(NavigationPanel.Item::new, NavigationPanel.Item.Requirements.Equals.byName("Базовая карта"))
                 .more().getItemBy(Menu.Item.Requirements.Equals.byText("Сменить карту")).click();
 
-        map.wait(Duration.ofSeconds(60));
+        map.wait(Duration.ofSeconds(1));
     }
 }
