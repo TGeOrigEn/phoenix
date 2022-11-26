@@ -90,7 +90,7 @@ public class CoordinateTable extends Component {
             final var column = find(CoordinateTable::new).findInside(Header::new, Header.Requirements.Equals.byName(columnName));
             Component.should(column, Requirement.isAvailable(true), column.getTimeout());
             findInside(() -> new WebComponent(VALUE_DESCRIPTION.copy(column.getIndex()))).toAction().click();
-            final var s = find(CoordinateTable::new).findInside(TextField::new, Field.DEFAULT_DESCRIPTION.copy("div:not([style*='display']) > div[class*=x-field]:not([style*='display'])"), Requirement.isDisplayed(true));
+            final var s = find(CoordinateTable::new).findInside(TextField::new, Requirement.isDisplayed(true));
             s.sendKeys(Keys.LEFT_CONTROL + "A" + Keys.DELETE);
             s.sendKeys(value);
         }
