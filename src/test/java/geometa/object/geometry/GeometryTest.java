@@ -35,7 +35,7 @@ public class GeometryTest extends BaseGeometryTest {
     private static final @NotNull File polygon;
 
     static {
-        final var pathToCoordinates = BaseTest.class.getClassLoader().getResource("geometa/card/geometry/polygon.csv");
+        final var pathToCoordinates = BaseTest.class.getClassLoader().getResource("geometa/object/geometry/polygon.csv");
 
         if (pathToCoordinates == null) throw new NullPointerException("Вложения 'polygon' не существует.");
 
