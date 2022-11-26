@@ -1,4 +1,4 @@
-package geometa.geometry;
+package geometa.object.geometry;
 
 import example.Menu;
 import example.NavigationPanel;

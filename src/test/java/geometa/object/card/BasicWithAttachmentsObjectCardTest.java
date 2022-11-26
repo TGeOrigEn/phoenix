@@ -1,10 +1,8 @@
-package geometa.objectCard;
+package geometa.object.card;
 
 import common.BaseTest;
 import common.nested.TAG;
 import example.Attachment;
-import example.Menu;
-import example.button.Button;
 import example.field.Field;
 import example.field.nested.TextField;
 import example.table.ViewPanel;

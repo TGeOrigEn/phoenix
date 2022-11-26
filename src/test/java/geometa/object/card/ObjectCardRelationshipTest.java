@@ -1,4 +1,4 @@
-package geometa.objectCard;
+package geometa.object.card;
 
 import common.nested.TAG;
 import example.Menu;

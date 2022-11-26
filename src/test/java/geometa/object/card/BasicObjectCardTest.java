@@ -1,7 +1,6 @@
-package geometa.objectCard;
+package geometa.object.card;
 
 import common.nested.TAG;
-import example.Menu;
 import example.button.Button;
 import example.field.Field;
 import example.field.nested.TextField;

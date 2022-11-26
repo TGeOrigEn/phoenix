@@ -1,4 +1,4 @@
-package geometa.geometry;
+package geometa.object.geometry;
 
 import common.BaseTest;
 import common.nested.TAG;
